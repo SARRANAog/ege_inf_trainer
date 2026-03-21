@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import API from '../config/api';
 
 export default function ProfilePage({ profile: initialProfile }) {
   const [profile, setProfile] = useState(initialProfile || {});
@@ -78,7 +78,6 @@ export default function ProfilePage({ profile: initialProfile }) {
         </div>
       </div>
 
-      {/* Statistics */}
       <div className="card" style={{padding:24,marginBottom:20}}>
         <h2 style={{fontSize:16,fontWeight:600,marginBottom:16}}>Статистика</h2>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
@@ -93,7 +92,6 @@ export default function ProfilePage({ profile: initialProfile }) {
         </div>
       </div>
 
-      {/* Danger Zone */}
       <div className="card" style={{padding:24,borderColor:'rgba(224,96,112,0.3)'}}>
         <h2 style={{fontSize:16,fontWeight:600,marginBottom:12,color:'var(--danger)'}}>Опасная зона</h2>
         <button className="btn btn-danger btn-sm" onClick={() => setShowReset(true)} data-testid="reset-progress-btn">
@@ -104,7 +102,6 @@ export default function ProfilePage({ profile: initialProfile }) {
         </p>
       </div>
 
-      {/* Reset Confirmation Modal */}
       {showReset && (
         <div className="modal-overlay">
           <div className="modal" style={{textAlign:'center'}} data-testid="reset-modal">

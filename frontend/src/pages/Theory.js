@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import API from '../config/api';
 
 function normalizeTaskNumber(value, fallback = 1) {
     const parsed = Number(value);
