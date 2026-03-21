@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import DashboardPage from './pages/Roadmap';
@@ -9,7 +9,7 @@ import MockExamPage from './pages/MockExam';
 import ProgressPage from './pages/Progress';
 import ProfilePage from './pages/Profile';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import API from './config/api';
 
 const pageTitles = {
   '/': ['Дашборд', 'Главная точка входа: что делать сейчас, где вы на пути и что блокирует прогресс'],

@@ -1,6 +1,6 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import API from '../config/api';
 
 function formatMinutes(value) {
   return `${value || 0} мин.`;

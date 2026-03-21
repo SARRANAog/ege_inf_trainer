@@ -1,8 +1,8 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import API from '../config/api';
 
 function normalizeTaskNumber(value, fallback = 1) {
   const parsed = Number(value);

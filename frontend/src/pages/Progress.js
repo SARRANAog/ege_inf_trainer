@@ -1,7 +1,7 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+import API from '../config/api';
 
 function MetricCard({ label, value, sublabel, tone = 'var(--accent)' }) {
   return (

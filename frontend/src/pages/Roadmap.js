@@ -1,350 +1,298 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import API from '../config/api';
 
-const API = process.env.REACT_APP_BACKEND_URL;
-
-function StageCard({ stage }) {
-  const cardClass = [
-    'stage-card',
-    stage.is_current ? 'current' : '',
-    stage.is_completed ? 'completed' : '',
-    stage.blocked_by_review ? 'blocked' : '',
-  ].filter(Boolean).join(' ');
-
-  return (
-    <div className={cardClass} data-testid={`guided-stage-${stage.stage_number}`}>
-      <div className="stage-header">
-        <div className="stage-index">
-          {stage.is_completed ? '✓' : stage.stage_number}
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div className="stage-title">{stage.title}</div>
-            {stage.is_current && <span className="badge badge-accent">Текущий этап</span>}
-            {stage.is_completed && <span className="badge badge-success">Пройден</span>}
-            {stage.kind === 'review' && <span className="badge badge-warning">Checkpoint</span>}
-            {stage.kind === 'revisit' && <span className="badge badge-muted">Возврат назад</span>}
-          </div>
-          <div className="stage-description">{stage.description}</div>
-        </div>
-        <div style={{ minWidth: 88, textAlign: 'right' }}>
-          <div style={{ fontSize: 13, fontWeight: 600 }}>{stage.progress_pct?.toFixed?.(0) || 0}%</div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{stage.estimated_minutes} мин.</div>
-        </div>
-      </div>
-
-      {(stage.tasks || []).length > 0 && (
-        <div className="stage-task-row">
-          {stage.tasks.map((taskNumber) => (
-            <span key={taskNumber} className="badge badge-muted">
-              №{taskNumber}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <div style={{ marginTop: 12 }}>
-        <div className="progress-bar">
-          <div className={`progress-fill ${stage.is_completed ? 'success' : stage.kind === 'review' ? 'warning' : ''}`} style={{ width: `${stage.progress_pct || 0}%` }} />
-        </div>
-      </div>
-    </div>
-  );
+function kindMeta(kind) {
+  switch (kind) {
+    case 'learn':
+      return { label: 'Новый блок', badge: 'badge-accent' };
+    case 'revisit':
+      return { label: 'Возврат и закрепление', badge: 'badge-warning' };
+    case 'review':
+      return { label: 'Обязательный checkpoint', badge: 'badge-danger' };
+    case 'mock':
+      return { label: 'Пробники', badge: 'badge-success' };
+    default:
+      return { label: 'Этап', badge: 'badge-muted' };
+  }
 }
 
-function MetricCard({ label, value, tone = 'var(--accent)', sublabel }) {
-  return (
-    <div className="metric-card">
-      <div className="metric-value" style={{ color: tone }}>{value}</div>
-      <div className="metric-label">{label}</div>
-      {sublabel ? <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{sublabel}</div> : null}
-    </div>
-  );
+function scoreLabel(estimatedScore) {
+  if (!estimatedScore) return '—';
+  if (typeof estimatedScore.center === 'number' && estimatedScore.center > 0) {
+    return `${estimatedScore.min}-${estimatedScore.max}`;
+  }
+  return `${estimatedScore.min || 0}-${estimatedScore.max || 0}`;
 }
 
-export default function DashboardPage({ profile, reloadProfile }) {
+export default function RoadmapPage() {
   const [roadmap, setRoadmap] = useState(null);
-  const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [savingMode, setSavingMode] = useState(false);
-
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const [roadmapRes, progressRes] = await Promise.all([
-        fetch(`${API}/api/roadmap`),
-        fetch(`${API}/api/progress`),
-      ]);
-      const [roadmapData, progressData] = await Promise.all([roadmapRes.json(), progressRes.json()]);
-      setRoadmap(roadmapData);
-      setProgress(progressData);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    loadData();
+    let cancelled = false;
+
+    async function loadDashboard() {
+      setLoading(true);
+      try {
+        const response = await fetch(`${API}/api/roadmap`);
+        const data = await response.json();
+        if (!cancelled) setRoadmap(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadDashboard();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const handleModeChange = async (learningMode) => {
-    setSavingMode(true);
-    try {
-      await fetch(`${API}/api/profile`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ learning_mode: learningMode }),
-      });
-      await Promise.all([loadData(), reloadProfile?.()]);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setSavingMode(false);
-    }
-  };
+  const stages = roadmap?.stages || [];
+  const summary = roadmap?.summary || {};
+  const todayPlan = roadmap?.today_plan || { items: [] };
+  const weakTaskDetails = roadmap?.weak_task_details || [];
+  const mistakeTasks = roadmap?.mistake_tasks || [];
+  const quickActions = roadmap?.quick_actions || [];
+  const currentFocusTasks = roadmap?.current_focus_tasks || [];
+  const progressData = roadmap?.progress_data || {};
 
-  const focusTasksLabel = useMemo(() => {
-    if (!roadmap?.current_focus_tasks?.length) return 'Нет фокуса';
-    return roadmap.current_focus_tasks.map((taskNumber) => `№${taskNumber}`).join(', ');
-  }, [roadmap]);
+  const currentStage = useMemo(
+    () => stages.find((stage) => stage.stage_number === roadmap?.current_stage) || null,
+    [roadmap?.current_stage, stages]
+  );
+
+  const getTaskData = (taskNumber) => progressData[String(taskNumber)] || progressData[taskNumber] || {};
+  const goToHref = (href) => href && navigate(href);
+  const goToTaskPractice = (taskNumber, mode = 'free') => navigate(`/practice?task=${taskNumber}&mode=${mode}`);
+  const goToTaskTheory = (taskNumber) => navigate(`/theory?task=${taskNumber}`);
+
+  const primaryAction = (() => {
+    if (roadmap?.review_due) {
+      return { label: 'Открыть Weekly Review', onClick: () => navigate('/weekly-review') };
+    }
+    if (todayPlan.items?.length) {
+      return {
+        label: todayPlan.items[0].action_label || 'Продолжить',
+        onClick: () => goToHref(todayPlan.items[0].href),
+      };
+    }
+    if (currentFocusTasks.length) {
+      return {
+        label: 'Открыть текущий этап',
+        onClick: () => goToTaskPractice(currentFocusTasks[0], roadmap?.profile_learning_mode === 'free' ? 'free' : 'guided'),
+      };
+    }
+    return { label: 'Открыть практику', onClick: () => navigate('/practice') };
+  })();
 
   if (loading) {
-    return <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Загрузка дашборда…</div>;
+    return <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Загрузка дашборда...</div>;
   }
-
-  if (!roadmap || !progress) {
-    return <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Не удалось загрузить дашборд.</div>;
-  }
-
-  const estimated = progress.estimated_score || {};
-  const weakDetails = roadmap.weak_task_details || [];
-  const todayPlan = roadmap.today_plan || { items: [] };
-  const mode = roadmap.profile_learning_mode || profile?.learning_mode || 'guided';
 
   return (
-    <div className="fade-in" style={{ maxWidth: 1320, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div className="dashboard-grid">
-        <div className="dashboard-stack">
-          <div className="card dashboard-hero" data-testid="dashboard-hero">
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-              <div style={{ flex: 1, minWidth: 280 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 10 }}>
-                  {profile?.name || 'Ученик'}, это ваш рабочий дашборд
-                </h1>
-                <p style={{ maxWidth: 760 }}>
-                  Здесь видны текущий этап guided path, обязательные checkpoint-блоки, слабые темы, ошибки и конкретный план на сегодня.
-                  Главный экран больше не декоративный — он управляет тем, что делать дальше.
-                </p>
-
-                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 18 }}>
-                  <Link className="btn btn-primary btn-md" to={roadmap.review_due ? '/weekly-review' : '/practice?mode=guided'}>
-                    {roadmap.review_due ? 'Открыть Weekly Review' : 'Продолжить guided path'}
-                  </Link>
-                  <Link className="btn btn-secondary btn-md" to="/practice?mode=free">
-                    Свободная практика
-                  </Link>
-                  <Link className="btn btn-ghost btn-md" to="/mock-exam">
-                    Пробник
-                  </Link>
-                </div>
-              </div>
-
-              <div style={{ minWidth: 280 }}>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8 }}>Режим обучения</div>
-                <div className="segment-control" style={{ width: '100%' }}>
-                  <button
-                    className={`segment-btn ${mode === 'guided' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('guided')}
-                    disabled={savingMode}
-                    style={{ flex: 1 }}
-                  >
-                    Guided path
-                  </button>
-                  <button
-                    className={`segment-btn ${mode === 'free' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('free')}
-                    disabled={savingMode}
-                    style={{ flex: 1 }}
-                  >
-                    Свободный режим
-                  </button>
-                </div>
-
-                <div style={{ marginTop: 16, display: 'grid', gap: 10 }}>
-                  <div className={`status-banner ${roadmap.review_due ? 'warning' : 'success'}`}>
-                    <div style={{ fontWeight: 600, fontSize: 14 }}>
-                      {roadmap.review_due ? 'Переход заблокирован checkpoint-блоком' : 'Следующий этап открыт'}
-                    </div>
-                    <div style={{ marginTop: 6, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                      {roadmap.review_due
-                        ? `Сейчас нужно пройти ${roadmap.review_gate_label}. Без этого guided path дальше не откроется.`
-                        : `Текущий фокус: ${focusTasksLabel}.`}
-                    </div>
-                  </div>
-
-                  <div className="card-elevated" style={{ padding: 14 }}>
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Текущий этап</div>
-                    <div style={{ marginTop: 4, fontSize: 16, fontWeight: 600 }}>{roadmap.current_stage_title}</div>
-                    <div style={{ marginTop: 8 }} className="progress-bar">
-                      <div className="progress-fill" style={{ width: `${(roadmap.current_stage / roadmap.stages.length) * 100}%` }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div className="fade-in" style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 20 }}>
+      <div className="card" data-testid="dashboard-hero">
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1, minWidth: 280 }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+              <span className="badge badge-accent">{roadmap?.profile_learning_mode === 'free' ? 'Свободный режим' : 'Guided path'}</span>
+              {roadmap?.review_due ? <span className="badge badge-danger">Checkpoint обязателен</span> : null}
+            </div>
+            <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>{roadmap?.dashboard_title || 'Дашборд подготовки'}</h1>
+            <div style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: 14, maxWidth: 760 }}>
+              {roadmap?.review_due
+                ? `Сейчас продвижение по guided path остановлено: сначала нужно пройти ${roadmap.review_gate_label || 'Weekly Review'}.`
+                : currentStage
+                  ? `Текущий этап: ${currentStage.title}. Дашборд показывает, что делать сейчас, что делать сегодня и где именно вы на дорожке.`
+                  : 'Главная точка входа в обучение: текущий этап, слабые места, ошибки и полезные действия на сегодня.'}
+            </div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 18 }}>
+              <button className="btn btn-primary btn-md" onClick={primaryAction.onClick}>{primaryAction.label}</button>
+              <button className="btn btn-secondary btn-md" onClick={() => navigate('/progress')}>Открыть аналитику</button>
             </div>
           </div>
-
-          {roadmap.review_due && (
-            <div className="status-banner warning" data-testid="weekly-review-gate">
-              <div style={{ fontWeight: 700, fontSize: 15 }}>Weekly Review обязателен</div>
-              <div style={{ marginTop: 6, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Дорожка специально не даёт перескочить дальше. Сначала контрольный блок по пройденному, затем новый материал.
-              </div>
-            </div>
-          )}
-
-          <div className="analytics-grid">
-            <MetricCard label="Покрытие программы" value={`${progress.coverage?.toFixed?.(0) || 0}%`} tone="var(--accent)" />
-            <MetricCard label="Средняя точность" value={`${progress.avg_accuracy?.toFixed?.(0) || 0}%`} tone="var(--success)" />
-            <MetricCard
-              label="Примерный прогноз баллов"
-              value={estimated.min !== undefined ? `${estimated.min}–${estimated.max}` : '—'}
-              tone="var(--warning)"
-              sublabel={estimated.description}
-            />
-            <MetricCard label="Фокус текущего этапа" value={`${roadmap.current_focus_tasks?.length || 0} тем`} tone="var(--accent)" sublabel={focusTasksLabel} />
-          </div>
-
-          <div className="card" data-testid="today-plan-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-              <div>
-                <div style={{ fontSize: 18, fontWeight: 700 }}>Что делать сейчас / сегодня</div>
-                <div style={{ marginTop: 6, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  {todayPlan.summary}
-                </div>
-              </div>
-              <div className="badge badge-muted">
-                {todayPlan.planned_minutes || 0} из {todayPlan.daily_budget_minutes || 0} мин.
-              </div>
-            </div>
-
-            <div className="today-plan-list">
-              {todayPlan.items?.map((item, index) => (
-                <div className="today-plan-item" key={`${item.type}-${index}`}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                    <div>
-                      <div className="today-plan-title">{item.title}</div>
-                      <div className="today-plan-description">{item.description}</div>
-                    </div>
-                    <div className="badge badge-muted">{item.minutes} мин.</div>
-                  </div>
-                  <div style={{ marginTop: 12 }}>
-                    <Link className="btn btn-secondary btn-sm" to={item.href}>{item.action_label}</Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="card" data-testid="guided-path-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-              <div>
-                <div style={{ fontSize: 18, fontWeight: 700 }}>Real guided path</div>
-                <div style={{ marginTop: 6, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  Осмысленная жёсткая дорожка с возвратами назад, усложнённым повторением и обязательными review-checkpoint’ами.
-                </div>
-              </div>
-              <div className="badge badge-accent">Этап {roadmap.current_stage} из {roadmap.stages.length}</div>
-            </div>
-
-            <div className="stage-list">
-              {roadmap.stages.map((stage) => (
-                <StageCard key={stage.stage_number} stage={stage} />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="dashboard-stack">
-          <div className="card">
-            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 14 }}>Быстрые действия</div>
-            <div className="quick-actions-grid">
-              {roadmap.quick_actions?.map((action) => (
-                <Link key={action.href} className="card-elevated" to={action.href} style={{ textDecoration: 'none' }}>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>{action.label}</div>
-                  <div style={{ marginTop: 8, fontSize: 12, color: 'var(--text-secondary)' }}>{action.href}</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="card" data-testid="weak-topics-card">
-            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 14 }}>Слабые темы и ошибки</div>
-
-            {weakDetails.length === 0 ? (
-              <div className="status-banner success">
-                <div style={{ fontWeight: 600, fontSize: 14 }}>Явно провальных тем сейчас нет</div>
-                <div style={{ marginTop: 6, fontSize: 13, color: 'var(--text-secondary)' }}>
-                  Продолжайте guided path или переходите в пробник.
-                </div>
-              </div>
-            ) : (
-              <div className="table-like-list">
-                {weakDetails.map((item) => (
-                  <div className="table-like-row" key={item.task_number}>
-                    <div className="badge badge-danger">№{item.task_number}</div>
-                    <div>
-                      <div style={{ fontSize: 14, fontWeight: 600 }}>Задание {item.task_number}</div>
-                      <div style={{ marginTop: 4, fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.reason}</div>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--warning)' }}>{item.accuracy?.toFixed?.(0) || 0}%</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>точность</div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6, flexWrap: 'wrap' }}>
-                      <Link className="btn btn-ghost btn-sm" to={`/practice?task=${item.task_number}&mode=weak`}>Практика</Link>
-                      <Link className="btn btn-ghost btn-sm" to={`/theory?task=${item.task_number}`}>Теория</Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {roadmap.mistake_tasks?.length > 0 && (
-              <div style={{ marginTop: 16 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Недавние ошибки</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {roadmap.mistake_tasks.map((taskNumber) => (
-                    <Link key={taskNumber} className="badge badge-warning" to={`/practice?task=${taskNumber}&mode=mistakes`}>
-                      №{taskNumber}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="card">
-            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>Weekly review / mock / analytics</div>
-            <div style={{ display: 'grid', gap: 10 }}>
-              <div className="card-elevated" style={{ padding: 14 }}>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Weekly review пройдено</div>
-                <div style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>{progress.weekly_reviews_completed || 0}</div>
-              </div>
-              <div className="card-elevated" style={{ padding: 14 }}>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Пробники завершены</div>
-                <div style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>{progress.mock_exams_completed || 0}</div>
-              </div>
-              <div className="card-elevated" style={{ padding: 14 }}>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Последняя средняя точность</div>
-                <div style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>{progress.avg_accuracy?.toFixed?.(0) || 0}%</div>
-              </div>
+          <div style={{ minWidth: 220, flexShrink: 0 }}>
+            <div className="card-elevated" style={{ padding: 16 }}>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Что сейчас</div>
+              <div style={{ marginTop: 8, fontSize: 18, fontWeight: 700 }}>{currentStage?.title || 'Начать обучение'}</div>
+              <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{currentStage?.description || 'Выберите следующий осмысленный шаг.'}</div>
             </div>
           </div>
         </div>
       </div>
+
+      <div className="analytics-grid">
+        <div className="metric-card"><div className="metric-value" style={{ color: 'var(--accent)' }}>{summary.coverage?.toFixed?.(0) || 0}%</div><div className="metric-label">Покрытие</div></div>
+        <div className="metric-card"><div className="metric-value" style={{ color: 'var(--success)' }}>{summary.accuracy?.toFixed?.(0) || 0}%</div><div className="metric-label">Средняя точность</div></div>
+        <div className="metric-card"><div className="metric-value" style={{ color: 'var(--warning)' }}>{scoreLabel(summary.estimated_score)}</div><div className="metric-label">Прогноз баллов</div></div>
+        <div className="metric-card"><div className="metric-value" style={{ color: 'var(--accent)' }}>{summary.weekly_reviews_completed || 0}</div><div className="metric-label">Пройдено Weekly Review</div></div>
+        <div className="metric-card"><div className="metric-value" style={{ color: 'var(--accent)' }}>{summary.mock_exams_completed || 0}</div><div className="metric-label">Завершено пробников</div></div>
+      </div>
+
+      {todayPlan.items?.length > 0 ? (
+        <div className="card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Что делать сегодня</div>
+              <div style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: 14 }}>{todayPlan.summary}</div>
+            </div>
+            <div className="badge badge-muted">План: {todayPlan.planned_minutes || 0} из {todayPlan.daily_budget_minutes || 0} мин.</div>
+          </div>
+          <div className="analytics-grid" style={{ marginTop: 18 }}>
+            {todayPlan.items.map((item, index) => (
+              <div key={`${item.type}-${index}`} className="card-elevated" style={{ padding: 16 }}>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+                  <span className="badge badge-accent">{item.type}</span>
+                  <span className="badge badge-muted">{item.minutes} мин.</span>
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 700 }}>{item.title}</div>
+                <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.description}</div>
+                <div style={{ marginTop: 14 }}><button className="btn btn-primary btn-sm" onClick={() => goToHref(item.href)}>{item.action_label || 'Открыть'}</button></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {quickActions.length > 0 ? (
+        <div className="card">
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>Быстрые действия</div>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {quickActions.map((action) => (
+              <button key={`${action.label}-${action.href}`} className="btn btn-secondary btn-sm" onClick={() => goToHref(action.href)}>{action.label}</button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div className="card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: 16 }}>
+          <div>
+            <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Real guided path</div>
+            <div style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: 14 }}>Дорожка идёт не по прямой: новый блок → возврат назад → усложнённое закрепление → обязательный review → движение дальше.</div>
+          </div>
+          {currentStage ? <span className="badge badge-accent">Текущий этап: {currentStage.stage_number}</span> : null}
+        </div>
+        <div style={{ display: 'grid', gap: 12 }}>
+          {stages.map((stage) => {
+            const meta = kindMeta(stage.kind);
+            const stageTasks = stage.tasks || stage.review_tasks || [];
+            const isCurrent = stage.is_current;
+            const isCompleted = stage.is_completed;
+            return (
+              <div key={stage.stage_number} className="card-elevated" style={{ padding: 16, border: '1px solid', borderColor: isCurrent ? 'var(--accent)' : isCompleted ? 'rgba(92,184,122,0.30)' : 'var(--border)', opacity: !isCurrent && !isCompleted && stage.blocked_by_review ? 0.75 : 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                  <div style={{ flex: 1, minWidth: 280 }}>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+                      <span className={`badge ${meta.badge}`}>{meta.label}</span>
+                      <span className="badge badge-muted">Этап {stage.stage_number}</span>
+                      {isCurrent ? <span className="badge badge-accent">Текущий</span> : null}
+                      {isCompleted ? <span className="badge badge-success">Пройден</span> : null}
+                    </div>
+                    <div style={{ fontSize: 17, fontWeight: 700 }}>{stage.title}</div>
+                    <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{stage.description}</div>
+                    {stage.blocked_by_review ? <div className="status-banner warning" style={{ marginTop: 12 }}>Этот и последующие этапы пока заблокированы обязательным Weekly Review.</div> : null}
+                    {stageTasks.length > 0 ? (
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 14 }}>
+                        {stageTasks.map((taskNumber) => {
+                          const task = getTaskData(taskNumber);
+                          const accuracy = task.accuracy || 0;
+                          return (
+                            <button key={`${stage.stage_number}-${taskNumber}`} className={`badge ${accuracy >= 80 ? 'badge-success' : accuracy >= 60 ? 'badge-accent' : task.total_attempts > 0 ? 'badge-warning' : 'badge-muted'}`} style={{ border: 'none', cursor: 'pointer' }} onClick={() => {
+                              if (stage.kind === 'review') return navigate('/weekly-review');
+                              if (stage.kind === 'mock') return navigate('/mock-exam');
+                              goToTaskPractice(taskNumber, roadmap?.profile_learning_mode === 'free' ? 'free' : 'guided');
+                            }} title={task.title || `Задание ${taskNumber}`}>
+                              №{taskNumber} {task.is_code_task ? '(PY)' : ''}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div style={{ minWidth: 180 }}>
+                    <div className="card-elevated" style={{ padding: 12 }}>
+                      <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Прогресс этапа</div>
+                      <div style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>{stage.progress_pct?.toFixed?.(0) || 0}%</div>
+                      <div style={{ marginTop: 6, fontSize: 12, color: 'var(--text-secondary)' }}>Средняя точность: {stage.avg_accuracy?.toFixed?.(0) || 0}%</div>
+                      {stage.estimated_minutes ? <div style={{ marginTop: 6, fontSize: 12, color: 'var(--text-secondary)' }}>~ {stage.estimated_minutes} мин.</div> : null}
+                    </div>
+                    <div style={{ marginTop: 10 }}>
+                      {stage.kind === 'review' ? <button className="btn btn-secondary btn-sm" onClick={() => navigate('/weekly-review')}>Открыть review</button> : stage.kind === 'mock' ? <button className="btn btn-secondary btn-sm" onClick={() => navigate('/mock-exam')}>Открыть пробник</button> : stageTasks.length > 0 ? <button className="btn btn-secondary btn-sm" onClick={() => goToTaskTheory(stageTasks[0])}>Теория блока</button> : null}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {(currentFocusTasks.length > 0 || weakTaskDetails.length > 0 || mistakeTasks.length > 0) ? (
+        <div className="analytics-grid">
+          <div className="card">
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>Фокус текущего этапа</div>
+            {currentFocusTasks.length > 0 ? (
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {currentFocusTasks.map((taskNumber) => {
+                  const task = getTaskData(taskNumber);
+                  return <button key={`focus-${taskNumber}`} className="badge badge-accent" style={{ border: 'none', cursor: 'pointer' }} onClick={() => goToTaskPractice(taskNumber, roadmap?.profile_learning_mode === 'free' ? 'free' : 'guided')}>№{taskNumber} {task.title || ''}</button>;
+                })}
+              </div>
+            ) : <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Сейчас нет выделенного фокуса по этапу.</div>}
+          </div>
+          <div className="card">
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>Слабые темы</div>
+            {weakTaskDetails.length > 0 ? (
+              <div style={{ display: 'grid', gap: 10 }}>
+                {weakTaskDetails.slice(0, 4).map((item) => {
+                  const task = getTaskData(item.task_number);
+                  return (
+                    <div key={`weak-${item.task_number}`} className="card-elevated" style={{ padding: 12 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+                        <div>
+                          <div style={{ fontSize: 14, fontWeight: 700 }}>№{item.task_number} {task.title || ''}</div>
+                          <div style={{ marginTop: 6, fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.reason}</div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                          <div className="badge badge-warning">{item.accuracy?.toFixed?.(0) || 0}%</div>
+                          <div style={{ marginTop: 6, fontSize: 12, color: 'var(--text-muted)' }}>Попыток: {item.attempts || 0}</div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 12 }}>
+                        <button className="btn btn-ghost btn-sm" onClick={() => goToTaskTheory(item.task_number)}>Теория</button>
+                        <button className="btn btn-secondary btn-sm" onClick={() => goToTaskPractice(item.task_number, 'weak')}>Слабые темы</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Явных слабых тем по текущим данным пока нет.</div>}
+          </div>
+          <div className="card">
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>Работа над ошибками</div>
+            {mistakeTasks.length > 0 ? (
+              <div style={{ display: 'grid', gap: 10 }}>
+                {mistakeTasks.slice(0, 5).map((taskNumber) => {
+                  const task = getTaskData(taskNumber);
+                  return (
+                    <div key={`mistake-${taskNumber}`} className="card-elevated" style={{ padding: 12 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700 }}>№{taskNumber} {task.title || ''}</div>
+                      <div style={{ marginTop: 6, fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6 }}>Недавние ошибки по этому заданию. Его стоит разобрать до следующего продвижения вперёд.</div>
+                      <div style={{ marginTop: 12 }}><button className="btn btn-secondary btn-sm" onClick={() => goToTaskPractice(taskNumber, 'mistakes')}>Открыть ошибки</button></div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Недавних ошибок, требующих отдельного режима, сейчас нет.</div>}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

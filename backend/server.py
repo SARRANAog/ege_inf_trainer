@@ -49,8 +49,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 1,
         "kind": "learn",
-        "title": "\u0421\u0442\u0430\u0440\u0442: \u0437\u0430\u0434\u0430\u043d\u0438\u044f 1\u20135",
-        "description": "\u041f\u0440\u043e\u0445\u043e\u0434 \u043f\u0435\u0440\u0432\u043e\u0433\u043e \u0431\u043b\u043e\u043a\u0430: \u0431\u0430\u0437\u043e\u0432\u0430\u044f \u0442\u0435\u043e\u0440\u0438\u044f, \u043a\u043e\u0440\u043e\u0442\u043a\u0430\u044f \u043f\u0440\u0430\u043a\u0442\u0438\u043a\u0430, \u0431\u0435\u0437 \u043f\u0435\u0440\u0435\u0441\u043a\u043e\u043a\u043e\u0432.",
+        "title": "Старт: задания 1–5",
+        "description": "Проход первого блока: базовая теория, короткая практика, без перескоков.",
         "tasks": [1, 2, 3, 4, 5],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -59,8 +59,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 2,
         "kind": "revisit",
-        "title": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 1\u20135: \u0443\u0441\u043b\u043e\u0436\u043d\u0451\u043d\u043d\u043e\u0435 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u0438\u0435",
-        "description": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u043a \u043f\u0435\u0440\u0432\u044b\u043c \u0437\u0430\u0434\u0430\u043d\u0438\u044f\u043c \u0441 \u0431\u043e\u043b\u044c\u0448\u0435\u0439 \u0441\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u044c\u044e \u0438 \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u0435\u043c \u043e\u0448\u0438\u0431\u043e\u043a.",
+        "title": "Возврат 1–5: усложнённое закрепление",
+        "description": "Возврат к первым заданиям с большей сложностью и контролем ошибок.",
         "tasks": [1, 2, 3, 4, 5],
         "min_attempts": 4,
         "min_accuracy": 72,
@@ -69,8 +69,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 3,
         "kind": "learn",
-        "title": "\u0414\u0430\u043b\u044c\u0448\u0435: \u0437\u0430\u0434\u0430\u043d\u0438\u044f 6\u201310",
-        "description": "\u0412\u0442\u043e\u0440\u043e\u0439 \u0431\u043b\u043e\u043a \u043d\u043e\u0432\u043e\u0433\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430.",
+        "title": "Дальше: задания 6–10",
+        "description": "Второй блок нового материала.",
         "tasks": [6, 7, 8, 9, 10],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -80,7 +80,7 @@ GUIDED_STAGES = [
         "stage_number": 4,
         "kind": "review",
         "title": "Weekly Review A",
-        "description": "\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u044b\u0439 \u0431\u043b\u043e\u043a \u043f\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044f\u043c 1\u201310.",
+        "description": "Обязательный контрольный блок по заданиям 1–10.",
         "review_index": 1,
         "review_tasks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         "estimated_minutes": 35,
@@ -88,8 +88,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 5,
         "kind": "revisit",
-        "title": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 1\u201310: \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u0438\u0435 \u0431\u043b\u043e\u043a\u0430",
-        "description": "\u041f\u043e\u0432\u0442\u043e\u0440\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u043d\u043e\u0433\u043e \u0434\u043e \u043f\u0435\u0440\u0435\u0445\u043e\u0434\u0430 \u0432 \u0441\u0440\u0435\u0434\u043d\u044e\u044e \u0447\u0430\u0441\u0442\u044c \u0434\u043e\u0440\u043e\u0436\u043a\u0438.",
+        "title": "Возврат 1–10: закрепление блока",
+        "description": "Повторение пройденного до перехода в среднюю часть дорожки.",
         "tasks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         "min_attempts": 4,
         "min_accuracy": 70,
@@ -98,8 +98,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 6,
         "kind": "learn",
-        "title": "\u0421\u0440\u0435\u0434\u043d\u0438\u0439 \u0431\u043b\u043e\u043a: \u0437\u0430\u0434\u0430\u043d\u0438\u044f 11\u201315",
-        "description": "\u041e\u0441\u043d\u043e\u0432\u043d\u0430\u044f \u0441\u0435\u0440\u0435\u0434\u0438\u043d\u0430 \u0434\u043e\u0440\u043e\u0436\u043a\u0438, \u0432\u043a\u043b\u044e\u0447\u0430\u044f \u043a\u043e\u0434\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f.",
+        "title": "Средний блок: задания 11–15",
+        "description": "Основная середина дорожки, включая кодовые задания.",
         "tasks": [11, 12, 13, 14, 15],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -109,7 +109,7 @@ GUIDED_STAGES = [
         "stage_number": 7,
         "kind": "review",
         "title": "Weekly Review B",
-        "description": "\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c \u0438 \u0432\u043e\u0437\u0432\u0440\u0430\u0442 \u043f\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044f\u043c 6\u201315.",
+        "description": "Контроль и возврат по заданиям 6–15.",
         "review_index": 2,
         "review_tasks": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
         "estimated_minutes": 40,
@@ -117,8 +117,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 8,
         "kind": "revisit",
-        "title": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 6\u201315: \u0441\u043b\u043e\u0436\u043d\u0435\u0435 \u0438 \u0442\u043e\u0447\u043d\u0435\u0435",
-        "description": "\u041f\u043e\u0432\u0442\u043e\u0440\u0435\u043d\u0438\u0435 \u0441 \u0443\u043f\u043e\u0440\u043e\u043c \u043d\u0430 \u0441\u043b\u0430\u0431\u044b\u0435 \u0442\u0435\u043c\u044b \u0438 \u0442\u0440\u0443\u0434\u043d\u044b\u0435 \u0443\u043f\u0440\u0430\u0436\u043d\u0435\u043d\u0438\u044f.",
+        "title": "Возврат 6–15: сложнее и точнее",
+        "description": "Повторение с упором на слабые темы и трудные упражнения.",
         "tasks": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
         "min_attempts": 4,
         "min_accuracy": 72,
@@ -127,8 +127,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 9,
         "kind": "learn",
-        "title": "\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u0431\u043b\u043e\u043a: \u0437\u0430\u0434\u0430\u043d\u0438\u044f 16\u201320",
-        "description": "\u041f\u0440\u043e\u0434\u0432\u0438\u043d\u0443\u0442\u0430\u044f \u0447\u0430\u0441\u0442\u044c \u0441 \u0432\u044b\u0441\u043e\u043a\u043e\u0439 \u0446\u0435\u043d\u043e\u0439 \u043e\u0448\u0438\u0431\u043e\u043a.",
+        "title": "Старший блок: задания 16–20",
+        "description": "Продвинутая часть с высокой ценой ошибок.",
         "tasks": [16, 17, 18, 19, 20],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -138,7 +138,7 @@ GUIDED_STAGES = [
         "stage_number": 10,
         "kind": "review",
         "title": "Weekly Review C",
-        "description": "\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044c \u043f\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044f\u043c 11\u201320.",
+        "description": "Контроль по заданиям 11–20.",
         "review_index": 3,
         "review_tasks": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
         "estimated_minutes": 40,
@@ -146,8 +146,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 11,
         "kind": "revisit",
-        "title": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 11\u201320: \u0440\u0430\u0431\u043e\u0442\u0430 \u043d\u0430\u0434 \u043e\u0448\u0438\u0431\u043a\u0430\u043c\u0438",
-        "description": "\u0423\u0441\u043b\u043e\u0436\u043d\u0451\u043d\u043d\u043e\u0435 \u043f\u043e\u0432\u0442\u043e\u0440\u0435\u043d\u0438\u0435 \u043f\u0435\u0440\u0435\u0434 \u0444\u0438\u043d\u0430\u043b\u044c\u043d\u044b\u043c \u0431\u043b\u043e\u043a\u043e\u043c.",
+        "title": "Возврат 11–20: работа над ошибками",
+        "description": "Усложнённое повторение перед финальным блоком.",
         "tasks": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
         "min_attempts": 4,
         "min_accuracy": 74,
@@ -156,8 +156,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 12,
         "kind": "learn",
-        "title": "\u0424\u0438\u043d\u0438\u0448: \u0437\u0430\u0434\u0430\u043d\u0438\u044f 21\u201327",
-        "description": "\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u043d\u043e\u0432\u044b\u0439 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b \u043f\u0435\u0440\u0435\u0434 \u0441\u0442\u0430\u0431\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u0435\u0439 \u0438 \u043f\u0440\u043e\u0431\u043d\u0438\u043a\u0430\u043c\u0438.",
+        "title": "Финиш: задания 21–27",
+        "description": "Последний новый материал перед стабилизацией и пробниками.",
         "tasks": [21, 22, 23, 24, 25, 26, 27],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -167,7 +167,7 @@ GUIDED_STAGES = [
         "stage_number": 13,
         "kind": "review",
         "title": "Weekly Review D",
-        "description": "\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u044c \u043f\u043e \u0437\u0430\u0432\u0435\u0440\u0448\u0430\u044e\u0449\u0435\u043c\u0443 \u0431\u043b\u043e\u043a\u0443.",
+        "description": "Обязательный контроль по завершающему блоку.",
         "review_index": 4,
         "review_tasks": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
         "estimated_minutes": 45,
@@ -175,8 +175,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 14,
         "kind": "revisit",
-        "title": "\u0424\u0438\u043d\u0430\u043b\u044c\u043d\u043e\u0435 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u0438\u0435 16\u201327",
-        "description": "\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0432\u043e\u0437\u0432\u0440\u0430\u0442 \u043d\u0430\u0437\u0430\u0434 \u043f\u0435\u0440\u0435\u0434 \u043f\u043e\u043b\u043d\u043e\u0446\u0435\u043d\u043d\u044b\u043c\u0438 \u043f\u0440\u043e\u0431\u043d\u0438\u043a\u0430\u043c\u0438.",
+        "title": "Финальное закрепление 16–27",
+        "description": "Последний возврат назад перед полноценными пробниками.",
         "tasks": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
         "min_attempts": 4,
         "min_accuracy": 76,
@@ -185,8 +185,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 15,
         "kind": "mock",
-        "title": "\u041f\u0440\u043e\u0431\u043d\u0438\u043a\u0438 \u0438 \u0441\u0442\u0430\u0431\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f",
-        "description": "\u0424\u043e\u0440\u043c\u0430\u0442, \u0442\u0430\u0439\u043c\u0438\u043d\u0433 \u0438 \u0434\u043e\u0432\u043e\u0434\u043a\u0430 \u0441\u043b\u0430\u0431\u044b\u0445 \u043c\u0435\u0441\u0442.",
+        "title": "Пробники и стабилизация",
+        "description": "Формат, тайминг и доводка слабых мест.",
         "min_mock_exams": 1,
         "estimated_minutes": 235,
     },
@@ -196,7 +196,7 @@ TRAINING_MOCK_TASKS = [2, 5, 6, 8, 12, 14, 16, 17, 19, 23, 25, 27]
 
 
 class ProfileCreate(BaseModel):
-    name: str = "\u0423\u0447\u0435\u043d\u0438\u043a"
+    name: str = "Ученик"
     target_score: int = 80
     exam_date: str = "2026-06-01"
     confidence_level: str = "medium"
@@ -322,7 +322,7 @@ def run_python_code(source_code: str, stdin_text: str = "") -> dict[str, Any]:
         except subprocess.TimeoutExpired:
             return {
                 "stdout": "",
-                "stderr": "\u041f\u0440\u0435\u0432\u044b\u0448\u0435\u043d\u043e \u0432\u0440\u0435\u043c\u044f \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f (timeout 5 \u0441\u0435\u043a).",
+                "stderr": "Превышено время выполнения (timeout 5 сек).",
                 "returncode": -1,
             }
 
@@ -332,7 +332,7 @@ def get_profile_core() -> dict[str, Any]:
     if profile:
         return profile
     profile = {
-        "name": "\u0423\u0447\u0435\u043d\u0438\u043a",
+        "name": "Ученик",
         "target_score": 80,
         "exam_date": "2026-06-01",
         "confidence_level": "medium",
@@ -365,14 +365,14 @@ def save_profile(profile: dict[str, Any]) -> dict[str, Any]:
 def get_theory_or_404(task_number: int) -> dict[str, Any]:
     item = storage.get_theory(task_number)
     if not item:
-        raise HTTPException(404, "\u0422\u0435\u043e\u0440\u0438\u044f \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u0430")
+        raise HTTPException(404, "Теория не найдена")
     return item
 
 
 def get_exercise_or_404(exercise_id: str) -> dict[str, Any]:
     exercise = storage.get_exercise(exercise_id)
     if not exercise:
-        raise HTTPException(404, "\u0423\u043f\u0440\u0430\u0436\u043d\u0435\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e")
+        raise HTTPException(404, "Упражнение не найдено")
     return exercise
 
 
@@ -492,8 +492,8 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
     if not tests:
         return {
             "correct": False,
-            "message": "\u0414\u043b\u044f \u044d\u0442\u043e\u0439 \u0437\u0430\u0434\u0430\u0447\u0438 \u043f\u043e\u043a\u0430 \u043d\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043d\u044b \u0442\u0435\u0441\u0442\u044b.",
-            "details": "\u0422\u0435\u0441\u0442\u043e\u0432 \u043d\u0435\u0442, \u043f\u043e\u044d\u0442\u043e\u043c\u0443 \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430.",
+            "message": "Для этой задачи пока не настроены тесты.",
+            "details": "Тестов нет, поэтому автоматическая проверка недоступна.",
             "test_results": [],
             "explanation": exercise.get("explanation", ""),
         }
@@ -509,7 +509,7 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
 
         if run_result.get("returncode") != 0:
             all_passed = False
-            failures.append(f"\u0422\u0435\u0441\u0442 {index}: \u043e\u0448\u0438\u0431\u043a\u0430 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f.")
+            failures.append(f"Тест {index}: ошибка выполнения.")
             test_results.append(
                 {
                     "test_number": index,
@@ -524,7 +524,7 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
         passed = actual_output == expected_output
         if not passed:
             all_passed = False
-            failures.append(f"\u0422\u0435\u0441\u0442 {index}: \u043e\u0436\u0438\u0434\u0430\u043b\u043e\u0441\u044c {expected_output}, \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u043e {actual_output}")
+            failures.append(f"Тест {index}: ожидалось {expected_output}, получено {actual_output}")
         test_results.append(
             {
                 "test_number": index,
@@ -537,7 +537,7 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
 
     return {
         "correct": all_passed,
-        "message": "\u041a\u043e\u0434 \u043f\u0440\u043e\u0448\u0451\u043b \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443" if all_passed else "\u041a\u043e\u0434 \u043d\u0435 \u043f\u0440\u043e\u0448\u0451\u043b \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+        "message": "Код прошёл проверку" if all_passed else "Код не прошёл проверку",
         "details": "\n".join(failures),
         "test_results": test_results,
         "explanation": exercise.get("explanation", ""),
@@ -589,7 +589,7 @@ def build_progress_metrics() -> dict[str, Any]:
         task_metrics.append(
             {
                 "task_number": task_number,
-                "title": theory.get("title", f"\u0417\u0430\u0434\u0430\u043d\u0438\u0435 {task_number}"),
+                "title": theory.get("title", f"Задание {task_number}"),
                 "is_code_task": bool(theory.get("is_code_task") or task_number in CODE_TASKS),
                 "total_attempts": total_attempts,
                 "correct_attempts": correct_attempts,
@@ -624,9 +624,9 @@ def build_progress_metrics() -> dict[str, Any]:
         "center": predicted,
         "level": "strong" if predicted >= 82 else "good" if predicted >= 68 else "medium" if predicted >= 45 else "early",
         "description": (
-            "\u041f\u0440\u043e\u0433\u043d\u043e\u0437 \u043e\u0441\u043d\u043e\u0432\u0430\u043d \u043d\u0430 \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u0438 \u0442\u0435\u043c, \u0442\u043e\u0447\u043d\u043e\u0441\u0442\u0438 \u0438 \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043d\u043d\u044b\u0445 \u043f\u0440\u043e\u0431\u043d\u0438\u043a\u0430\u0445."
+            "Прогноз основан на покрытии тем, точности и завершённых пробниках."
             if started_tasks
-            else "\u041d\u0443\u0436\u043d\u044b \u043f\u0435\u0440\u0432\u044b\u0435 \u0440\u0435\u0448\u0451\u043d\u043d\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f, \u0447\u0442\u043e\u0431\u044b \u0441\u0442\u0440\u043e\u0438\u0442\u044c \u043f\u0440\u043e\u0433\u043d\u043e\u0437."
+            else "Нужны первые решённые задания, чтобы строить прогноз."
         ),
     }
 
@@ -709,11 +709,11 @@ def build_today_plan(
         items.append(
             {
                 "type": "weekly_review",
-                "title": "\u0421\u043d\u0430\u0447\u0430\u043b\u0430 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439 Weekly Review",
-                "description": "\u0414\u043e\u0440\u043e\u0436\u043a\u0430 \u043e\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0430 \u0434\u043e \u043f\u0440\u043e\u0445\u043e\u0436\u0434\u0435\u043d\u0438\u044f \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u044c\u043d\u043e\u0433\u043e \u0431\u043b\u043e\u043a\u0430.",
+                "title": "Сначала обязательный Weekly Review",
+                "description": "Дорожка остановлена до прохождения контрольного блока.",
                 "minutes": current_stage.get("estimated_minutes", 35),
                 "href": "/weekly-review",
-                "action_label": "\u041e\u0442\u043a\u0440\u044b\u0442\u044c Weekly Review",
+                "action_label": "Открыть Weekly Review",
             }
         )
     elif current_stage.get("kind") in {"learn", "revisit"}:
@@ -723,21 +723,21 @@ def build_today_plan(
                 items.append(
                     {
                         "type": "theory",
-                        "title": f"\u041a\u0440\u0430\u0442\u043a\u043e \u043f\u0440\u043e\u0439\u0442\u0438 \u0442\u0435\u043e\u0440\u0438\u044e \u043f\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044e {task_number}",
-                        "description": "\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u043a\u0440\u0430\u0442\u043a\u0443\u044e \u0438 \u043f\u043e\u043b\u043d\u0443\u044e \u0442\u0435\u043e\u0440\u0438\u044e, \u0437\u0430\u0442\u0435\u043c \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u043f\u0440\u0430\u043a\u0442\u0438\u043a\u0435.",
+                        "title": f"Кратко пройти теорию по заданию {task_number}",
+                        "description": "Открыть краткую и полную теорию, затем перейти к практике.",
                         "minutes": 15,
                         "href": f"/theory?task={task_number}",
-                        "action_label": "\u041a \u0442\u0435\u043e\u0440\u0438\u0438",
+                        "action_label": "К теории",
                     }
                 )
                 items.append(
                     {
                         "type": "practice",
-                        "title": f"\u0420\u0435\u0448\u0430\u0442\u044c \u0437\u0430\u0434\u0430\u043d\u0438\u0435 {task_number} \u0432 guided mode",
-                        "description": "\u041d\u0430\u0431\u0435\u0440\u0438\u0442\u0435 \u043f\u0435\u0440\u0432\u044b\u0435 \u043f\u043e\u043f\u044b\u0442\u043a\u0438 \u043f\u043e \u0442\u0435\u043a\u0443\u0449\u0435\u043c\u0443 \u044d\u0442\u0430\u043f\u0443.",
+                        "title": f"Решать задание {task_number} в guided mode",
+                        "description": "Наберите первые попытки по текущему этапу.",
                         "minutes": 20,
                         "href": f"/practice?task={task_number}&mode=guided",
-                        "action_label": "\u041a \u043f\u0440\u0430\u043a\u0442\u0438\u043a\u0435",
+                        "action_label": "К практике",
                     }
                 )
                 break
@@ -750,22 +750,22 @@ def build_today_plan(
             items.append(
                 {
                     "type": "practice",
-                    "title": f"\u0414\u043e\u0431\u0440\u0430\u0442\u044c \u0442\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u043f\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044e {weakest_inside_stage.get('task_number')}",
-                    "description": "\u042d\u0442\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u0435 \u0441\u0438\u043b\u044c\u043d\u0435\u0435 \u0432\u0441\u0435\u0433\u043e \u0442\u043e\u0440\u043c\u043e\u0437\u0438\u0442 \u043f\u0435\u0440\u0435\u0445\u043e\u0434 \u043a \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0435\u043c\u0443 \u044d\u0442\u0430\u043f\u0443.",
+                    "title": f"Добрать точность по заданию {weakest_inside_stage.get('task_number')}",
+                    "description": "Это задание сильнее всего тормозит переход к следующему этапу.",
                     "minutes": 25,
                     "href": f"/practice?task={weakest_inside_stage.get('task_number')}&mode=guided",
-                    "action_label": "\u041e\u0442\u043a\u0440\u044b\u0442\u044c guided practice",
+                    "action_label": "Открыть guided practice",
                 }
             )
     else:
         items.append(
             {
                 "type": "mock",
-                "title": "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u043f\u0440\u043e\u0431\u043d\u0438\u043a\u0443",
-                "description": "Guided path \u0434\u043e\u0432\u0435\u0434\u0451\u043d \u0434\u043e \u0440\u0435\u0436\u0438\u043c\u0430 \u0441\u0442\u0430\u0431\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u0438.",
+                "title": "Перейти к пробнику",
+                "description": "Guided path доведён до режима стабилизации.",
                 "minutes": 120,
                 "href": "/mock-exam",
-                "action_label": "\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u043f\u0440\u043e\u0431\u043d\u0438\u043a",
+                "action_label": "Открыть пробник",
             }
         )
 
@@ -774,11 +774,11 @@ def build_today_plan(
         items.append(
             {
                 "type": "weak",
-                "title": f"\u0412\u0435\u0440\u043d\u0443\u0442\u044c\u0441\u044f \u043a \u0441\u043b\u0430\u0431\u043e\u0439 \u0442\u0435\u043c\u0435 \u2116{task_number}",
+                "title": f"Вернуться к слабой теме №{task_number}",
                 "description": weak_details[0]["reason"],
                 "minutes": 20,
                 "href": f"/practice?task={task_number}&mode=weak",
-                "action_label": "\u0421\u043b\u0430\u0431\u044b\u0435 \u0442\u0435\u043c\u044b",
+                "action_label": "Слабые темы",
             }
         )
 
@@ -787,18 +787,18 @@ def build_today_plan(
         items.append(
             {
                 "type": "mistakes",
-                "title": f"\u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c \u043d\u0435\u0434\u0430\u0432\u043d\u0438\u0435 \u043e\u0448\u0438\u0431\u043a\u0438 \u043f\u043e \u2116{task_number}",
-                "description": "\u0420\u0435\u0436\u0438\u043c \u043e\u0448\u0438\u0431\u043e\u043a \u043f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0435\u0442 \u0442\u0435\u043c\u044b, \u0433\u0434\u0435 \u0431\u044b\u043b\u0438 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0435 \u043f\u0440\u043e\u043c\u0430\u0445\u0438.",
+                "title": f"Разобрать недавние ошибки по №{task_number}",
+                "description": "Режим ошибок показывает темы, где были последние промахи.",
                 "minutes": 15,
                 "href": f"/practice?task={task_number}&mode=mistakes",
-                "action_label": "\u041a \u043e\u0448\u0438\u0431\u043a\u0430\u043c",
+                "action_label": "К ошибкам",
             }
         )
 
     daily_hours = float(profile.get("daily_hours", 2) or 2)
     total_minutes = int(sum(item["minutes"] for item in items[:3]))
     return {
-        "summary": "\u041f\u043e\u043d\u044f\u0442\u043d\u044b\u0439 \u043f\u043b\u0430\u043d \u043d\u0430 \u0441\u0435\u0433\u043e\u0434\u043d\u044f \u0431\u0435\u0437 \u043b\u0438\u0448\u043d\u0435\u0439 \u0433\u0435\u0439\u043c\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0438.",
+        "summary": "Понятный план на сегодня без лишней геймификации.",
         "daily_budget_minutes": int(daily_hours * 60),
         "planned_minutes": total_minutes,
         "items": items[:3],
@@ -829,9 +829,9 @@ def build_roadmap_payload() -> dict[str, Any]:
                 "accuracy": item.get("accuracy", 0),
                 "attempts": item.get("total_attempts", 0),
                 "reason": (
-                    "\u041d\u0438\u0437\u043a\u0430\u044f \u0442\u043e\u0447\u043d\u043e\u0441\u0442\u044c \u043f\u043e\u0441\u043b\u0435 \u0441\u0435\u0440\u0438\u0438 \u043f\u043e\u043f\u044b\u0442\u043e\u043a."
+                    "Низкая точность после серии попыток."
                     if item.get("accuracy", 0) < 60
-                    else "\u0417\u0430\u0434\u0430\u043d\u0438\u0435 \u0440\u0435\u0448\u0430\u0435\u0442\u0441\u044f \u043d\u0435\u0441\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u043e \u0438 \u0442\u0440\u0435\u0431\u0443\u0435\u0442 \u0437\u0430\u043a\u0440\u0435\u043f\u043b\u0435\u043d\u0438\u044f."
+                    else "Задание решается нестабильно и требует закрепления."
                 ),
             }
         )
@@ -871,7 +871,7 @@ def build_roadmap_payload() -> dict[str, Any]:
 
     return {
         "profile_learning_mode": normalize_learning_mode(profile.get("learning_mode")),
-        "dashboard_title": "\u0414\u0430\u0448\u0431\u043e\u0440\u0434 \u043f\u043e\u0434\u0433\u043e\u0442\u043e\u0432\u043a\u0438",
+        "dashboard_title": "Дашборд подготовки",
         "current_stage": current_stage["stage_number"],
         "current_stage_title": current_stage["title"],
         "current_stage_kind": current_stage["kind"],
@@ -885,10 +885,10 @@ def build_roadmap_payload() -> dict[str, Any]:
         "progress_data": progress_map,
         "today_plan": today_plan,
         "quick_actions": [
-            {"label": "\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u0430\u044f \u043f\u0440\u0430\u043a\u0442\u0438\u043a\u0430", "href": "/practice?mode=free"},
+            {"label": "Свободная практика", "href": "/practice?mode=free"},
             {"label": "Guided path", "href": "/practice?mode=guided"},
             {"label": "Weekly Review", "href": "/weekly-review"},
-            {"label": "\u041f\u0440\u043e\u0431\u043d\u0438\u043a", "href": "/mock-exam"},
+            {"label": "Пробник", "href": "/mock-exam"},
         ],
         "summary": {
             "coverage": progress_metrics["coverage"],
@@ -926,7 +926,7 @@ def build_weekly_review_blueprint(active_only: bool = False) -> dict[str, Any]:
 
     return {
         "status": "ready",
-        "summary": "Weekly Review \u0441\u043e\u0431\u0438\u0440\u0430\u0435\u0442\u0441\u044f \u0438\u0437 \u0442\u0435\u043a\u0443\u0449\u0435\u0433\u043e \u044d\u0442\u0430\u043f\u0430, \u0441\u043b\u0430\u0431\u044b\u0445 \u0442\u0435\u043c \u0438 \u043d\u0435\u0434\u0430\u0432\u043d\u0438\u0445 \u043e\u0448\u0438\u0431\u043e\u043a.",
+        "summary": "Weekly Review собирается из текущего этапа, слабых тем и недавних ошибок.",
         "review_tasks": list(dict.fromkeys(item["task_number"] for item in selected_exercises)),
         "weak_tasks": weak_tasks,
         "estimated_time": max(20, len(selected_exercises) * 4),
@@ -947,7 +947,7 @@ def build_mock_exam_task(task_number: int, mode: str) -> dict[str, Any]:
     theory = storage.get_theory(task_number) or {}
     return {
         "task_number": task_number,
-        "title": theory.get("title", f"\u0417\u0430\u0434\u0430\u043d\u0438\u0435 {task_number}"),
+        "title": theory.get("title", f"Задание {task_number}"),
         "status": "pending",
         "flagged": False,
         "answer": None,
@@ -991,17 +991,17 @@ def mock_exam_status_payload() -> dict[str, Any]:
         "modes": [
             {
                 "mode": "exam",
-                "label": "\u042d\u043a\u0437\u0430\u043c\u0435\u043d\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0439",
+                "label": "Экзаменационный",
                 "duration_minutes": 235,
                 "tasks_count": 27,
-                "description": "\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u043e \u043f\u043e\u0445\u043e\u0436\u0435 \u043d\u0430 \u0440\u0435\u0430\u043b\u044c\u043d\u044b\u0439 \u044d\u043a\u0437\u0430\u043c\u0435\u043d.",
+                "description": "Максимально похоже на реальный экзамен.",
             },
             {
                 "mode": "training",
-                "label": "\u0422\u0440\u0435\u043d\u0438\u0440\u043e\u0432\u043e\u0447\u043d\u044b\u0439",
+                "label": "Тренировочный",
                 "duration_minutes": 120,
                 "tasks_count": len(TRAINING_MOCK_TASKS),
-                "description": "\u0423\u043a\u043e\u0440\u043e\u0447\u0435\u043d\u043d\u044b\u0439 \u043f\u0440\u043e\u0431\u043d\u0438\u043a \u0441 \u0430\u043a\u0446\u0435\u043d\u0442\u043e\u043c \u043d\u0430 \u0442\u0440\u0435\u043d\u0438\u0440\u0443\u0435\u043c\u044b\u0435 \u0442\u0438\u043f\u044b \u0437\u0430\u0434\u0430\u0447.",
+                "description": "Укороченный пробник с акцентом на тренируемые типы задач.",
             },
         ],
     }
@@ -1050,7 +1050,7 @@ async def get_exercise_alias(exercise_id: str):
 async def check_answer(payload: AnswerCheck):
     exercise = get_exercise_or_404(payload.exercise_id)
     if exercise.get("exercise_type") == "code":
-        raise HTTPException(400, "\u0414\u043b\u044f \u043a\u043e\u0434\u043e\u0432\u044b\u0445 \u0437\u0430\u0434\u0430\u0447 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439\u0442\u0435 /api/check-code")
+        raise HTTPException(400, "Для кодовых задач используйте /api/check-code")
 
     correct, expected_answer = evaluate_answer_against_exercise(exercise, payload.answer)
     record_attempt(
@@ -1162,7 +1162,7 @@ async def get_progress_for_task(task_number: int):
     metrics = build_progress_metrics()
     task = metrics["task_map"].get(task_number)
     if not task:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0433\u0440\u0435\u0441\u0441 \u043f\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044e \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Прогресс по заданию не найден")
     return task
 
 
@@ -1197,7 +1197,7 @@ async def start_weekly_review():
 
     blueprint = build_weekly_review_blueprint()
     if not blueprint.get("exercises"):
-        raise HTTPException(400, "\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0441\u043e\u0431\u0440\u0430\u0442\u044c Weekly Review: \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0438\u0432\u043d\u044b\u0445 \u0437\u0430\u0434\u0430\u043d\u0438\u0439.")
+        raise HTTPException(400, "Не удалось собрать Weekly Review: недостаточно объективных заданий.")
 
     review = {
         **blueprint,
@@ -1219,14 +1219,14 @@ async def start_weekly_review():
 async def answer_weekly_review(payload: WeeklyReviewAnswer):
     review = storage.get_active_weekly_review()
     if not review:
-        raise HTTPException(404, "\u0410\u043a\u0442\u0438\u0432\u043d\u044b\u0439 Weekly Review \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Активный Weekly Review не найден")
 
     exercise = next((item for item in review.get("exercises", []) if item.get("exercise_id") == payload.exercise_id), None)
     if not exercise:
-        raise HTTPException(404, "\u0417\u0430\u0434\u0430\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e \u0432 \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u043c Weekly Review")
+        raise HTTPException(404, "Задание не найдено в активном Weekly Review")
 
     if exercise.get("exercise_type") == "code":
-        raise HTTPException(400, "Weekly Review \u043f\u0440\u0438\u043d\u0438\u043c\u0430\u0435\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0438\u0432\u043d\u044b\u0435 \u043e\u0442\u0432\u0435\u0442\u044b.")
+        raise HTTPException(400, "Weekly Review принимает только объективные ответы.")
 
     correct, expected_answer = evaluate_answer_against_exercise(exercise, payload.answer)
     review.setdefault("answers", {})[payload.exercise_id] = payload.answer
@@ -1259,14 +1259,14 @@ async def answer_weekly_review(payload: WeeklyReviewAnswer):
 async def complete_weekly_review():
     review = storage.get_active_weekly_review()
     if not review:
-        raise HTTPException(404, "\u0410\u043a\u0442\u0438\u0432\u043d\u044b\u0439 Weekly Review \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Активный Weekly Review не найден")
 
     total = len(review.get("exercises", []))
     answers_count = safe_int(review.get("answers_count"), 0)
     if total == 0:
-        raise HTTPException(400, "Weekly Review \u043f\u0443\u0441\u0442.")
+        raise HTTPException(400, "Weekly Review пуст.")
     if answers_count < max(3, total - 1):
-        raise HTTPException(400, "\u041d\u0443\u0436\u043d\u043e \u043e\u0442\u0432\u0435\u0442\u0438\u0442\u044c \u043f\u043e\u0447\u0442\u0438 \u043d\u0430 \u0432\u0441\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f review, \u043f\u0440\u0435\u0436\u0434\u0435 \u0447\u0435\u043c \u0437\u0430\u0432\u0435\u0440\u0448\u0430\u0442\u044c.")
+        raise HTTPException(400, "Нужно ответить почти на все задания review, прежде чем завершать.")
 
     review["status"] = "completed"
     review["has_active"] = False
@@ -1314,9 +1314,9 @@ async def start_mock_exam(payload: MockExamStart):
 async def save_mock_exam_answer(exam_id: str, payload: MockExamAnswer):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Пробник не найден")
     if exam.get("status") == "completed":
-        raise HTTPException(400, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u0443\u0436\u0435 \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043d")
+        raise HTTPException(400, "Пробник уже завершён")
 
     updated = False
     for task in exam.get("tasks", []):
@@ -1327,7 +1327,7 @@ async def save_mock_exam_answer(exam_id: str, payload: MockExamAnswer):
             updated = True
             break
     if not updated:
-        raise HTTPException(404, "\u0417\u0430\u0434\u0430\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e \u0432 \u043f\u0440\u043e\u0431\u043d\u0438\u043a\u0435")
+        raise HTTPException(404, "Задание не найдено в пробнике")
 
     storage.save_mock_exam(exam)
     return {"status": "ok"}
@@ -1337,39 +1337,39 @@ async def save_mock_exam_answer(exam_id: str, payload: MockExamAnswer):
 async def flag_mock_exam_task(exam_id: str, payload: MockExamAnswer):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Пробник не найден")
 
     for task in exam.get("tasks", []):
         if task["task_number"] == payload.task_number:
             task["flagged"] = not task.get("flagged", False)
             storage.save_mock_exam(exam)
             return {"status": "ok", "flagged": task["flagged"]}
-    raise HTTPException(404, "\u0417\u0430\u0434\u0430\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e")
+    raise HTTPException(404, "Задание не найдено")
 
 
 @app.put("/api/mock-exam/{exam_id}/flag/{task_number}")
 async def flag_mock_exam_task_compat(exam_id: str, task_number: int):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Пробник не найден")
 
     for task in exam.get("tasks", []):
         if task["task_number"] == task_number:
             task["flagged"] = not task.get("flagged", False)
             storage.save_mock_exam(exam)
             return {"status": "ok", "flagged": task["flagged"]}
-    raise HTTPException(404, "\u0417\u0430\u0434\u0430\u043d\u0438\u0435 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e")
+    raise HTTPException(404, "Задание не найдено")
 
 
 @app.post("/api/mock-exam/{exam_id}/pause")
 async def pause_mock_exam(exam_id: str):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Пробник не найден")
     if exam.get("status") == "paused":
         return {"status": "ok"}
     if exam.get("status") == "completed":
-        raise HTTPException(400, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u0443\u0436\u0435 \u0437\u0430\u0432\u0435\u0440\u0448\u0451\u043d")
+        raise HTTPException(400, "Пробник уже завершён")
 
     exam["elapsed_seconds"] = mock_elapsed_seconds(exam)
     exam["paused_at"] = now_iso()
@@ -1382,7 +1382,7 @@ async def pause_mock_exam(exam_id: str):
 async def resume_mock_exam(exam_id: str):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Пробник не найден")
     if exam.get("status") != "paused":
         return {"status": "ok"}
 
@@ -1399,7 +1399,7 @@ async def resume_mock_exam(exam_id: str):
 async def submit_mock_exam(exam_id: str):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "\u041f\u0440\u043e\u0431\u043d\u0438\u043a \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d")
+        raise HTTPException(404, "Пробник не найден")
     if exam.get("status") == "completed":
         return exam
 
@@ -1414,7 +1414,7 @@ async def submit_mock_exam(exam_id: str):
                 {
                     "task_number": task_number,
                     "correct": False,
-                    "explanation": "\u0414\u043b\u044f \u044d\u0442\u043e\u0433\u043e \u0437\u0430\u0434\u0430\u043d\u0438\u044f \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e \u0443\u043f\u0440\u0430\u0436\u043d\u0435\u043d\u0438\u0435 \u0432 \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u043e\u0439 \u0431\u0430\u0437\u0435.",
+                    "explanation": "Для этого задания не найдено упражнение в локальной базе.",
                 }
             )
             continue

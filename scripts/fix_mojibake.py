@@ -1,22 +1,21 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 FILES = [
-    "backend/server.py",
-    "backend/theory_content.py",
-    "backend/content_data.py",
-    "backend/roadmap_content.py",
-    "backend/exercises_content.py",
-    "backend/exercises_extra.py",
-    "backend/exercises_extra_2.py",
+    'backend/server.py',
+    'backend/theory_content.py',
+    'backend/content_data.py',
+    'backend/roadmap_content.py',
+    'backend/exercises_content.py',
+    'backend/exercises_extra.py',
+    'backend/exercises_extra_2.py',
 ]
-
-MARKERS = ("Ð", "Ñ", "â€“", "â€”", "â€œ", "â€", "â„", "Ã", "Р", "С")
+MARKERS = ('Ð', 'Ñ', 'â€“', 'â€”', 'â€œ', 'â€', 'â„', 'Ã', 'Р', 'С')
 
 def looks_broken(text: str) -> bool:
     return any(marker in text for marker in MARKERS)
 
 def repair_once(text: str) -> str:
-    return text.encode("latin1").decode("utf-8")
+    return text.encode('latin1').decode('utf-8')
 
 def repair_text(text: str) -> str:
     current = text
@@ -33,21 +32,18 @@ def repair_text(text: str) -> str:
     return current
 
 fixed_any = False
-
 for rel in FILES:
     path = Path(rel)
     if not path.exists():
-        print(f"SKIP {rel} (not found)")
+        print(f'SKIP {rel} (not found)')
         continue
-
-    original = path.read_text(encoding="utf-8-sig")
+    original = path.read_text(encoding='utf-8-sig')
     repaired = repair_text(original)
-
     if repaired != original:
-        path.write_text(repaired, encoding="utf-8")
+        path.write_text(repaired, encoding='utf-8')
         fixed_any = True
-        print(f"FIXED {rel}")
+        print(f'FIXED {rel}')
     else:
-        print(f"OK {rel}")
+        print(f'OK {rel}')
 
-print("DONE", "CHANGED" if fixed_any else "NO_CHANGES")
+print('DONE', 'CHANGED' if fixed_any else 'NO_CHANGES')

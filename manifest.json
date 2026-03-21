@@ -1,4 +1,4 @@
-﻿{
+{
   "source_markdown": "ege_product_update.md",
   "files": [
     "backend/server.py",

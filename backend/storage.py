@@ -206,7 +206,7 @@ class LocalSQLiteStorage:
             }
 
         theory_rows = [
-            (doc["task_number"], doc.get("title", f"\u0417\u0430\u0434\u0430\u043d\u0438\u0435 {doc['task_number']}"), _json_dumps(doc))
+            (doc["task_number"], doc.get("title", f"Задание {doc['task_number']}"), _json_dumps(doc))
             for doc in theory_data
         ]
         exercise_rows = [
@@ -222,7 +222,7 @@ class LocalSQLiteStorage:
             for doc in exercises_data
         ]
         roadmap_rows = [
-            (doc["stage_number"], doc.get("title", f"\u042d\u0442\u0430\u043f {doc['stage_number']}"), _json_dumps(doc))
+            (doc["stage_number"], doc.get("title", f"Этап {doc['stage_number']}"), _json_dumps(doc))
             for doc in roadmap_data
         ]
 
