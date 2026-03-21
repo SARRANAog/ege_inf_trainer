@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink, useNavigate, useLocation } from 'react-router-dom';
+﻿import React, { useCallback, useEffect, useState } from 'react';
+import { BrowserRouter as Router, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
-import RoadmapPage from './pages/Roadmap';
+import DashboardPage from './pages/Roadmap';
 import TheoryPage from './pages/Theory';
 import PracticePage from './pages/Practice';
 import WeeklyReviewPage from './pages/WeeklyReview';
@@ -11,178 +11,111 @@ import ProfilePage from './pages/Profile';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
+const pageTitles = {
+  '/': ['Дашборд', 'Главная точка входа: что делать сейчас, где вы на пути и что блокирует прогресс'],
+  '/theory': ['Теория', 'Краткая и полная теория по каждому заданию'],
+  '/practice': ['Практика', 'Свободный режим, guided path, слабые темы и работа над ошибками'],
+  '/weekly-review': ['Weekly Review', 'Обязательный контрольный блок между этапами дорожки'],
+  '/mock-exam': ['Пробник', 'Экзаменационный и тренировочный режимы с таймером и паузой'],
+  '/progress': ['Аналитика', 'Покрытие, прогноз баллов, история и проблемные зоны'],
+  '/profile': ['Профиль', 'Локальные настройки ученика'],
+};
+
 function Sidebar({ profile }) {
-  const location = useLocation();
   const navItems = [
-    { path: '/', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', label: 'Дорожка' },
-    { path: '/theory', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', label: 'Теория' },
-    { path: '/practice', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', label: 'Практика' },
-    { path: '/weekly-review', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', label: 'Weekly Review' },
-    { path: '/mock-exam', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', label: 'Пробник' },
-    { path: '/progress', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', label: 'Прогресс' },
-    { path: '/profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', label: 'Профиль' },
+    { path: '/', label: 'Дашборд', icon: 'M4 10.5L12 4l8 6.5V20a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9.5z' },
+    { path: '/theory', label: 'Теория', icon: 'M5 5h6a4 4 0 014 4v10H9a4 4 0 00-4 4V5zm14 0h-6a4 4 0 00-4 4v10h6a4 4 0 014 4V5z' },
+    { path: '/practice', label: 'Практика', icon: 'M7 7h10M7 12h10M7 17h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z' },
+    { path: '/weekly-review', label: 'Weekly Review', icon: 'M4 7h16M7 3v4m10-4v4M5 11h14v8H5z' },
+    { path: '/mock-exam', label: 'Пробник', icon: 'M7 4h10l3 3v13a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1zm9 0v4h4' },
+    { path: '/progress', label: 'Аналитика', icon: 'M5 19V9m7 10V5m7 14v-8M3 21h18' },
+    { path: '/profile', label: 'Профиль', icon: 'M12 13a4 4 0 100-8 4 4 0 000 8zm0 2c-4.418 0-8 2.015-8 4.5V21h16v-1.5C20 17.015 16.418 15 12 15z' },
   ];
 
   return (
-    <div className="sidebar" data-testid="sidebar">
+    <aside className="sidebar" data-testid="sidebar">
       <div className="sidebar-header">
         <div className="sidebar-logo">
           <div className="sidebar-logo-icon">ЕГЭ</div>
           <div>
-            <div className="sidebar-logo-text">Информатика</div>
-            <div className="sidebar-logo-sub">Тренажёр</div>
+            <div className="sidebar-logo-text">Informatics Trainer</div>
+            <div className="sidebar-logo-sub">локально · офлайн · без лишней геймификации</div>
+          </div>
+        </div>
+
+        <div className="sidebar-profile-chip">
+          <div className="sidebar-profile-name">{profile?.name || 'Ученик'}</div>
+          <div className="sidebar-profile-meta">
+            <span className="badge badge-muted">{profile?.learning_mode === 'free' ? 'Свободный режим' : 'Guided path'}</span>
           </div>
         </div>
       </div>
+
       <nav className="sidebar-nav">
-        {navItems.map(item => (
+        {navItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g,'-')}`}
             end={item.path === '/'}
           >
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
               <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
             </svg>
-            {item.label}
+            <span>{item.label}</span>
           </NavLink>
         ))}
       </nav>
+
       <div className="sidebar-footer">
         <div className="saving-indicator">
-          <div className="saving-dot"></div>
-          Сохранено
+          <div className="saving-dot" />
+          Локальные данные сохранены
         </div>
-        <div style={{marginTop: 4}}>v1.0.0</div>
+        <div style={{ marginTop: 6 }}>UTF-8 · SQLite · Offline first</div>
       </div>
-    </div>
+    </aside>
   );
 }
 
-function Topbar({ title, subtitle }) {
+function Topbar() {
+  const location = useLocation();
+  const [title, subtitle] = pageTitles[location.pathname] || ['Тренажёр', ''];
+
   return (
-    <div className="topbar" data-testid="topbar">
-      <div style={{display:'flex',alignItems:'baseline'}}>
-        <span className="topbar-title">{title}</span>
-        {subtitle && <span className="topbar-subtitle">{subtitle}</span>}
+    <header className="topbar" data-testid="topbar">
+      <div>
+        <div className="topbar-title">{title}</div>
+        <div className="topbar-subtitle">{subtitle}</div>
       </div>
       <div className="topbar-actions">
         <div className="saving-indicator">
-          <div className="saving-dot"></div>
+          <div className="saving-dot" />
           Автосохранение
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 
-function OnboardingModal({ onComplete }) {
-  const [name, setName] = useState('');
-  const [targetScore, setTargetScore] = useState(80);
-  const [examDate, setExamDate] = useState('2026-06-01');
-  const [confidence, setConfidence] = useState('medium');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await fetch(`${API}/api/profile`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name || 'Ученик',
-          target_score: targetScore,
-          exam_date: examDate,
-          confidence_level: confidence,
-          daily_hours: 2,
-          weekly_hours: 10,
-          font_size: 14,
-        }),
-      });
-      onComplete();
-    } catch (e) {
-      console.error(e);
-    }
-    setLoading(false);
-  };
-
-  return (
-    <div className="modal-overlay" data-testid="onboarding-modal">
-      <div className="modal" style={{maxWidth: 480}}>
-        <h2 className="modal-title" style={{fontSize: 22, marginBottom: 4}}>Добро пожаловать!</h2>
-        <p style={{color: 'var(--text-secondary)', marginBottom: 24, fontSize: 14}}>
-          Создайте локальный профиль для отслеживания прогресса
-        </p>
-
-        <div style={{display:'flex',flexDirection:'column',gap:16}}>
-          <div>
-            <label style={{fontSize:13,color:'var(--text-secondary)',marginBottom:6,display:'block'}}>Имя или ник</label>
-            <input className="input" value={name} onChange={e => setName(e.target.value)} placeholder="Как вас называть?" data-testid="onboard-name" />
-          </div>
-          <div>
-            <label style={{fontSize:13,color:'var(--text-secondary)',marginBottom:6,display:'block'}}>Целевой балл ЕГЭ</label>
-            <input className="input" type="number" min={0} max={100} value={targetScore} onChange={e => setTargetScore(+e.target.value)} data-testid="onboard-score" />
-          </div>
-          <div>
-            <label style={{fontSize:13,color:'var(--text-secondary)',marginBottom:6,display:'block'}}>Дата экзамена</label>
-            <input className="input" type="date" value={examDate} onChange={e => setExamDate(e.target.value)} data-testid="onboard-date" />
-          </div>
-          <div>
-            <label style={{fontSize:13,color:'var(--text-secondary)',marginBottom:6,display:'block'}}>Уровень уверенности</label>
-            <div className="segment-control" style={{width:'100%'}}>
-              {[{v:'low',l:'Начальный'},{v:'medium',l:'Средний'},{v:'high',l:'Уверенный'}].map(o => (
-                <button key={o.v} className={`segment-btn ${confidence===o.v?'active':''}`} onClick={() => setConfidence(o.v)} style={{flex:1}} data-testid={`confidence-${o.v}`}>{o.l}</button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div style={{display:'flex',gap:12,marginTop:24}}>
-          <button className="btn btn-primary btn-md" style={{flex:1}} onClick={handleSubmit} disabled={loading} data-testid="create-profile-btn">
-            {loading ? 'Создание...' : 'Создать профиль'}
-          </button>
-          <button className="btn btn-secondary btn-md" onClick={() => { setName('Ученик'); handleSubmit(); }} data-testid="default-profile-btn">
-            По умолчанию
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const pageTitles = {
-  '/': ['Дорожка', 'Ваш путь к успешной сдаче ЕГЭ'],
-  '/theory': ['Теория', 'Задания 1–27'],
-  '/practice': ['Практика', 'Решайте задания'],
-  '/weekly-review': ['Weekly Review', 'Еженедельное повторение'],
-  '/mock-exam': ['Пробник', 'Полноценный экзамен'],
-  '/progress': ['Прогресс', 'Аналитика и статистика'],
-  '/profile': ['Профиль', 'Настройки'],
-};
-
-function AppLayout({ profile }) {
-  const location = useLocation();
-  const [title, subtitle] = pageTitles[location.pathname] || ['', ''];
-
+function AppLayout({ profile, reloadProfile }) {
   return (
     <div className="app-layout">
       <Sidebar profile={profile} />
-      <div className="main-content">
-        <Topbar title={title} subtitle={subtitle} />
+      <main className="main-content">
+        <Topbar />
         <div className="page-content">
           <Routes>
-            <Route path="/" element={<RoadmapPage profile={profile} />} />
+            <Route path="/" element={<DashboardPage profile={profile} reloadProfile={reloadProfile} />} />
             <Route path="/theory" element={<TheoryPage />} />
-            <Route path="/practice" element={<PracticePage />} />
+            <Route path="/practice" element={<PracticePage profile={profile} />} />
             <Route path="/weekly-review" element={<WeeklyReviewPage />} />
             <Route path="/mock-exam" element={<MockExamPage />} />
             <Route path="/progress" element={<ProgressPage />} />
-            <Route path="/profile" element={<ProfilePage profile={profile} />} />
+            <Route path="/profile" element={<ProfilePage profile={profile} onProfileSaved={reloadProfile} />} />
           </Routes>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
@@ -190,41 +123,36 @@ function AppLayout({ profile }) {
 export default function App() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const loadProfile = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/api/profile`);
-      const data = await res.json();
-      if (data.exists) {
-        setProfile(data);
-        setShowOnboarding(false);
-      } else {
-        setShowOnboarding(true);
-      }
-    } catch (e) {
-      console.error('Profile load error:', e);
-      setShowOnboarding(true);
+      const response = await fetch(`${API}/api/profile`);
+      const data = await response.json();
+      setProfile(data);
+    } catch (error) {
+      console.error('Profile load error:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  useEffect(() => { loadProfile(); }, [loadProfile]);
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   if (loading) {
     return (
-      <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--bg-app)',flexDirection:'column',gap:16}}>
-        <div className="sidebar-logo-icon" style={{width:56,height:56,fontSize:20,borderRadius:14}}>ЕГЭ</div>
-        <div style={{color:'var(--text-primary)',fontSize:16,fontWeight:600}}>Информатика Тренажёр</div>
-        <div style={{color:'var(--text-muted)',fontSize:13}}>Загрузка...</div>
+      <div className="app-loading-screen">
+        <div className="sidebar-logo-icon app-loading-logo">ЕГЭ</div>
+        <div className="app-loading-title">Загрузка локального тренажёра</div>
+        <div className="app-loading-subtitle">Поднимаем дашборд, аналитику и дорожку обучения…</div>
       </div>
     );
   }
 
   return (
     <Router>
-      {showOnboarding && <OnboardingModal onComplete={loadProfile} />}
-      <AppLayout profile={profile} />
+      <AppLayout profile={profile} reloadProfile={loadProfile} />
     </Router>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 
@@ -6,15 +6,14 @@ const API = process.env.REACT_APP_BACKEND_URL;
 
 function normalizeTaskNumber(value, fallback = 1) {
   const parsed = Number(value);
-  if (!Number.isInteger(parsed) || parsed < 1 || parsed > 27) return fallback;
-  return parsed;
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= 27 ? parsed : fallback;
 }
 
-function normalizeMode(value) {
-  return ['training', 'control', 'weak'].includes(value) ? value : 'training';
+function normalizeMode(value, fallback = 'free') {
+  return ['free', 'guided', 'weak', 'mistakes'].includes(value) ? value : fallback;
 }
 
-function ExerciseCard({ exercise, onNext, theoryLink }) {
+function ExerciseCard({ exercise, currentMode, onNext, theoryLink, onRefreshProgress }) {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [multiAnswers, setMultiAnswers] = useState([]);
   const [numberAnswer, setNumberAnswer] = useState('');
@@ -28,13 +27,13 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
   const isFirstAutosave = useRef(true);
 
   const isCode = exercise.exercise_type === 'code';
-  const atype = exercise.answer_type;
+  const answerType = exercise.answer_type;
   const draftScope = `practice:${exercise.exercise_id}`;
 
   useEffect(() => {
     let cancelled = false;
 
-    const loadDraft = async () => {
+    async function loadDraft() {
       setSelectedAnswer(null);
       setMultiAnswers([]);
       setNumberAnswer('');
@@ -46,18 +45,15 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
       isFirstAutosave.current = true;
 
       try {
-        const res = await fetch(`${API}/api/drafts/${encodeURIComponent(draftScope)}`);
-        if (!res.ok) {
-          if (res.status !== 404) {
-            console.error('Failed to load draft', res.status);
-          }
+        const response = await fetch(`${API}/api/drafts/${encodeURIComponent(draftScope)}`);
+        if (!response.ok) {
+          setDraftReady(true);
           return;
         }
-
-        const draft = await res.json();
-        const payload = draft?.payload || {};
+        const draft = await response.json();
         if (cancelled) return;
 
+        const payload = draft?.payload || {};
         setSelectedAnswer(payload.selectedAnswer ?? null);
         setMultiAnswers(Array.isArray(payload.multiAnswers) ? payload.multiAnswers : []);
         setNumberAnswer(payload.numberAnswer ?? '');
@@ -65,11 +61,9 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
       } catch (error) {
         console.error(error);
       } finally {
-        if (!cancelled) {
-          setDraftReady(true);
-        }
+        if (!cancelled) setDraftReady(true);
       }
-    };
+    }
 
     loadDraft();
     return () => {
@@ -79,7 +73,6 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
 
   useEffect(() => {
     if (!draftReady) return undefined;
-
     if (isFirstAutosave.current) {
       isFirstAutosave.current = false;
       return undefined;
@@ -105,51 +98,63 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
       } catch (error) {
         console.error(error);
       }
-    }, 400);
+    }, 350);
 
     return () => clearTimeout(timer);
   }, [code, draftReady, draftScope, exercise.exercise_id, exercise.task_number, multiAnswers, numberAnswer, selectedAnswer]);
+
+  const toggleMulti = (value) => {
+    setMultiAnswers((prev) => (
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    ));
+  };
 
   const handleCheck = async () => {
     setChecking(true);
     try {
       if (isCode) {
-        const res = await fetch(`${API}/api/code/check`, {
+        const response = await fetch(`${API}/api/code/check`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ exercise_id: exercise.exercise_id, code }),
         });
-        setResult(await res.json());
+        setResult(await response.json());
       } else {
         let answer = selectedAnswer;
-        if (atype === 'multiple_choice') answer = multiAnswers;
-        else if (atype === 'number') answer = numberAnswer;
-        const res = await fetch(`${API}/api/exercises/check`, {
+        if (answerType === 'multiple_choice') answer = multiAnswers;
+        if (answerType === 'number') answer = numberAnswer;
+
+        const response = await fetch(`${API}/api/exercises/check`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ exercise_id: exercise.exercise_id, answer }),
         });
-        setResult(await res.json());
+        setResult(await response.json());
       }
-    } catch (e) {
-      console.error(e);
+      await onRefreshProgress?.();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setChecking(false);
     }
-    setChecking(false);
   };
 
   const handleRun = async () => {
     setRunning(true);
     try {
-      const res = await fetch(`${API}/api/code/run`, {
+      const response = await fetch(`${API}/api/code/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, stdin: '' }),
       });
-      setOutput(await res.json());
-    } catch (e) {
-      console.error(e);
+      setOutput(await response.json());
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRunning(false);
     }
-    setRunning(false);
   };
 
   const handleReset = async () => {
@@ -161,7 +166,6 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
     setOutput(null);
     setHintIdx(-1);
     isFirstAutosave.current = true;
-
     try {
       await fetch(`${API}/api/drafts/${encodeURIComponent(draftScope)}`, { method: 'DELETE' });
     } catch (error) {
@@ -171,29 +175,35 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
     }
   };
 
-  const toggleMulti = (opt) => {
-    setMultiAnswers(prev => prev.includes(opt) ? prev.filter(x => x !== opt) : [...prev, opt]);
-  };
+  const selectedSummary = useMemo(() => {
+    if (isCode) return 'Кодовое решение';
+    if (answerType === 'multiple_choice') return multiAnswers.length > 0 ? multiAnswers.join(', ') : 'Не выбрано';
+    if (answerType === 'number') return numberAnswer || 'Не введено';
+    return selectedAnswer || 'Не выбрано';
+  }, [answerType, isCode, multiAnswers, numberAnswer, selectedAnswer]);
 
   return (
     <div className="card fade-in" style={{ padding: 24 }} data-testid={`exercise-${exercise.exercise_id}`}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
         <span className="badge badge-accent">№{exercise.task_number}</span>
-        <span className={`badge ${exercise.difficulty === 'easy' ? 'badge-success' : exercise.difficulty === 'hard' ? 'badge-danger' : 'badge-warning'}`}>
-          {exercise.difficulty === 'easy' ? 'Лёгкое' : exercise.difficulty === 'hard' ? 'Сложное' : 'Среднее'}
+        <span className={`badge ${exercise.difficulty === 'hard' ? 'badge-danger' : exercise.difficulty === 'medium' ? 'badge-warning' : 'badge-success'}`}>
+          {exercise.difficulty === 'hard' ? 'Сложное' : exercise.difficulty === 'medium' ? 'Среднее' : 'Базовое'}
         </span>
         {isCode && <span className="badge badge-accent">Python</span>}
-        <span style={{ marginLeft: 'auto', color: 'var(--text-muted)', fontSize: 12 }}>Локальный автосейв</span>
+        <span className="badge badge-muted">{currentMode === 'guided' ? 'Guided path' : currentMode === 'weak' ? 'Слабые темы' : currentMode === 'mistakes' ? 'Работа над ошибками' : 'Свободный режим'}</span>
+        <span style={{ marginLeft: 'auto', color: 'var(--text-muted)', fontSize: 12 }}>Черновик сохраняется локально</span>
       </div>
 
-      <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>{exercise.title}</h3>
-      <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.7, marginBottom: 20, whiteSpace: 'pre-wrap' }}>{exercise.text}</p>
+      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>{exercise.title}</h3>
+      <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.7, marginBottom: 20, whiteSpace: 'pre-wrap' }}>
+        {exercise.text}
+      </p>
 
       {isCode ? (
         <div style={{ marginBottom: 16 }}>
-          <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
+          <div style={{ border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden' }}>
             <Editor
-              height="260px"
+              height="280px"
               language="python"
               theme="vs-dark"
               value={code}
@@ -209,129 +219,149 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
               }}
             />
           </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-            <button className="btn btn-secondary btn-sm" onClick={handleRun} disabled={running} data-testid="run-code-btn">
-              {running ? 'Выполняется...' : 'Запустить код'}
+          <div className="exercise-toolbar" style={{ marginTop: 12 }}>
+            <button className="btn btn-secondary btn-sm" onClick={handleRun} disabled={running}>
+              {running ? 'Выполняется…' : 'Запустить код'}
             </button>
-            <button className="btn btn-primary btn-sm" onClick={handleCheck} disabled={checking} data-testid="check-code-btn">
-              {checking ? 'Проверка...' : 'Проверить решение'}
+            <button className="btn btn-primary btn-sm" onClick={handleCheck} disabled={checking || !code.trim()}>
+              {checking ? 'Проверка…' : 'Проверить решение'}
             </button>
           </div>
           {output && (
-            <div className="code-block" style={{ marginTop: 12, fontSize: 13 }}>
-              {output.stdout && <div style={{ color: 'var(--text-primary)' }}>Вывод: {output.stdout}</div>}
-              {output.stderr && <div style={{ color: 'var(--danger)' }}>Ошибка: {output.stderr}</div>}
-              {output.timeout && <div style={{ color: 'var(--warning)' }}>Превышено время выполнения</div>}
+            <div className="code-block" style={{ marginTop: 12 }}>
+              {output.stdout ? <div>stdout: {output.stdout}</div> : null}
+              {output.stderr ? <div style={{ color: 'var(--danger)' }}>stderr: {output.stderr}</div> : null}
             </div>
           )}
         </div>
-      ) : atype === 'single_choice' && exercise.options ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
-          {exercise.options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => setSelectedAnswer(opt.charAt(0))}
-              style={{
-                padding: '10px 16px', borderRadius: 10, border: '1px solid', textAlign: 'left', cursor: 'pointer', fontSize: 14,
-                borderColor: selectedAnswer === opt.charAt(0) ? 'var(--accent)' : 'var(--border)',
-                background: selectedAnswer === opt.charAt(0) ? 'rgba(108,127,216,0.1)' : 'var(--bg-elevated)',
-                color: 'var(--text-primary)',
-              }}
-              data-testid={`option-${i}`}
-            >
-              {opt}
-            </button>
-          ))}
+      ) : answerType === 'single_choice' && exercise.options ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
+          {exercise.options.map((option, index) => {
+            const optionValue = option.charAt(0);
+            const active = selectedAnswer === optionValue;
+            return (
+              <button
+                key={index}
+                onClick={() => setSelectedAnswer(optionValue)}
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: 12,
+                  border: '1px solid',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: 14,
+                  borderColor: active ? 'var(--accent)' : 'var(--border)',
+                  background: active ? 'rgba(108,127,216,0.10)' : 'var(--bg-elevated)',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                {option}
+              </button>
+            );
+          })}
         </div>
-      ) : atype === 'multiple_choice' && exercise.options ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
-          {exercise.options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => toggleMulti(opt.charAt(0))}
-              style={{
-                padding: '10px 16px', borderRadius: 10, border: '1px solid', textAlign: 'left', cursor: 'pointer', fontSize: 14,
-                borderColor: multiAnswers.includes(opt.charAt(0)) ? 'var(--accent)' : 'var(--border)',
-                background: multiAnswers.includes(opt.charAt(0)) ? 'rgba(108,127,216,0.1)' : 'var(--bg-elevated)',
-                color: 'var(--text-primary)',
-              }}
-              data-testid={`option-multi-${i}`}
-            >
-              <span style={{ marginRight: 8 }}>{multiAnswers.includes(opt.charAt(0)) ? '☑' : '☐'}</span>
-              {opt}
-            </button>
-          ))}
+      ) : answerType === 'multiple_choice' && exercise.options ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
+          {exercise.options.map((option, index) => {
+            const optionValue = option.charAt(0);
+            const active = multiAnswers.includes(optionValue);
+            return (
+              <button
+                key={index}
+                onClick={() => toggleMulti(optionValue)}
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: 12,
+                  border: '1px solid',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: 14,
+                  borderColor: active ? 'var(--accent)' : 'var(--border)',
+                  background: active ? 'rgba(108,127,216,0.10)' : 'var(--bg-elevated)',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                <span style={{ marginRight: 8 }}>{active ? '☑' : '☐'}</span>
+                {option}
+              </button>
+            );
+          })}
         </div>
-      ) : (
-        <div style={{ marginBottom: 16 }}>
+      ) : answerType === 'number' ? (
+        <div style={{ marginBottom: 18 }}>
           <input
             className="input"
-            type={atype === 'number' ? 'number' : 'text'}
+            type="number"
             value={numberAnswer}
-            onChange={e => setNumberAnswer(e.target.value)}
-            placeholder="Введите ответ"
-            style={{ maxWidth: 300 }}
-            data-testid="number-answer-input"
+            onChange={(event) => setNumberAnswer(event.target.value)}
+            placeholder="Введите числовой ответ"
+            style={{ maxWidth: 260 }}
           />
         </div>
+      ) : (
+        <div className="status-banner danger" style={{ marginBottom: 18 }}>
+          Теоретические ручные ответы отключены продуктовой логикой. Для этого упражнения нужен объективный формат.
+        </div>
       )}
+
+      <div className="card-elevated" style={{ marginBottom: 16, padding: 14 }}>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Текущее состояние ответа</div>
+        <div style={{ marginTop: 6, fontSize: 14, fontWeight: 600 }}>{selectedSummary}</div>
+      </div>
 
       {result && (
         <div
-          style={{
-            padding: 14,
-            borderRadius: 12,
-            marginBottom: 16,
-            background: result.correct || result.passed ? 'rgba(92,184,122,0.08)' : 'rgba(224,96,112,0.08)',
-            border: `1px solid ${result.correct || result.passed ? 'var(--success)' : 'var(--danger)'}`,
-          }}
+          className={`status-banner ${result.correct ? 'success' : 'danger'}`}
+          style={{ marginBottom: 16 }}
           data-testid="exercise-result"
         >
-          <div style={{ fontWeight: 600, fontSize: 14, color: result.correct || result.passed ? 'var(--success)' : 'var(--danger)', marginBottom: 4 }}>
-            {result.correct || result.passed ? 'Правильно!' : 'Неправильно'}
+          <div style={{ fontWeight: 700, fontSize: 14 }}>
+            {result.correct ? 'Правильно' : 'Нужно доработать'}
           </div>
-          {result.feedback && <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{result.feedback}</div>}
-          {result.explanation && <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 6 }}>{result.explanation}</div>}
-          {result.test_results && result.test_results.length > 0 && (
-            <div style={{ marginTop: 8 }}>
-              {result.test_results.filter(t => t.is_public).map((t, i) => (
-                <div key={i} style={{ fontSize: 12, color: t.passed ? 'var(--success)' : 'var(--danger)', marginTop: 4 }}>
-                  Тест {t.test_number}: {t.passed ? 'пройден' : `ожидалось "${t.expected}", получено "${t.actual}"`}
-                </div>
-              ))}
+          {result.explanation ? (
+            <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              {result.explanation}
             </div>
-          )}
+          ) : null}
+          {result.details ? (
+            <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+              {result.details}
+            </div>
+          ) : null}
+          {result.expected !== undefined && !isCode ? (
+            <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)' }}>
+              Ожидаемый ответ: <strong>{Array.isArray(result.expected) ? result.expected.join(', ') : String(result.expected)}</strong>
+            </div>
+          ) : null}
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-        {!isCode && !result && (
+      <div className="exercise-toolbar">
+        {!isCode && answerType !== 'text' && (
           <button
             className="btn btn-primary btn-sm"
             onClick={handleCheck}
-            disabled={checking || (atype === 'single_choice' && !selectedAnswer) || (atype === 'number' && !numberAnswer)}
-            data-testid="check-answer-btn"
+            disabled={checking || (answerType === 'single_choice' && !selectedAnswer) || (answerType === 'multiple_choice' && multiAnswers.length === 0) || (answerType === 'number' && numberAnswer === '')}
           >
-            {checking ? 'Проверка...' : 'Проверить ответ'}
+            {checking ? 'Проверка…' : 'Проверить'}
           </button>
         )}
         <button
           className="btn btn-ghost btn-sm"
           onClick={() => setHintIdx(Math.min(hintIdx + 1, (exercise.hints || []).length - 1))}
           disabled={!exercise.hints || exercise.hints.length === 0 || hintIdx >= exercise.hints.length - 1}
-          data-testid="hint-btn"
         >
           Подсказка {hintIdx >= 0 ? `(${hintIdx + 1}/${exercise.hints?.length || 0})` : ''}
         </button>
-        <button className="btn btn-ghost btn-sm" onClick={handleReset} data-testid="reset-btn">Сбросить</button>
-        <button className="btn btn-secondary btn-sm" onClick={onNext} style={{ marginLeft: 'auto' }} data-testid="next-exercise-btn">Следующее</button>
+        <button className="btn btn-ghost btn-sm" onClick={handleReset}>Сбросить</button>
+        <button className="btn btn-secondary btn-sm" onClick={onNext}>Следующее</button>
         <Link to={theoryLink} className="btn btn-ghost btn-sm">К теории</Link>
       </div>
 
       {hintIdx >= 0 && exercise.hints && (
-        <div style={{ marginTop: 12, padding: 12, background: 'rgba(108,127,216,0.06)', borderRadius: 10, border: '1px solid rgba(108,127,216,0.15)' }}>
+        <div style={{ marginTop: 14, padding: 14, background: 'rgba(108,127,216,0.06)', borderRadius: 12, border: '1px solid rgba(108,127,216,0.18)' }}>
           {exercise.hints.slice(0, hintIdx + 1).map((hint, index) => (
-            <div key={index} style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: index > 0 ? 6 : 0 }}>
+            <div key={index} style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: index === 0 ? 0 : 6 }}>
               Подсказка {index + 1}: {hint}
             </div>
           ))}
@@ -341,150 +371,236 @@ function ExerciseCard({ exercise, onNext, theoryLink }) {
   );
 }
 
-export default function PracticePage() {
-  const [taskNumber, setTaskNumber] = useState(1);
+export default function PracticePage({ profile }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [roadmap, setRoadmap] = useState(null);
+  const [progress, setProgress] = useState(null);
+  const [tasks, setTasks] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [tasks, setTasks] = useState([]);
-  const [progress, setProgress] = useState([]);
-  const [mode, setMode] = useState('training');
-  const [loading, setLoading] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+
+  const modeFromRoute = normalizeMode(searchParams.get('mode'), profile?.learning_mode === 'guided' ? 'guided' : 'free');
+  const taskFromRoute = normalizeTaskNumber(searchParams.get('task'), 1);
+
+  const allowedTasks = useMemo(() => {
+    if (!roadmap) return [];
+    if (modeFromRoute === 'guided') return roadmap.review_due ? [] : (roadmap.current_focus_tasks || []);
+    if (modeFromRoute === 'weak') return roadmap.weak_tasks || [];
+    if (modeFromRoute === 'mistakes') return roadmap.mistake_tasks || [];
+    return tasks.map((task) => task.task_number);
+  }, [modeFromRoute, roadmap, tasks]);
+
+  const currentTask = useMemo(() => {
+    if (allowedTasks.length === 0) return taskFromRoute;
+    return allowedTasks.includes(taskFromRoute) ? taskFromRoute : allowedTasks[0];
+  }, [allowedTasks, taskFromRoute]);
+
+  const refreshAll = async () => {
+    try {
+      const [theoryRes, progressRes, roadmapRes] = await Promise.all([
+        fetch(`${API}/api/theory`),
+        fetch(`${API}/api/progress`),
+        fetch(`${API}/api/roadmap`),
+      ]);
+      const [theoryData, progressData, roadmapData] = await Promise.all([theoryRes.json(), progressRes.json(), roadmapRes.json()]);
+      setTasks(theoryData);
+      setProgress(progressData);
+      setRoadmap(roadmapData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const refreshExercises = async () => {
+    if (modeFromRoute === 'guided' && roadmap?.review_due) {
+      setExercises([]);
+      setLoading(false);
+      return;
+    }
+
+    if (allowedTasks.length === 0 && modeFromRoute !== 'free') {
+      setExercises([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${API}/api/exercises/${currentTask}?mode=${modeFromRoute}`);
+      const data = await response.json();
+      setExercises(data);
+      setCurrentIdx(0);
+    } catch (error) {
+      console.error(error);
+      setExercises([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const nextTask = normalizeTaskNumber(searchParams.get('task'), 1);
-    const nextMode = normalizeMode(searchParams.get('mode'));
-    setTaskNumber(nextTask);
-    setMode(nextMode);
-  }, [searchParams]);
-
-  useEffect(() => {
-    fetch(`${API}/api/theory`).then(r => r.json()).then(setTasks).catch(() => {});
-    fetch(`${API}/api/progress`).then(r => r.json()).then(data => setProgress(data.tasks || [])).catch(() => {});
+    refreshAll();
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-
-    const load = async () => {
-      try {
-        if (mode === 'weak') {
-          const weakTasks = (progress || [])
-            .filter(item => (item.accuracy || 0) < 60 && (item.total_attempts || 0) >= 3)
-            .map(item => item.task_number);
-          const fallbackTask = weakTasks[0] || taskNumber;
-          const targetTask = weakTasks.includes(taskNumber) ? taskNumber : fallbackTask;
-          if (targetTask !== taskNumber) {
-            setSearchParams({ task: String(targetTask), mode: 'weak' });
-            return;
-          }
-        }
-
-        const response = await fetch(`${API}/api/exercises/${taskNumber}`);
-        let data = await response.json();
-
-        if (mode === 'control') {
-          const sorted = [...data].sort((a, b) => {
-            const diffOrder = { easy: 0, medium: 1, hard: 2 };
-            return (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1);
-          });
-          data = sorted.slice(0, Math.min(sorted.length, 5));
-        }
-
-        setExercises(data);
-        setCurrentIdx(0);
-      } catch (error) {
-        console.error(error);
-      }
-      setLoading(false);
-    };
-
-    if (progress.length > 0 || mode !== 'weak') {
-      load();
-    } else {
-      setLoading(false);
+    if (!roadmap && !tasks.length) return;
+    if (taskFromRoute !== currentTask || normalizeMode(searchParams.get('mode'), modeFromRoute) !== modeFromRoute) {
+      setSearchParams({ task: String(currentTask), mode: modeFromRoute });
+      return;
     }
-  }, [taskNumber, mode, progress, setSearchParams]);
+    refreshExercises();
+  }, [currentTask, modeFromRoute, roadmap, taskFromRoute, tasks.length]);
 
-  const handleNext = () => {
-    if (currentIdx < exercises.length - 1) setCurrentIdx(currentIdx + 1);
-    else setCurrentIdx(0);
+  const modeDescription = {
+    free: 'Свободный режим: можно брать любой номер задания и тренироваться без ограничений.',
+    guided: roadmap?.review_due
+      ? 'Guided path сейчас заблокирован обязательным Weekly Review.'
+      : 'Guided path: доступны только задания текущего этапа, без произвольных перескоков.',
+    weak: 'Слабые темы: фокус на заданиях с просевшей точностью.',
+    mistakes: 'Работа над ошибками: берём темы, где были последние неверные попытки.',
   };
 
-  const updateRoute = (nextTask, nextMode = mode) => {
-    setSearchParams({ task: String(nextTask), mode: nextMode });
+  const handleModeChange = (nextMode) => {
+    const fallbackTask = nextMode === 'guided'
+      ? (roadmap?.current_focus_tasks?.[0] || 1)
+      : nextMode === 'weak'
+        ? (roadmap?.weak_tasks?.[0] || 1)
+        : nextMode === 'mistakes'
+          ? (roadmap?.mistake_tasks?.[0] || 1)
+          : currentTask;
+    setSearchParams({ task: String(fallbackTask), mode: nextMode });
   };
 
-  const weakTaskNumbers = (progress || [])
-    .filter(item => (item.accuracy || 0) < 60 && (item.total_attempts || 0) >= 3)
-    .map(item => item.task_number);
+  const taskMap = useMemo(() => {
+    const map = {};
+    tasks.forEach((task) => {
+      map[task.task_number] = task;
+    });
+    return map;
+  }, [tasks]);
+
+  const progressMap = useMemo(() => {
+    const map = {};
+    (progress?.tasks || []).forEach((task) => {
+      map[task.task_number] = task;
+    });
+    return map;
+  }, [progress]);
+
+  const currentExercise = exercises[currentIdx];
 
   return (
-    <div className="fade-in" style={{ display: 'flex', gap: 20, height: 'calc(100vh - 104px)' }}>
-      <div style={{ width: 200, minWidth: 200, overflowY: 'auto' }} data-testid="practice-task-list">
-        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 12 }}>Задание</div>
-        {(tasks.length > 0 ? tasks : Array.from({ length: 27 }, (_, i) => ({ task_number: i + 1, title: `№${i + 1}` }))).map(t => {
-          const isWeak = weakTaskNumbers.includes(t.task_number);
+    <div className="fade-in" style={{ display: 'grid', gridTemplateColumns: '240px minmax(0, 1fr)', gap: 20, height: 'calc(100vh - 132px)' }}>
+      <div style={{ overflowY: 'auto' }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 12 }}>Навигация по заданиям</div>
+
+        {(allowedTasks.length > 0 ? allowedTasks : Array.from({ length: 27 }, (_, index) => index + 1)).map((taskNumber) => {
+          const taskInfo = taskMap[taskNumber];
+          const taskProgress = progressMap[taskNumber] || {};
+          const active = taskNumber === currentTask;
+
           return (
             <button
-              key={t.task_number}
-              onClick={() => updateRoute(t.task_number)}
-              className={`nav-item ${taskNumber === t.task_number ? 'active' : ''}`}
-              style={{ width: '100%', textAlign: 'left', border: 'none', fontSize: 13 }}
-              data-testid={`practice-task-${t.task_number}`}
+              key={taskNumber}
+              onClick={() => setSearchParams({ task: String(taskNumber), mode: modeFromRoute })}
+              className={`nav-item ${active ? 'active' : ''}`}
+              style={{ width: '100%', textAlign: 'left', border: 'none' }}
+              data-testid={`practice-task-${taskNumber}`}
             >
               <span style={{
-                width: 22, height: 22, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 600,
-                background: taskNumber === t.task_number ? 'var(--accent)' : 'var(--bg-elevated)',
-                color: taskNumber === t.task_number ? 'white' : 'var(--text-secondary)', flexShrink: 0,
-              }}>{t.task_number}</span>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.title || `Задание ${t.task_number}`}</span>
-              {isWeak && <span className="badge badge-danger" style={{ marginLeft: 'auto', fontSize: 10 }}>weak</span>}
+                width: 26,
+                height: 26,
+                borderRadius: 8,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 12,
+                fontWeight: 700,
+                background: active ? 'var(--accent)' : 'var(--bg-elevated)',
+                color: active ? 'white' : 'var(--text-secondary)',
+                flexShrink: 0,
+              }}>
+                {taskNumber}
+              </span>
+              <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {taskInfo?.title || `Задание ${taskNumber}`}
+              </span>
+              {taskProgress.total_attempts > 0 ? (
+                <span className={`badge ${taskProgress.accuracy >= 80 ? 'badge-success' : taskProgress.accuracy >= 60 ? 'badge-accent' : 'badge-warning'}`} style={{ marginLeft: 'auto' }}>
+                  {taskProgress.accuracy?.toFixed?.(0) || 0}%
+                </span>
+              ) : null}
             </button>
           );
         })}
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-          <div className="segment-control" data-testid="practice-mode">
-            {[{ v: 'training', l: 'Тренировка' }, { v: 'control', l: 'Контроль' }, { v: 'weak', l: 'Слабые места' }].map(item => (
-              <button
-                key={item.v}
-                className={`segment-btn ${mode === item.v ? 'active' : ''}`}
-                onClick={() => updateRoute(taskNumber, item.v)}
-                data-testid={`mode-${item.v}`}
-              >
-                {item.l}
-              </button>
-            ))}
+      <div style={{ overflowY: 'auto', minWidth: 0 }}>
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Практика</div>
+              <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{modeDescription[modeFromRoute]}</div>
+            </div>
+            <div className="segment-control" data-testid="practice-mode">
+              <button className={`segment-btn ${modeFromRoute === 'free' ? 'active' : ''}`} onClick={() => handleModeChange('free')}>Свободный</button>
+              <button className={`segment-btn ${modeFromRoute === 'guided' ? 'active' : ''}`} onClick={() => handleModeChange('guided')}>Guided</button>
+              <button className={`segment-btn ${modeFromRoute === 'weak' ? 'active' : ''}`} onClick={() => handleModeChange('weak')}>Слабые темы</button>
+              <button className={`segment-btn ${modeFromRoute === 'mistakes' ? 'active' : ''}`} onClick={() => handleModeChange('mistakes')}>Ошибки</button>
+            </div>
           </div>
-          {mode === 'control' && <span style={{ color: 'var(--warning)', fontSize: 13 }}>Контроль: показываем до 5 заданий по номеру, отсортированных по сложности.</span>}
-          {mode === 'weak' && <span style={{ color: 'var(--danger)', fontSize: 13 }}>Режим слабых мест фокусируется на темах с точностью ниже 60% после 3+ попыток.</span>}
-          {exercises.length > 0 && (
-            <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>
-              Задание {currentIdx + 1} из {exercises.length}
-            </span>
-          )}
+
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 14 }}>
+            {modeFromRoute === 'guided' && roadmap?.current_focus_tasks?.length > 0 && (
+              <span className="badge badge-accent">Фокус этапа: {roadmap.current_focus_tasks.map((task) => `№${task}`).join(', ')}</span>
+            )}
+            {modeFromRoute === 'weak' && (roadmap?.weak_tasks?.length || 0) === 0 && (
+              <span className="badge badge-success">Слабых тем по текущим данным нет</span>
+            )}
+            {modeFromRoute === 'mistakes' && (roadmap?.mistake_tasks?.length || 0) === 0 && (
+              <span className="badge badge-success">Недавних ошибок нет</span>
+            )}
+            {exercises.length > 0 && (
+              <span className="badge badge-muted">Упражнение {currentIdx + 1} из {exercises.length}</span>
+            )}
+          </div>
         </div>
 
-        {loading ? (
-          <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Загрузка заданий...</div>
+        {modeFromRoute === 'guided' && roadmap?.review_due ? (
+          <div className="status-banner warning">
+            <div style={{ fontWeight: 700, fontSize: 15 }}>Guided path временно закрыт checkpoint’ом</div>
+            <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              Сначала завершите Weekly Review, затем guided path снова откроет практику текущего этапа.
+            </div>
+            <div style={{ marginTop: 12 }}>
+              <Link className="btn btn-primary btn-sm" to="/weekly-review">Перейти в Weekly Review</Link>
+            </div>
+          </div>
+        ) : loading ? (
+          <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Загрузка упражнений…</div>
         ) : exercises.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: 40 }}>
-            <div style={{ fontSize: 15, color: 'var(--text-secondary)' }}>
-              {mode === 'weak'
-                ? 'Пока нет слабых мест по заданию правил режима. Сначала накопите хотя бы 3 попытки с точностью ниже 60%.'
-                : 'Задания для этого номера пока не добавлены'}
+            <div style={{ fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+              {modeFromRoute === 'weak'
+                ? 'Для режима слабых тем пока недостаточно провальных задач.'
+                : modeFromRoute === 'mistakes'
+                  ? 'В режиме ошибок пока нет недавних неверных попыток.'
+                  : 'Для этого задания пока нет объективных упражнений в локальной базе.'}
             </div>
-            <Link to={`/theory?task=${taskNumber}`} className="btn btn-secondary btn-sm" style={{ marginTop: 16 }}>Изучить теорию</Link>
+            <div style={{ marginTop: 16, display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link className="btn btn-secondary btn-sm" to={`/theory?task=${currentTask}`}>Открыть теорию</Link>
+              <Link className="btn btn-ghost btn-sm" to="/progress">Посмотреть аналитику</Link>
+            </div>
           </div>
         ) : (
           <ExerciseCard
-            key={exercises[currentIdx]?.exercise_id}
-            exercise={exercises[currentIdx]}
-            onNext={handleNext}
-            theoryLink={`/theory?task=${taskNumber}`}
+            key={currentExercise.exercise_id}
+            exercise={currentExercise}
+            currentMode={modeFromRoute}
+            theoryLink={`/theory?task=${currentTask}`}
+            onNext={() => setCurrentIdx((prev) => (prev + 1) % exercises.length)}
+            onRefreshProgress={refreshAll}
           />
         )}
       </div>

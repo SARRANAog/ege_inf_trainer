@@ -82,6 +82,7 @@ class LocalSQLiteStorage:
 
                 CREATE INDEX IF NOT EXISTS idx_attempts_task_time ON attempts(task_number, timestamp DESC);
                 CREATE INDEX IF NOT EXISTS idx_attempts_correct ON attempts(correct);
+                CREATE INDEX IF NOT EXISTS idx_attempts_timestamp ON attempts(timestamp DESC);
 
                 CREATE TABLE IF NOT EXISTS weekly_reviews (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -148,11 +149,6 @@ class LocalSQLiteStorage:
             conn.execute(query, params)
             conn.commit()
 
-    def _executemany(self, query: str, params_seq: list[tuple[Any, ...]]) -> None:
-        with self._lock, self._connect() as conn:
-            conn.executemany(query, params_seq)
-            conn.commit()
-
     def get_meta(self, key: str) -> Optional[str]:
         with self._lock, self._connect() as conn:
             row = conn.execute("SELECT value FROM app_meta WHERE key = ?", (key,)).fetchone()
@@ -168,7 +164,12 @@ class LocalSQLiteStorage:
             (key, value),
         )
 
-    def _content_signature(self, theory_data: list[dict[str, Any]], exercises_data: list[dict[str, Any]], roadmap_data: list[dict[str, Any]]) -> str:
+    def _content_signature(
+        self,
+        theory_data: list[dict[str, Any]],
+        exercises_data: list[dict[str, Any]],
+        roadmap_data: list[dict[str, Any]],
+    ) -> str:
         payload = _json_dumps(
             {
                 "theory": theory_data,
@@ -205,7 +206,7 @@ class LocalSQLiteStorage:
             }
 
         theory_rows = [
-            (doc["task_number"], doc.get("title", f"Задание {doc['task_number']}"), _json_dumps(doc))
+            (doc["task_number"], doc.get("title", f"\u0417\u0430\u0434\u0430\u043d\u0438\u0435 {doc['task_number']}"), _json_dumps(doc))
             for doc in theory_data
         ]
         exercise_rows = [
@@ -221,7 +222,7 @@ class LocalSQLiteStorage:
             for doc in exercises_data
         ]
         roadmap_rows = [
-            (doc["stage_number"], doc.get("title", f"Этап {doc['stage_number']}"), _json_dumps(doc))
+            (doc["stage_number"], doc.get("title", f"\u042d\u0442\u0430\u043f {doc['stage_number']}"), _json_dumps(doc))
             for doc in roadmap_data
         ]
 
@@ -284,29 +285,54 @@ class LocalSQLiteStorage:
 
     def list_exercises(
         self,
-        task_number: int,
+        task_number: Optional[int] = None,
         difficulty: Optional[str] = None,
         exercise_type: Optional[str] = None,
+        *,
+        only_objective: bool = False,
+        only_code: bool = False,
     ) -> list[dict[str, Any]]:
-        query = "SELECT data_json FROM exercises WHERE task_number = ?"
-        params: list[Any] = [task_number]
+        query = "SELECT data_json FROM exercises WHERE 1=1"
+        params: list[Any] = []
+
+        if task_number is not None:
+            query += " AND task_number = ?"
+            params.append(task_number)
         if difficulty:
             query += " AND difficulty = ?"
             params.append(difficulty)
         if exercise_type:
             query += " AND exercise_type = ?"
             params.append(exercise_type)
-        query += " ORDER BY exercise_id ASC"
+        if only_objective:
+            query += " AND (answer_type IN ('single_choice', 'multiple_choice', 'number') OR exercise_type = 'code')"
+        if only_code:
+            query += " AND exercise_type = 'code'"
+
+        query += " ORDER BY task_number ASC, exercise_id ASC"
+        return self._fetch_many_docs(query, tuple(params))
+
+    def list_exercises_for_task_limited(
+        self,
+        task_number: int,
+        limit: int,
+        *,
+        only_objective: bool = False,
+        only_code: bool = False,
+    ) -> list[dict[str, Any]]:
+        query = "SELECT data_json FROM exercises WHERE task_number = ?"
+        params: list[Any] = [task_number]
+        if only_objective:
+            query += " AND (answer_type IN ('single_choice', 'multiple_choice', 'number') OR exercise_type = 'code')"
+        if only_code:
+            query += " AND exercise_type = 'code'"
+        query += f" ORDER BY exercise_id ASC LIMIT {int(limit)}"
         return self._fetch_many_docs(query, tuple(params))
 
     def get_exercise(self, exercise_id: str) -> Optional[dict[str, Any]]:
         return self._fetch_one_doc("SELECT data_json FROM exercises WHERE exercise_id = ?", (exercise_id,))
 
-    def list_exercises_for_task_limited(self, task_number: int, limit: int) -> list[dict[str, Any]]:
-        query = f"SELECT data_json FROM exercises WHERE task_number = ? ORDER BY exercise_id ASC LIMIT {int(limit)}"
-        return self._fetch_many_docs(query, (task_number,))
-
-    def upsert_progress(self, progress: dict[str, Any]) -> None:
+    def save_progress(self, progress: dict[str, Any]) -> None:
         self._execute(
             """
             INSERT INTO progress (task_number, total_attempts, correct_attempts, accuracy, last_practiced, status, updated_at, data_json)
@@ -347,7 +373,7 @@ class LocalSQLiteStorage:
             conn.execute("DELETE FROM drafts")
             conn.commit()
 
-    def insert_attempt(self, attempt: dict[str, Any]) -> None:
+    def add_attempt(self, attempt: dict[str, Any]) -> None:
         self._execute(
             "INSERT INTO attempts (task_number, exercise_id, correct, timestamp, data_json) VALUES (?, ?, ?, ?, ?)",
             (
@@ -359,6 +385,14 @@ class LocalSQLiteStorage:
             ),
         )
 
+    def list_attempts(self, task_number: int, limit: int = 20) -> list[dict[str, Any]]:
+        query = f"SELECT data_json FROM attempts WHERE task_number = ? ORDER BY timestamp DESC LIMIT {int(limit)}"
+        return self._fetch_many_docs(query, (task_number,))
+
+    def list_recent_attempts(self, limit: int = 120) -> list[dict[str, Any]]:
+        query = f"SELECT data_json FROM attempts ORDER BY timestamp DESC LIMIT {int(limit)}"
+        return self._fetch_many_docs(query)
+
     def count_attempts(self, *, correct: Optional[bool] = None) -> int:
         query = "SELECT COUNT(*) AS c FROM attempts"
         params: tuple[Any, ...] = ()
@@ -369,13 +403,8 @@ class LocalSQLiteStorage:
             row = conn.execute(query, params).fetchone()
         return int(row["c"]) if row else 0
 
-    def list_attempts(self, task_number: int, limit: int) -> list[dict[str, Any]]:
-        query = f"SELECT data_json FROM attempts WHERE task_number = ? ORDER BY timestamp DESC LIMIT {int(limit)}"
-        return self._fetch_many_docs(query, (task_number,))
-
     def list_roadmap(self) -> list[dict[str, Any]]:
         return self._fetch_many_docs("SELECT data_json FROM roadmap ORDER BY stage_number ASC")
-
 
     def count_weekly_reviews(self, *, status: Optional[str] = None) -> int:
         query = "SELECT COUNT(*) AS c FROM weekly_reviews"
@@ -403,29 +432,36 @@ class LocalSQLiteStorage:
             ),
         )
 
-    def complete_active_weekly_review(self, completed_at: str) -> None:
-        active = self.get_active_weekly_review()
-        if not active:
-            return
-        active["status"] = "completed"
-        active["completed_at"] = completed_at
-        with self._lock, self._connect() as conn:
-            conn.execute(
-                """
-                UPDATE weekly_reviews
-                SET status = ?, completed_at = ?, data_json = ?
+    def save_active_weekly_review(self, review: dict[str, Any]) -> None:
+        self._execute(
+            """
+            UPDATE weekly_reviews
+            SET status = ?, started_at = ?, completed_at = ?, data_json = ?
+            WHERE id = (
+                SELECT id FROM weekly_reviews
                 WHERE status = 'active'
-                """,
-                (active["status"], active["completed_at"], _json_dumps(active)),
+                ORDER BY started_at DESC
+                LIMIT 1
             )
-            conn.commit()
+            """,
+            (
+                review.get("status", "active"),
+                review.get("started_at"),
+                review.get("completed_at"),
+                _json_dumps(review),
+            ),
+        )
+
+    def list_completed_weekly_reviews(self, limit: int = 10) -> list[dict[str, Any]]:
+        query = f"SELECT data_json FROM weekly_reviews WHERE status = 'completed' ORDER BY completed_at DESC LIMIT {int(limit)}"
+        return self._fetch_many_docs(query)
 
     def get_active_mock_exam(self) -> Optional[dict[str, Any]]:
         return self._fetch_one_doc(
-            "SELECT data_json FROM mock_exams WHERE status = 'active' ORDER BY started_at DESC LIMIT 1"
+            "SELECT data_json FROM mock_exams WHERE status IN ('active', 'paused') ORDER BY started_at DESC LIMIT 1"
         )
 
-    def list_completed_mock_exams(self, limit: int) -> list[dict[str, Any]]:
+    def list_completed_mock_exams(self, limit: int = 10) -> list[dict[str, Any]]:
         query = f"SELECT data_json FROM mock_exams WHERE status = 'completed' ORDER BY completed_at DESC LIMIT {int(limit)}"
         return self._fetch_many_docs(query)
 
@@ -457,6 +493,16 @@ class LocalSQLiteStorage:
 
     def get_mock_exam(self, exam_id: str) -> Optional[dict[str, Any]]:
         return self._fetch_one_doc("SELECT data_json FROM mock_exams WHERE exam_id = ?", (exam_id,))
+
+    def count_mock_exams(self, *, status: Optional[str] = None) -> int:
+        query = "SELECT COUNT(*) AS c FROM mock_exams"
+        params: tuple[Any, ...] = ()
+        if status is not None:
+            query += " WHERE status = ?"
+            params = (status,)
+        with self._lock, self._connect() as conn:
+            row = conn.execute(query, params).fetchone()
+        return int(row["c"]) if row else 0
 
     def get_draft(self, scope: str) -> Optional[dict[str, Any]]:
         return self._fetch_one_doc("SELECT data_json FROM drafts WHERE scope = ?", (scope,))

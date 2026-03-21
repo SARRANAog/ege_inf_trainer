@@ -1,0 +1,14 @@
+﻿{
+  "source_markdown": "ege_product_update.md",
+  "files": [
+    "backend/server.py",
+    "backend/storage.py",
+    "frontend/src/App.js",
+    "frontend/src/App.css",
+    "frontend/src/pages/Roadmap.js",
+    "frontend/src/pages/Practice.js",
+    "frontend/src/pages/WeeklyReview.js",
+    "frontend/src/pages/MockExam.js",
+    "frontend/src/pages/Progress.js"
+  ]
+}
