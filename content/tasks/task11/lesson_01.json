@@ -21,8 +21,8 @@
       "exercise_type": "closed",
       "explanation": "log2(8)=3 бита.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -37,8 +37,8 @@
       "exercise_type": "closed",
       "explanation": "2 равновероятных исхода → 1 бит.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -53,8 +53,8 @@
       "exercise_type": "closed",
       "explanation": "log2(128)=7.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -69,8 +69,8 @@
       "exercise_type": "closed",
       "explanation": "10 КБ = 10240 байт. 256 символов → 1 байт/символ. 10240 символов.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -85,8 +85,8 @@
       "exercise_type": "closed",
       "explanation": "50*80=4000 символов = 4000 байт.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -101,8 +101,8 @@
       "exercise_type": "closed",
       "explanation": "log₂(32) = 5 бит.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -117,8 +117,8 @@
       "exercise_type": "closed",
       "explanation": "2³ = 8.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     },
@@ -133,8 +133,8 @@
       "exercise_type": "closed",
       "explanation": "log₂(16)=4 бита на символ. 100×4=400.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Чётко определите, какую формулу нужно применить: I=log2(N) или V=K*i.",
+        "Проверьте единицы измерения и округление (если оно требуется условием)."
       ],
       "code_template": ""
     }

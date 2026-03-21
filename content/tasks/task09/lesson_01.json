@@ -21,8 +21,8 @@
       "exercise_type": "closed",
       "explanation": "7>10? Нет. Значит A1+5=7+5=12.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "При копировании формулы сначала определите сдвиг по строке и столбцу.",
+        "Разберите ссылки по типам: относительная, абсолютная, смешанная."
       ],
       "code_template": ""
     },
@@ -37,8 +37,8 @@
       "exercise_type": "closed",
       "explanation": "75>100? Нет. 75>50? Да. Ответ: B.",
       "hints": [
-        "Eliminate options contradicting base definitions.",
-        "Run one final condition check before selecting option."
+        "??? ??????????? ??????? ??????? ?????????? ????? ?? ?????? ? ???????.",
+        "????????? ?????? ?? ?????: ?????????????, ??????????, ?????????."
       ],
       "code_template": "",
       "options": [
@@ -58,8 +58,8 @@
       "exercise_type": "closed",
       "explanation": "Число 3 встречается 3 раза.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "При копировании формулы сначала определите сдвиг по строке и столбцу.",
+        "Разберите ссылки по типам: относительная, абсолютная, смешанная."
       ],
       "code_template": ""
     },
@@ -74,8 +74,8 @@
       "exercise_type": "closed",
       "explanation": "C1→D2: +1 столбец, +1 строка. A→B ($1 остаётся), $B остаётся (1→2). Ответ: =B$1+$B2.",
       "hints": [
-        "Eliminate options contradicting base definitions.",
-        "Run one final condition check before selecting option."
+        "??? ??????????? ??????? ??????? ?????????? ????? ?? ?????? ? ???????.",
+        "????????? ?????? ?? ?????: ?????????????, ??????????, ?????????."
       ],
       "code_template": "",
       "options": [
@@ -96,8 +96,8 @@
       "exercise_type": "closed",
       "explanation": "Строки с 'да': A1(10)+A3(30)+A4(40)=80.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "При копировании формулы сначала определите сдвиг по строке и столбцу.",
+        "Разберите ссылки по типам: относительная, абсолютная, смешанная."
       ],
       "code_template": ""
     },
@@ -112,8 +112,8 @@
       "exercise_type": "closed",
       "explanation": "30/(30+50+20)*100 = 30/100*100 = 30.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "При копировании формулы сначала определите сдвиг по строке и столбцу.",
+        "Разберите ссылки по типам: относительная, абсолютная, смешанная."
       ],
       "code_template": ""
     },
@@ -123,17 +123,17 @@
       "title": "Копирование формулы",
       "text": "В ячейке B2 формула =A1+$C1. Если скопировать в D4, какая формула получится?",
       "answer_type": "single_choice",
-      "correct_answer": "B",
+      "correct_answer": "A",
       "difficulty": "hard",
       "exercise_type": "closed",
-      "explanation": "Копирование B2→D4: сдвиг на +2 столбца, +2 строки. A1→C3, $C1→$C3 (столбец фиксирован, строка +2). Формула: =C3+$C3.",
+      "explanation": "Копирование из B2 в D4 даёт сдвиг +2 столбца и +2 строки. A1 превращается в C3, а $C1 — в $C3 (фиксирован только столбец C). Итог: =C3+$C3.",
       "hints": [
         "$ фиксирует столбец или строку при копировании"
       ],
       "code_template": "",
       "options": [
         "A) =C3+$C3",
-        "B) =C3+$C3",
+        "B) =C3+$D3",
         "C) =C3+$E3",
         "D) =A1+$C1"
       ]
@@ -149,8 +149,8 @@
       "exercise_type": "closed",
       "explanation": "2+4+6 = 12.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "При копировании формулы сначала определите сдвиг по строке и столбцу.",
+        "Разберите ссылки по типам: относительная, абсолютная, смешанная."
       ],
       "code_template": ""
     }

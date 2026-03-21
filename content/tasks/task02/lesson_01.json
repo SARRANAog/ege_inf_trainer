@@ -21,8 +21,8 @@
       "exercise_type": "code",
       "explanation": "XOR трёх переменных = 1, когда нечётное число единиц: 001,010,100,111 = 4.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Сначала перепишите логическое выражение в Python со скобками.",
+        "Проверьте 2^n наборов значений и считайте только подходящие строки таблицы истинности."
       ],
       "code_template": "from itertools import product\ncount = 0\nfor a,b,c in product((0,1), repeat=3):\n    if (a ^ b ^ c):\n        count += 1\nprint(count)",
       "test_cases": [
@@ -40,7 +40,7 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "hint_after_first_error": "Сначала перепишите логическое выражение в Python со скобками.",
       "full_explanation": "XOR трёх переменных = 1, когда нечётное число единиц: 001,010,100,111 = 4."
     },
     {
@@ -54,8 +54,8 @@
       "exercise_type": "code",
       "explanation": "x5=1. (x1∨x2): 3 из 4. (x3∨x4): 3 из 4. Итого: 3*3*1=9.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Сначала перепишите логическое выражение в Python со скобками.",
+        "Проверьте 2^n наборов значений и считайте только подходящие строки таблицы истинности."
       ],
       "code_template": "from itertools import product\ncount = 0\nfor vals in product((0,1), repeat=5):\n    x1,x2,x3,x4,x5 = vals\n    if (x1 or x2) and (x3 or x4) and x5:\n        count += 1\nprint(count)",
       "test_cases": [
@@ -73,7 +73,7 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "hint_after_first_error": "Сначала перепишите логическое выражение в Python со скобками.",
       "full_explanation": "x5=1. (x1∨x2): 3 из 4. (x3∨x4): 3 из 4. Итого: 3*3*1=9."
     },
     {
@@ -82,32 +82,32 @@
       "title": "Сложное выражение",
       "text": "Сколько решений: (A∨¬B) ∧ (B∨¬C) ∧ (C∨¬A) = 1?",
       "answer_type": "number",
-      "correct_answer": 4,
+      "correct_answer": 2,
       "difficulty": "easy",
       "exercise_type": "code",
-      "explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints.",
+      "explanation": "Выражение (A∨¬B) ∧ (B∨¬C) ∧ (C∨¬A) истинно только для наборов 000 и 111, поэтому ответ 2.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Сначала перепишите логическое выражение в Python со скобками.",
+        "Проверьте 2^n наборов значений и считайте только подходящие строки таблицы истинности."
       ],
       "code_template": "from itertools import product\ncount = 0\nfor a,b,c in product((0,1), repeat=3):\n    if (a or not b) and (b or not c) and (c or not a):\n        count += 1\nprint(count)",
       "test_cases": [
         {
           "input": "",
-          "expected_output": "4",
+          "expected_output": "2",
           "is_public": true
         }
       ],
       "tests": [
         {
           "input": "",
-          "output": "4",
+          "output": "2",
           "is_public": true
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Сначала перепишите логическое выражение в Python со скобками.",
+      "full_explanation": "Полный перебор 8 наборов показывает, что формула (A∨¬B) ∧ (B∨¬C) ∧ (C∨¬A) равна 1 только на 000 и 111. Итого 2 строки."
     },
     {
       "exercise_id": "ex_2_1016",
@@ -118,10 +118,10 @@
       "correct_answer": 4,
       "difficulty": "easy",
       "exercise_type": "code",
-      "explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints.",
+      "explanation": "Импликация A→B ложна только в случае A=1 и B=0. После перебора всех наборов A, B, C выражение (A→B) ∧ (B→C) истинно в 4 строках.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Сначала перепишите логическое выражение в Python со скобками.",
+        "Проверьте 2^n наборов значений и считайте только подходящие строки таблицы истинности."
       ],
       "code_template": "from itertools import product\ncount = 0\nfor a,b,c in product((0,1), repeat=3):\n    imp1 = (not a) or b\n    imp2 = (not b) or c\n    if imp1 and imp2:\n        count += 1\nprint(count)",
       "test_cases": [
@@ -139,8 +139,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Сначала перепишите логическое выражение в Python со скобками.",
+      "full_explanation": "Импликация A→B ложна только в случае A=1 и B=0. После перебора всех наборов A, B, C выражение (A→B) ∧ (B→C) истинно в 4 строках."
     },
     {
       "exercise_id": "ex_2_1018",
@@ -151,10 +151,10 @@
       "correct_answer": 4,
       "difficulty": "medium",
       "exercise_type": "code",
-      "explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints.",
+      "explanation": "Считаем значение ((A==B)==C) на всех 8 наборах. Истина получается ровно в 4 строках, значит ответ 4.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Сначала перепишите логическое выражение в Python со скобками.",
+        "Проверьте 2^n наборов значений и считайте только подходящие строки таблицы истинности."
       ],
       "code_template": "from itertools import product\ncount = 0\nfor a,b,c in product((0,1), repeat=3):\n    if ((a==b)==c):\n        count += 1\nprint(count)",
       "test_cases": [
@@ -172,8 +172,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Сначала перепишите логическое выражение в Python со скобками.",
+      "full_explanation": "Считаем значение ((A==B)==C) на всех 8 наборах. Истина получается ровно в 4 строках, значит ответ 4."
     },
     {
       "exercise_id": "ex_2_1019",
@@ -186,8 +186,8 @@
       "exercise_type": "code",
       "explanation": "Неубывающие последовательности из 0 и 1 длины 6: C(6+1,1)=7.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Сначала перепишите логическое выражение в Python со скобками.",
+        "Проверьте 2^n наборов значений и считайте только подходящие строки таблицы истинности."
       ],
       "code_template": "from itertools import product\ncount = 0\nfor vals in product((0,1), repeat=6):\n    ok = True\n    for i in range(5):\n        if vals[i] > vals[i+1]:\n            ok = False\n            break\n    if ok: count += 1\nprint(count)",
       "test_cases": [
@@ -205,7 +205,7 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "hint_after_first_error": "Сначала перепишите логическое выражение в Python со скобками.",
       "full_explanation": "Неубывающие последовательности из 0 и 1 длины 6: C(6+1,1)=7."
     },
     {
@@ -214,32 +214,32 @@
       "title": "Таблица истинности",
       "text": "Сколько строк таблицы истинности выражения (A ∨ B) ∧ (¬A ∨ C) дают значение 1?\nПеременные: A, B, C.",
       "answer_type": "number",
-      "correct_answer": 5,
+      "correct_answer": 4,
       "difficulty": "hard",
       "exercise_type": "code",
-      "explanation": "Перебором: (0,0,0)→0, (0,0,1)→0, (0,1,0)→1, (0,1,1)→1, (1,0,0)→0, (1,0,1)→1, (1,1,0)→0, (1,1,1)→1... Считаем = 5",
+      "explanation": "Истина получается для наборов 010, 011, 101, 111 — всего 4 строки.",
       "hints": [
         "Используйте itertools.product для перебора",
         "Импликация ¬A ∨ C — это NOT A OR C"
       ],
-      "code_template": "from itertools import product\n\ncount = 0\nfor a, b, c in product((0,1), repeat=3):\n    # Запишите выражение\n    result = # ваш код\n    if result:\n        count += 1\nprint(count)",
+      "code_template": "from itertools import product\n\ncount = 0\nfor a, b, c in product((0, 1), repeat=3):\n    result = (a or b) and ((not a) or c)\n    if result:\n        count += 1\nprint(count)\n",
       "test_cases": [
         {
           "input": "",
-          "expected_output": "5",
+          "expected_output": "4",
           "is_public": true
         }
       ],
       "tests": [
         {
           "input": "",
-          "output": "5",
+          "output": "4",
           "is_public": true
         }
       ],
       "required_nodes": [],
       "hint_after_first_error": "Используйте itertools.product для перебора",
-      "full_explanation": "Перебором: (0,0,0)→0, (0,0,1)→0, (0,1,0)→1, (0,1,1)→1, (1,0,0)→0, (1,0,1)→1, (1,1,0)→0, (1,1,1)→1... Считаем = 5"
+      "full_explanation": "Перебираем все 8 наборов A, B, C и вычисляем выражение (A ∨ B) ∧ (¬A ∨ C). Истина получается в 4 строках: 010, 011, 101, 111."
     },
     {
       "exercise_id": "ex_2_8",
@@ -255,7 +255,7 @@
         "Импликация x→y эквивалентна x<=y для 0 и 1",
         "Перебор всех 16 комбинаций"
       ],
-      "code_template": "from itertools import product\n\ncount = 0\nfor x1,x2,x3,x4 in product((0,1), repeat=4):\n    # Импликация x→y = (not x) or y\n    # Ваш код\n    pass\nprint(count)",
+      "code_template": "from itertools import product\n\ncount = 0\nfor x1, x2, x3, x4 in product((0, 1), repeat=4):\n    cond = ((not x1) or x2) and ((not x2) or x3) and ((not x3) or x4)\n    if cond:\n        count += 1\nprint(count)\n",
       "test_cases": [
         {
           "input": "",

@@ -21,8 +21,8 @@
       "exercise_type": "closed",
       "explanation": "2^5=32<50, 2^6=64>=50. Ответ: 6 бит.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Проверьте условие Фано: ни одно слово не должно быть префиксом другого.",
+        "Для Крафта посчитайте сумму 2^(-li) и сравните её с 1."
       ],
       "code_template": ""
     },
@@ -37,8 +37,8 @@
       "exercise_type": "closed",
       "explanation": "0+10+11+0+10+11 = 1+2+2+1+2+2 = 10 бит.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Проверьте условие Фано: ни одно слово не должно быть префиксом другого.",
+        "Для Крафта посчитайте сумму 2^(-li) и сравните её с 1."
       ],
       "code_template": ""
     },
@@ -53,8 +53,8 @@
       "exercise_type": "closed",
       "explanation": "Ни один код не является началом другого. Да.",
       "hints": [
-        "Eliminate options contradicting base definitions.",
-        "Run one final condition check before selecting option."
+        "????????? ??????? ????: ?? ???? ????? ?? ?????? ???? ????????? ???????.",
+        "??? ?????? ?????????? ????? 2^(-li) ? ???????? ?? ? 1."
       ],
       "code_template": "",
       "options": [
@@ -73,8 +73,8 @@
       "exercise_type": "closed",
       "explanation": "Занятые ветви: 1xx, 01x. Свободные: 000, 001. Минимум = 3.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Проверьте условие Фано: ни одно слово не должно быть префиксом другого.",
+        "Для Крафта посчитайте сумму 2^(-li) и сравните её с 1."
       ],
       "code_template": ""
     },
@@ -104,8 +104,8 @@
       "exercise_type": "closed",
       "explanation": "110|10|111|0|0 → c b d a a = 5 символов.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Проверьте условие Фано: ни одно слово не должно быть префиксом другого.",
+        "Для Крафта посчитайте сумму 2^(-li) и сравните её с 1."
       ],
       "code_template": ""
     },
@@ -115,10 +115,10 @@
       "title": "Неравенство Крафта 2",
       "text": "Возможен ли префиксный код с длинами 1, 2, 2, 3?",
       "answer_type": "single_choice",
-      "correct_answer": "A",
+      "correct_answer": "B",
       "difficulty": "hard",
       "exercise_type": "closed",
-      "explanation": "1/2 + 1/4 + 1/4 + 1/8 = 1.125 > 1. Нет! Ответ: Нет.",
+      "explanation": "Проверяем неравенство Крафта: 2^-1 + 2^-2 + 2^-2 + 2^-3 = 1/2 + 1/4 + 1/4 + 1/8 = 1.125 > 1. Такой префиксный код невозможен, ответ: «Нет».",
       "hints": [
         "Проверьте неравенство Крафта: сумма 2^(-li) <= 1"
       ],
@@ -139,8 +139,8 @@
       "exercise_type": "closed",
       "explanation": "Дерево Хаффмана: D и C объединяются (3), потом с B (6), потом с A (11). D получит код длины 3.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Проверьте условие Фано: ни одно слово не должно быть префиксом другого.",
+        "Для Крафта посчитайте сумму 2^(-li) и сравните её с 1."
       ],
       "code_template": ""
     }

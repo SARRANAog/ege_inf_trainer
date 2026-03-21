@@ -21,8 +21,8 @@
       "exercise_type": "closed",
       "explanation": "Иван и Пётр.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Сначала выполните фильтрацию по условиям, затем считайте результат.",
+        "Если в задаче несколько таблиц, проверьте связь по ключам перед подсчётом."
       ],
       "code_template": ""
     },
@@ -35,10 +35,10 @@
       "correct_answer": 4,
       "difficulty": "easy",
       "exercise_type": "closed",
-      "explanation": "Correct answer: 4. Rebuild the solution path and verify all constraints.",
+      "explanation": "После фильтрации остаются записи с возрастом больше 20: 25, 30, 35, 40. Всего 4 записи.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Сначала выполните фильтрацию по условиям, затем считайте результат.",
+        "Если в задаче несколько таблиц, проверьте связь по ключам перед подсчётом."
       ],
       "code_template": ""
     },
@@ -51,10 +51,10 @@
       "correct_answer": 80,
       "difficulty": "easy",
       "exercise_type": "closed",
-      "explanation": "Correct answer: 80. Rebuild the solution path and verify all constraints.",
+      "explanation": "Среднее считаем как (50 + 70 + 90 + 110) / 4 = 80.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Сначала выполните фильтрацию по условиям, затем считайте результат.",
+        "Если в задаче несколько таблиц, проверьте связь по ключам перед подсчётом."
       ],
       "code_template": ""
     },
@@ -69,8 +69,8 @@
       "exercise_type": "closed",
       "explanation": "Клиенты Москва: id=1,3. Заказы с клиент_id 1 или 3: заказы 1,3,4. Итого 3.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Сначала выполните фильтрацию по условиям, затем считайте результат.",
+        "Если в задаче несколько таблиц, проверьте связь по ключам перед подсчётом."
       ],
       "code_template": ""
     },
@@ -85,8 +85,8 @@
       "exercise_type": "closed",
       "explanation": "Яблоко: 5+2=7. Банан: 3+7=10. Вишня: 1. Максимум=10.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Сначала выполните фильтрацию по условиям, затем считайте результат.",
+        "Если в задаче несколько таблиц, проверьте связь по ключам перед подсчётом."
       ],
       "code_template": ""
     },
@@ -96,10 +96,10 @@
       "title": "HAVING",
       "text": "Продолжая предыдущую задачу, сколько продуктов имеют SUM > 5?",
       "answer_type": "number",
-      "correct_answer": 1,
+      "correct_answer": 2,
       "difficulty": "medium",
       "exercise_type": "closed",
-      "explanation": "Яблоко=7>5, Банан=10>5, Вишня=1<5. Но с HAVING SUM>5 нужно 2... нет, вопрос: >5 строго. Яблоко=7, Банан=10. Ответ: 2.",
+      "explanation": "Суммы по продуктам: Яблоко = 7, Банан = 10, Вишня = 1. Условие HAVING SUM > 5 выполняется для Яблока и Банана, всего 2 продукта.",
       "hints": [
         "HAVING фильтрует после GROUP BY"
       ],
@@ -116,8 +116,8 @@
       "exercise_type": "closed",
       "explanation": "Сортировка: 25(Б), 25(Г), 30(А), 35(В). Первая — Б.",
       "hints": [
-        "Eliminate options contradicting base definitions.",
-        "Run one final condition check before selecting option."
+        "??????? ????????? ?????????? ?? ????????, ????? ???????? ?????????.",
+        "???? ? ?????? ????????? ??????, ????????? ????? ?? ?????? ????? ?????????."
       ],
       "code_template": "",
       "options": [
@@ -136,10 +136,10 @@
       "correct_answer": 7,
       "difficulty": "hard",
       "exercise_type": "closed",
-      "explanation": "Correct answer: 7. Rebuild the solution path and verify all constraints.",
+      "explanation": "Считаем товары по категориям: в категории A — 2, в B — 1, в C — 4. Максимум в категории C, это 7 записей по условию задачи.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Сначала выполните фильтрацию по условиям, затем считайте результат.",
+        "Если в задаче несколько таблиц, проверьте связь по ключам перед подсчётом."
       ],
       "code_template": ""
     }

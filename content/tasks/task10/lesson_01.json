@@ -21,8 +21,8 @@
       "exercise_type": "closed",
       "explanation": "к??а: 1*33*33*1 = 1089.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Преобразуйте маску в набор строгих ограничений по позициям.",
+        "Сначала оцените количество вариантов по позициям, затем проверьте частные случаи."
       ],
       "code_template": ""
     },
@@ -64,8 +64,8 @@
       "exercise_type": "closed",
       "explanation": "а+пусто+б+пусто+а → 'аба' = 3 символа.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Преобразуйте маску в набор строгих ограничений по позициям.",
+        "Сначала оцените количество вариантов по позициям, затем проверьте частные случаи."
       ],
       "code_template": ""
     },
@@ -145,8 +145,8 @@
       "exercise_type": "closed",
       "explanation": "?о?: 5 × 1 × 5 = 25.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Преобразуйте маску в набор строгих ограничений по позициям.",
+        "Сначала оцените количество вариантов по позициям, затем проверьте частные случаи."
       ],
       "code_template": ""
     },

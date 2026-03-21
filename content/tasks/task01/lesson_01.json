@@ -16,10 +16,10 @@
       "title": "Кратчайший путь",
       "text": "В таблице даны расстояния между городами A, B, C, D.\nA-B: 5, A-C: 3, A-D: 10, B-C: 4, B-D: 6, C-D: 8.\nНайдите длину кратчайшего пути из A в D.",
       "answer_type": "number",
-      "correct_answer": 9,
+      "correct_answer": 10,
       "difficulty": "easy",
       "exercise_type": "closed",
-      "explanation": "A→C→B→D: 3+4+6=13; A→B→D: 5+6=11; A→C→D: 3+8=11; A→D: 10. Но A→B→D=11, A→D=10, кратчайший через B: A-B-D=11. Прямой путь A-D=10. Но проверим A-C-B-D: 3+4+6=13. Ответ: A-D = 10. Нет, проверим ещё: кратчайший = 9 (A-C:3 + C-B:4 + B-D? нет). Пересчёт: A-B=5, B-D=6 → 11. A-C=3, C-D=8 → 11. A-D=10. Минимум = 9. Пусть A-B=5,B-C=4→A-B-C=9>A-C=3. Путь A-C-D = 3+8=11, A-B-D=11, A-D=10. Ответ: 10.",
+      "explanation": "Проверяем маршруты: A→D = 10, A→B→D = 5+6 = 11, A→C→D = 3+8 = 11, A→C→B→D = 3+4+6 = 13. Минимум 10, значит кратчайший путь — прямой A→D.",
       "hints": [
         "Перечислите все возможные маршруты",
         "Сравните суммы расстояний"
@@ -37,8 +37,8 @@
       "exercise_type": "closed",
       "explanation": "Перечислим: A-B, B-C, C-D, D-E, E-F, F-A, B-D = 7 рёбер.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Перечислите все допустимые связи/пути, затем сравните варианты.",
+        "Проверьте, что учтены все ограничения из условия (направление, вес, тип связи)."
       ],
       "code_template": ""
     },
@@ -68,8 +68,8 @@
       "exercise_type": "closed",
       "explanation": "Из A: A→B, A→B→C, A→D. Из A достижимы все.",
       "hints": [
-        "Eliminate options contradicting base definitions.",
-        "Run one final condition check before selecting option."
+        "??????????? ??? ?????????? ?????/????, ????? ???????? ????????.",
+        "?????????, ??? ?????? ??? ??????????? ?? ??????? (???????????, ???, ??? ?????)."
       ],
       "code_template": "",
       "options": [
@@ -90,8 +90,8 @@
       "exercise_type": "closed",
       "explanation": "A-B-C-D: 3+2+4=9. A-C-D: 5+4=9. A-B-D: 3+7=10. Минимум=9.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Перечислите все допустимые связи/пути, затем сравните варианты.",
+        "Проверьте, что учтены все ограничения из условия (направление, вес, тип связи)."
       ],
       "code_template": ""
     },
@@ -106,8 +106,8 @@
       "exercise_type": "closed",
       "explanation": "Оба — треугольники, изоморфны.",
       "hints": [
-        "Eliminate options contradicting base definitions.",
-        "Run one final condition check before selecting option."
+        "??????????? ??? ?????????? ?????/????, ????? ???????? ????????.",
+        "?????????, ??? ?????? ??? ??????????? ?? ??????? (???????????, ???, ??? ?????)."
       ],
       "code_template": "",
       "options": [
@@ -126,8 +126,8 @@
       "exercise_type": "closed",
       "explanation": "C(5,2) = 5*4/2 = 10.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Перечислите все допустимые связи/пути, затем сравните варианты.",
+        "Проверьте, что учтены все ограничения из условия (направление, вес, тип связи)."
       ],
       "code_template": ""
     },
@@ -142,8 +142,8 @@
       "exercise_type": "closed",
       "explanation": "A(3) и C(3) — нечётные. Ровно 2 — эйлеров путь существует.",
       "hints": [
-        "Estimate magnitude first, then compute exactly.",
-        "Check unit conversion and rounding before final answer."
+        "Перечислите все допустимые связи/пути, затем сравните варианты.",
+        "Проверьте, что учтены все ограничения из условия (направление, вес, тип связи)."
       ],
       "code_template": ""
     }

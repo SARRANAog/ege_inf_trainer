@@ -19,10 +19,10 @@
       "correct_answer": 120,
       "difficulty": "easy",
       "exercise_type": "code",
-      "explanation": "Correct answer: 120. Rebuild the solution path and verify all constraints.",
+      "explanation": "Цикл перемножает числа от 1 до 5: 1*2*3*4*5 = 120.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "x = 1\nfor i in range(1, 6):\n    x *= i\nprint(x)",
       "test_cases": [
@@ -40,8 +40,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 120. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "Цикл перемножает числа от 1 до 5: 1*2*3*4*5 = 120."
     },
     {
       "exercise_id": "ex_5_1041",
@@ -52,10 +52,10 @@
       "correct_answer": 1024,
       "difficulty": "easy",
       "exercise_type": "code",
-      "explanation": "Correct answer: 1024. Rebuild the solution path and verify all constraints.",
+      "explanation": "Последовательно удваиваем 1: 2, 4, ..., 512, 1024. Первое значение больше 1000 — 1024.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "x = 1\nwhile x <= 1000:\n    x *= 2\nprint(x)",
       "test_cases": [
@@ -73,8 +73,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 1024. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "Последовательно удваиваем 1: 2, 4, ..., 512, 1024. Первое значение больше 1000 — 1024."
     },
     {
       "exercise_id": "ex_5_1042",
@@ -85,10 +85,10 @@
       "correct_answer": 21,
       "difficulty": "easy",
       "exercise_type": "code",
-      "explanation": "Correct answer: 21. Rebuild the solution path and verify all constraints.",
+      "explanation": "Последовательность Фибоначчи: 1, 1, 2, 3, 5, 8, 13, 21. Восьмой член равен 21.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "a, b = 1, 1\nfor _ in range(6):\n    a, b = b, a + b\nprint(b)",
       "test_cases": [
@@ -106,8 +106,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 21. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "Последовательность Фибоначчи: 1, 1, 2, 3, 5, 8, 13, 21. Восьмой член равен 21."
     },
     {
       "exercise_id": "ex_5_1043",
@@ -118,10 +118,10 @@
       "correct_answer": 1023,
       "difficulty": "easy",
       "exercise_type": "code",
-      "explanation": "Correct answer: 1023. Rebuild the solution path and verify all constraints.",
+      "explanation": "Сумма геометрической прогрессии 1+2+4+...+512 равна 2^10 - 1 = 1023.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "s = 0\nx = 1\nwhile x <= 512:\n    s += x\n    x *= 2\nprint(s)",
       "test_cases": [
@@ -139,8 +139,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 1023. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "Сумма геометрической прогрессии 1+2+4+...+512 равна 2^10 - 1 = 1023."
     },
     {
       "exercise_id": "ex_5_1044",
@@ -151,10 +151,10 @@
       "correct_answer": 12,
       "difficulty": "medium",
       "exercise_type": "code",
-      "explanation": "Correct answer: 12. Rebuild the solution path and verify all constraints.",
+      "explanation": "По алгоритму Евклида: 48 mod 36 = 12, 36 mod 12 = 0. НОД равен 12.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "a, b = 48, 36\nwhile b:\n    a, b = b, a % b\nprint(a)",
       "test_cases": [
@@ -172,8 +172,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 12. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "По алгоритму Евклида: 48 mod 36 = 12, 36 mod 12 = 0. НОД равен 12."
     },
     {
       "exercise_id": "ex_5_1045",
@@ -181,32 +181,32 @@
       "title": "Обратный алгоритм",
       "text": "Исполнитель: -3, //2. Начальное значение 100. Программа: //2, -3, //2, -3. Результат?",
       "answer_type": "number",
-      "correct_answer": 21,
+      "correct_answer": 20,
       "difficulty": "medium",
       "exercise_type": "code",
-      "explanation": "100//2=50, 50-3=47, 47//2=23, 23-3=20. Ответ: 20.",
+      "explanation": "Выполняем команды по порядку: 100//2 = 50, 50-3 = 47, 47//2 = 23, 23-3 = 20. Итоговое значение: 20.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "x = 100\nx = x // 2  # 50\nx = x - 3   # 47\nx = x // 2  # 23\nx = x - 3   # 20\nprint(x)",
       "test_cases": [
         {
           "input": "",
-          "expected_output": "21",
+          "expected_output": "20",
           "is_public": true
         }
       ],
       "tests": [
         {
           "input": "",
-          "output": "21",
+          "output": "20",
           "is_public": true
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "100//2=50, 50-3=47, 47//2=23, 23-3=20. Ответ: 20."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "Выполняем команды по порядку: 100//2 = 50, 50-3 = 47, 47//2 = 23, 23-3 = 20. Итоговое значение: 20."
     },
     {
       "exercise_id": "ex_5_1046",
@@ -217,10 +217,10 @@
       "correct_answer": 12,
       "difficulty": "hard",
       "exercise_type": "code",
-      "explanation": "Correct answer: 12. Rebuild the solution path and verify all constraints.",
+      "explanation": "У числа 60 делители: 1,2,3,4,5,6,10,12,15,20,30,60. Всего 12.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "n = 60\ncount = 0\nfor i in range(1, n+1):\n    if n % i == 0:\n        count += 1\nprint(count)",
       "test_cases": [
@@ -238,8 +238,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 12. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "У числа 60 делители: 1,2,3,4,5,6,10,12,15,20,30,60. Всего 12."
     },
     {
       "exercise_id": "ex_5_1047",
@@ -250,10 +250,10 @@
       "correct_answer": 9,
       "difficulty": "hard",
       "exercise_type": "code",
-      "explanation": "Correct answer: 9. Rebuild the solution path and verify all constraints.",
+      "explanation": "У числа 123456789 девять цифр, поэтому ответ 9.",
       "hints": [
-        "Split solution into small steps and print intermediate values during debug.",
-        "Check edge cases: minimum and maximum input bounds."
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Проверьте порядок операций: в таких задачах перестановка команд меняет ответ."
       ],
       "code_template": "n = 123456789\nprint(len(str(n)))",
       "test_cases": [
@@ -271,8 +271,8 @@
         }
       ],
       "required_nodes": [],
-      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
-      "full_explanation": "Correct answer: 9. Rebuild the solution path and verify all constraints."
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+      "full_explanation": "У числа 123456789 девять цифр, поэтому ответ 9."
     }
   ]
 }
