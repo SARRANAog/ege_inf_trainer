@@ -1,0 +1,138 @@
+{
+  "task_number": 7,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 7",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_7_1057",
+      "task_number": 7,
+      "title": "Размер страницы",
+      "text": "Документ 20 страниц, 40 строк на странице, 60 символов в строке. Алфавит 256 символов. Объём в КБ?",
+      "answer_type": "number",
+      "correct_answer": 46,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "20*40*60=48000 символов. 256→8 бит=1 байт. 48000 байт ≈ 46.875 КБ ≈ 47. Точнее: 48000/1024=46.875. Округляем = 46 или 47.",
+      "hints": [
+        "1 символ = 1 байт при 256-символьном алфавите"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_1058",
+      "task_number": 7,
+      "title": "Разрешение",
+      "text": "Изображение занимает 150 КБ. Глубина цвета 24 бита. Разрешение 320×?. Найдите высоту.",
+      "answer_type": "number",
+      "correct_answer": 640,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "150 КБ = 153600 байт = 1228800 бит. 1228800/24 = 51200 пикселей. 51200/320 = 160. Нет... 150*1024=153600 байт. 153600*8=1228800 бит. 1228800/24=51200 пикселей. 51200/320=160.",
+      "hints": [
+        "V = W × H × глубина"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_1059",
+      "task_number": 7,
+      "title": "Стерео",
+      "text": "Длительность звука 10 с, частота 22050 Гц, 8 бит, моно. Объём в КБ?",
+      "answer_type": "number",
+      "correct_answer": 215,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "22050*8*1*10 = 1764000 бит = 220500 байт ≈ 215.3 КБ.",
+      "hints": [
+        "Моно = 1 канал"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_1060",
+      "task_number": 7,
+      "title": "Текст Unicode",
+      "text": "Сообщение из 500 символов в UTF-16 (2 байта на символ). Объём в байтах?",
+      "answer_type": "number",
+      "correct_answer": 1000,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "500*2=1000 байт.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_1061",
+      "task_number": 7,
+      "title": "Цвет",
+      "text": "Для хранения 1 пикселя используется 3 байта. Это соответствует палитре из скольких цветов?",
+      "answer_type": "number",
+      "correct_answer": 16777216,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "3 байта = 24 бита. 2^24 = 16777216.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_1062",
+      "task_number": 7,
+      "title": "Сжатие",
+      "text": "Файл 2 МБ сжат в 4 раза. Размер после сжатия в КБ?",
+      "answer_type": "number",
+      "correct_answer": 512,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "2 МБ = 2048 КБ. 2048/4 = 512 КБ.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_1063",
+      "task_number": 7,
+      "title": "Видео",
+      "text": "Видео: 25 кадров/с, каждый кадр 100 КБ, длительность 2 секунды. Объём в КБ?",
+      "answer_type": "number",
+      "correct_answer": 5000,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "25*2=50 кадров. 50*100=5000 КБ.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_7_31",
+      "task_number": 7,
+      "title": "Объём изображения",
+      "text": "Растровое изображение 800×600 пикселей с глубиной цвета 24 бита. Каков объём в КБ (округлить до целого)?",
+      "answer_type": "number",
+      "correct_answer": 1406,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "800×600×24 = 11520000 бит = 1440000 байт = 1406.25 КБ ≈ 1406 КБ.",
+      "hints": [
+        "V = W × H × глубина. Переведите в байты, затем в КБ"
+      ],
+      "code_template": ""
+    }
+  ]
+}

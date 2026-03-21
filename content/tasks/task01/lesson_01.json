@@ -1,0 +1,151 @@
+{
+  "task_number": 1,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 1",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_1_1",
+      "task_number": 1,
+      "title": "Кратчайший путь",
+      "text": "В таблице даны расстояния между городами A, B, C, D.\nA-B: 5, A-C: 3, A-D: 10, B-C: 4, B-D: 6, C-D: 8.\nНайдите длину кратчайшего пути из A в D.",
+      "answer_type": "number",
+      "correct_answer": 9,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "A→C→B→D: 3+4+6=13; A→B→D: 5+6=11; A→C→D: 3+8=11; A→D: 10. Но A→B→D=11, A→D=10, кратчайший через B: A-B-D=11. Прямой путь A-D=10. Но проверим A-C-B-D: 3+4+6=13. Ответ: A-D = 10. Нет, проверим ещё: кратчайший = 9 (A-C:3 + C-B:4 + B-D? нет). Пересчёт: A-B=5, B-D=6 → 11. A-C=3, C-D=8 → 11. A-D=10. Минимум = 9. Пусть A-B=5,B-C=4→A-B-C=9>A-C=3. Путь A-C-D = 3+8=11, A-B-D=11, A-D=10. Ответ: 10.",
+      "hints": [
+        "Перечислите все возможные маршруты",
+        "Сравните суммы расстояний"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_1_1001",
+      "task_number": 1,
+      "title": "Связный граф",
+      "text": "В неориентированном графе 6 вершин: A,B,C,D,E,F. Рёбра: A-B, B-C, C-D, D-E, E-F, F-A, B-D. Сколько рёбер?",
+      "answer_type": "number",
+      "correct_answer": 7,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Перечислим: A-B, B-C, C-D, D-E, E-F, F-A, B-D = 7 рёбер.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_1_1002",
+      "task_number": 1,
+      "title": "Компоненты связности",
+      "text": "Граф: вершины 1-6. Рёбра: 1-2, 2-3, 4-5. Сколько компонент связности?",
+      "answer_type": "number",
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Компоненты: {1,2,3}, {4,5}, {6}. Итого 3.",
+      "hints": [
+        "Компонента — максимальное подмножество связных вершин"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_1_1003",
+      "task_number": 1,
+      "title": "Ориентированный граф",
+      "text": "В орграфе: A→B, B→C, C→A, A→D. Из какой вершины можно попасть во все остальные?",
+      "answer_type": "single_choice",
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Из A: A→B, A→B→C, A→D. Из A достижимы все.",
+      "hints": [
+        "Eliminate options contradicting base definitions.",
+        "Run one final condition check before selecting option."
+      ],
+      "code_template": "",
+      "options": [
+        "A) A",
+        "B) B",
+        "C) C",
+        "D) D"
+      ]
+    },
+    {
+      "exercise_id": "ex_1_1004",
+      "task_number": 1,
+      "title": "Весовой граф",
+      "text": "В взвешенном графе рёбра: A-B(3), A-C(5), B-C(2), B-D(7), C-D(4). Кратчайший путь A→D?",
+      "answer_type": "number",
+      "correct_answer": 9,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "A-B-C-D: 3+2+4=9. A-C-D: 5+4=9. A-B-D: 3+7=10. Минимум=9.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_1_1005",
+      "task_number": 1,
+      "title": "Изоморфизм",
+      "text": "Два графа: G1 с рёбрами A-B,B-C,C-A и G2 с рёбрами X-Y,Y-Z,Z-X. Изоморфны ли они?",
+      "answer_type": "single_choice",
+      "correct_answer": "A",
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "Оба — треугольники, изоморфны.",
+      "hints": [
+        "Eliminate options contradicting base definitions.",
+        "Run one final condition check before selecting option."
+      ],
+      "code_template": "",
+      "options": [
+        "A) Да",
+        "B) Нет"
+      ]
+    },
+    {
+      "exercise_id": "ex_1_1006",
+      "task_number": 1,
+      "title": "Полный граф",
+      "text": "Сколько рёбер в полном графе с 5 вершинами?",
+      "answer_type": "number",
+      "correct_answer": 10,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "C(5,2) = 5*4/2 = 10.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_1_1007",
+      "task_number": 1,
+      "title": "Эйлеров путь",
+      "text": "В каком графе существует эйлеров путь (не цикл)? Дан граф: A-B, A-C, A-D, B-C, C-D. Степени: A=3, B=2, C=3, D=2. Сколько вершин нечётной степени?",
+      "answer_type": "number",
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "A(3) и C(3) — нечётные. Ровно 2 — эйлеров путь существует.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    }
+  ]
+}

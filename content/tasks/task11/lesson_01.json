@@ -1,0 +1,142 @@
+{
+  "task_number": 11,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 11",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_11_1081",
+      "task_number": 11,
+      "title": "Событие",
+      "text": "В мешке 8 шаров. Вынули один. Количество информации?",
+      "answer_type": "number",
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "log2(8)=3 бита.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_1082",
+      "task_number": 11,
+      "title": "Неравновероятные",
+      "text": "Монета: орёл с вер. 0.5, решка 0.5. Информация?",
+      "answer_type": "number",
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "2 равновероятных исхода → 1 бит.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_1083",
+      "task_number": 11,
+      "title": "Большой алфавит",
+      "text": "Мощность алфавита 128. Бит на символ?",
+      "answer_type": "number",
+      "correct_answer": 7,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "log2(128)=7.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_1084",
+      "task_number": 11,
+      "title": "Файл",
+      "text": "Текстовый файл 10 КБ. Мощность алфавита 256. Сколько символов?",
+      "answer_type": "number",
+      "correct_answer": 10240,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "10 КБ = 10240 байт. 256 символов → 1 байт/символ. 10240 символов.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_1085",
+      "task_number": 11,
+      "title": "Страница",
+      "text": "На странице 50 строк по 80 символов. 256-символьный алфавит. Объём страницы в байтах?",
+      "answer_type": "number",
+      "correct_answer": 4000,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "50*80=4000 символов = 4000 байт.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_51",
+      "task_number": 11,
+      "title": "Формула Хартли",
+      "text": "В коробке 32 шара разного цвета. Сколько бит информации несёт сообщение о цвете одного вынутого шара?",
+      "answer_type": "number",
+      "correct_answer": 5,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "log₂(32) = 5 бит.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_52",
+      "task_number": 11,
+      "title": "Обратная задача",
+      "text": "Сообщение о результате несёт 3 бита. Сколько равновероятных исходов?",
+      "answer_type": "number",
+      "correct_answer": 8,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "2³ = 8.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_11_53",
+      "task_number": 11,
+      "title": "Объём сообщения",
+      "text": "Сообщение длиной 100 символов из алфавита мощностью 16. Объём в битах?",
+      "answer_type": "number",
+      "correct_answer": 400,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "log₂(16)=4 бита на символ. 100×4=400.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    }
+  ]
+}

@@ -210,6 +210,7 @@ function ExerciseCard({ exercise, currentMode, onNext, theoryLink, onRefreshProg
       {result ? <div className={`status-banner ${result.correct ? 'success' : 'danger'}`} style={{ marginTop: 18 }}>
         <div style={{ fontWeight: 780, fontSize: 15 }}>{result.correct ? 'Ответ принят' : 'Нужно доработать'}</div>
         {result.explanation ? <div style={{ marginTop: 8, fontSize: 13, lineHeight: 1.7, color: 'var(--text-secondary)' }}>{result.explanation}</div> : null}
+        {result.hint ? <div style={{ marginTop: 8, fontSize: 13, lineHeight: 1.7, color: 'var(--text-secondary)' }}><strong>Hint:</strong> {result.hint}</div> : null}
         {result.details ? <div style={{ marginTop: 8, fontSize: 13, lineHeight: 1.7, whiteSpace: 'pre-wrap', color: 'var(--text-secondary)' }}>{result.details}</div> : null}
         {result.expected !== undefined && !isCode ? <div style={{ marginTop: 8, fontSize: 13, color: 'var(--text-secondary)' }}>Ожидаемый ответ: <strong>{Array.isArray(result.expected) ? result.expected.join(', ') : String(result.expected)}</strong></div> : null}
       </div> : null}

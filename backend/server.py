@@ -470,6 +470,78 @@ def update_progress_after_attempt(task_number: int, correct: bool) -> dict[str, 
     return progress
 
 
+def get_exercise_explanation(exercise: dict[str, Any]) -> str:
+    return str(exercise.get("full_explanation") or exercise.get("explanation") or "")
+
+
+def normalize_code_tests(exercise: dict[str, Any]) -> list[dict[str, Any]]:
+    raw_tests = exercise.get("tests") or exercise.get("test_cases") or []
+    normalized: list[dict[str, Any]] = []
+    for test in raw_tests:
+        if not isinstance(test, dict):
+            continue
+        output = test.get("output", test.get("expected_output", ""))
+        normalized.append(
+            {
+                "input": str(test.get("input", "")),
+                "output": str(output),
+                "is_public": bool(test.get("is_public", True)),
+            }
+        )
+    return normalized
+
+
+def find_missing_required_nodes(source_code: str, required_nodes: list[str]) -> tuple[list[str], Optional[str]]:
+    if not required_nodes:
+        return [], None
+
+    try:
+        tree = ast.parse(source_code)
+    except SyntaxError as exc:
+        return required_nodes, f"Syntax error: {exc.msg} (line {exc.lineno})"
+
+    node_map: dict[str, Any] = {
+        "for": ast.For,
+        "while": ast.While,
+        "if": ast.If,
+        "listcomp": ast.ListComp,
+        "dictcomp": ast.DictComp,
+        "setcomp": ast.SetComp,
+        "generator": ast.GeneratorExp,
+        "function": ast.FunctionDef,
+    }
+
+    missing: list[str] = []
+    walk_nodes = list(ast.walk(tree))
+    functions = [node for node in walk_nodes if isinstance(node, ast.FunctionDef)]
+
+    for raw_name in required_nodes:
+        name = str(raw_name).strip().lower()
+        if not name:
+            continue
+
+        if name == "recursion":
+            has_recursion = False
+            for fn in functions:
+                for node in ast.walk(fn):
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == fn.name:
+                        has_recursion = True
+                        break
+                if has_recursion:
+                    break
+            if not has_recursion:
+                missing.append(str(raw_name))
+            continue
+
+        node_type = node_map.get(name)
+        if node_type is None:
+            continue
+        if not any(isinstance(node, node_type) for node in walk_nodes):
+            missing.append(str(raw_name))
+
+    return missing, None
+
+
 def evaluate_answer_against_exercise(exercise: dict[str, Any], submitted_answer: Any) -> tuple[bool, Any]:
     expected_answer = exercise.get("correct_answer")
     correct = False
@@ -488,14 +560,40 @@ def evaluate_answer_against_exercise(exercise: dict[str, Any], submitted_answer:
 
 
 def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -> dict[str, Any]:
-    tests = exercise.get("tests") or []
+    tests = normalize_code_tests(exercise)
+    explanation = get_exercise_explanation(exercise)
+    hint = exercise.get("hint_after_first_error")
+
+    required_nodes_raw = exercise.get("required_nodes") or exercise.get("required_constructs") or []
+    required_nodes = [str(node) for node in required_nodes_raw if str(node).strip()]
+    missing_nodes, syntax_error = find_missing_required_nodes(source_code, required_nodes)
+    if syntax_error:
+        return {
+            "correct": False,
+            "message": "Code check failed",
+            "details": syntax_error,
+            "test_results": [],
+            "hint": hint,
+            "explanation": explanation,
+        }
+    if missing_nodes:
+        return {
+            "correct": False,
+            "message": "Code did not pass structure validation",
+            "details": f"Missing required constructs: {', '.join(missing_nodes)}",
+            "test_results": [],
+            "hint": hint,
+            "explanation": explanation,
+        }
+
     if not tests:
         return {
             "correct": False,
-            "message": "Для этой задачи пока не настроены тесты.",
-            "details": "Тестов нет, поэтому автоматическая проверка недоступна.",
+            "message": "No tests configured for this exercise yet.",
+            "details": "Automatic code validation is unavailable for this item.",
             "test_results": [],
-            "explanation": exercise.get("explanation", ""),
+            "hint": hint,
+            "explanation": explanation,
         }
 
     failures: list[str] = []
@@ -505,11 +603,11 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
     for index, test in enumerate(tests, start=1):
         run_result = run_python_code(source_code, test.get("input", ""))
         actual_output = (run_result.get("stdout") or "").strip()
-        expected_output = (test.get("output") or "").strip()
+        expected_output = (test.get("output", "") or "").strip()
 
         if run_result.get("returncode") != 0:
             all_passed = False
-            failures.append(f"Тест {index}: ошибка выполнения.")
+            failures.append(f"Test {index}: runtime error.")
             test_results.append(
                 {
                     "test_number": index,
@@ -524,7 +622,7 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
         passed = actual_output == expected_output
         if not passed:
             all_passed = False
-            failures.append(f"Тест {index}: ожидалось {expected_output}, получено {actual_output}")
+            failures.append(f"Test {index}: expected {expected_output!r}, got {actual_output!r}")
         test_results.append(
             {
                 "test_number": index,
@@ -537,10 +635,11 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
 
     return {
         "correct": all_passed,
-        "message": "Код прошёл проверку" if all_passed else "Код не прошёл проверку",
+        "message": "Code passed" if all_passed else "Code check failed",
         "details": "\n".join(failures),
         "test_results": test_results,
-        "explanation": exercise.get("explanation", ""),
+        "hint": None if all_passed else hint,
+        "explanation": explanation,
     }
 
 
@@ -1066,7 +1165,7 @@ async def check_answer(payload: AnswerCheck):
     return {
         "correct": correct,
         "expected": expected_answer,
-        "explanation": exercise.get("explanation", ""),
+        "explanation": get_exercise_explanation(exercise),
     }
 
 
@@ -1233,7 +1332,7 @@ async def answer_weekly_review(payload: WeeklyReviewAnswer):
     review.setdefault("results", {})[payload.exercise_id] = {
         "correct": correct,
         "expected": expected_answer,
-        "explanation": exercise.get("explanation", ""),
+        "explanation": get_exercise_explanation(exercise),
     }
     review["answers_count"] = len(review["results"])
     review["correct_count"] = sum(1 for item in review["results"].values() if item.get("correct"))
@@ -1449,7 +1548,7 @@ async def submit_mock_exam(exam_id: str):
             evaluation = {
                 "correct": correct,
                 "expected": expected_answer,
-                "explanation": exercise.get("explanation", ""),
+                "explanation": get_exercise_explanation(exercise),
             }
 
         correct_count += 1 if correct else 0

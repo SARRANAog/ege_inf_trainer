@@ -1,0 +1,158 @@
+{
+  "task_number": 9,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 9",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_9_1071",
+      "task_number": 9,
+      "title": "IF-формула",
+      "text": "=ЕСЛИ(A1>10;A1*2;A1+5). A1=7. Результат?",
+      "answer_type": "number",
+      "correct_answer": 12,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "7>10? Нет. Значит A1+5=7+5=12.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_9_1072",
+      "task_number": 9,
+      "title": "Вложенный IF",
+      "text": "=ЕСЛИ(A1>100;'A';ЕСЛИ(A1>50;'B';'C')). A1=75. Результат?",
+      "answer_type": "single_choice",
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "75>100? Нет. 75>50? Да. Ответ: B.",
+      "hints": [
+        "Eliminate options contradicting base definitions.",
+        "Run one final condition check before selecting option."
+      ],
+      "code_template": "",
+      "options": [
+        "A) A",
+        "B) B",
+        "C) C"
+      ]
+    },
+    {
+      "exercise_id": "ex_9_1073",
+      "task_number": 9,
+      "title": "СЧЁТЕСЛИ",
+      "text": "Ячейки A1:A6 = 3,5,8,3,2,3. =СЧЁТЕСЛИ(A1:A6;3) = ?",
+      "answer_type": "number",
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Число 3 встречается 3 раза.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_9_1074",
+      "task_number": 9,
+      "title": "Смешанная ссылка",
+      "text": "В C1: =A$1+$B1. Копируем в D2. Результат?",
+      "answer_type": "single_choice",
+      "correct_answer": "C",
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "C1→D2: +1 столбец, +1 строка. A→B ($1 остаётся), $B остаётся (1→2). Ответ: =B$1+$B2.",
+      "hints": [
+        "Eliminate options contradicting base definitions.",
+        "Run one final condition check before selecting option."
+      ],
+      "code_template": "",
+      "options": [
+        "A) =A$1+$B2",
+        "B) =B$1+$B1",
+        "C) =B$1+$B2",
+        "D) =A$2+$B2"
+      ]
+    },
+    {
+      "exercise_id": "ex_9_1075",
+      "task_number": 9,
+      "title": "СУММЕСЛИ",
+      "text": "A1:A4=10,20,30,40. B1:B4='да','нет','да','да'. =СУММЕСЛИ(B1:B4;'да';A1:A4)=?",
+      "answer_type": "number",
+      "correct_answer": 80,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "Строки с 'да': A1(10)+A3(30)+A4(40)=80.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_9_1076",
+      "task_number": 9,
+      "title": "Процент",
+      "text": "=A1/СУММ(A1:A3)*100. A1=30, A2=50, A3=20. Результат?",
+      "answer_type": "number",
+      "correct_answer": 30,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "30/(30+50+20)*100 = 30/100*100 = 30.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_9_41",
+      "task_number": 9,
+      "title": "Копирование формулы",
+      "text": "В ячейке B2 формула =A1+$C1. Если скопировать в D4, какая формула получится?",
+      "answer_type": "single_choice",
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "Копирование B2→D4: сдвиг на +2 столбца, +2 строки. A1→C3, $C1→$C3 (столбец фиксирован, строка +2). Формула: =C3+$C3.",
+      "hints": [
+        "$ фиксирует столбец или строку при копировании"
+      ],
+      "code_template": "",
+      "options": [
+        "A) =C3+$C3",
+        "B) =C3+$C3",
+        "C) =C3+$E3",
+        "D) =A1+$C1"
+      ]
+    },
+    {
+      "exercise_id": "ex_9_42",
+      "task_number": 9,
+      "title": "Функция СУММ",
+      "text": "В ячейках A1:A5 значения: 2, 4, 6, 8, 10. Чему равно =СУММ(A1:A3)?",
+      "answer_type": "number",
+      "correct_answer": 12,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "2+4+6 = 12.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    }
+  ]
+}

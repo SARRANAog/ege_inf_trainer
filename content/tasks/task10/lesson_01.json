@@ -1,0 +1,181 @@
+{
+  "task_number": 10,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 10",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_10_1077",
+      "task_number": 10,
+      "title": "Точная длина",
+      "text": "Маска к??а. Алфавит 33 буквы. Сколько слов?",
+      "answer_type": "number",
+      "correct_answer": 1089,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "к??а: 1*33*33*1 = 1089.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_10_1078",
+      "task_number": 10,
+      "title": "Звёздочка",
+      "text": "Маска: *ть. Какие слова подходят: петь, мать, кость, путь?",
+      "answer_type": "multiple_choice",
+      "correct_answer": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Все заканчиваются на 'ть'.",
+      "hints": [
+        "Evaluate each option independently.",
+        "Verify no additional valid option is missed."
+      ],
+      "code_template": "",
+      "options": [
+        "A) петь",
+        "B) мать",
+        "C) кость",
+        "D) путь"
+      ]
+    },
+    {
+      "exercise_id": "ex_10_1079",
+      "task_number": 10,
+      "title": "Двойная звёздочка",
+      "text": "Маска: а*б*а. Минимальная длина слова?",
+      "answer_type": "number",
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "а+пусто+б+пусто+а → 'аба' = 3 символа.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_10_1080",
+      "task_number": 10,
+      "title": "Регистр",
+      "text": "Маска: ?Б? (регистрозависимый). Какие подходят: АБВ, абв, ОБО?",
+      "answer_type": "multiple_choice",
+      "correct_answer": [
+        "A",
+        "C"
+      ],
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Второй символ = Б (заглавная). АБВ и ОБО.",
+      "hints": [
+        "Evaluate each option independently.",
+        "Verify no additional valid option is missed."
+      ],
+      "code_template": "",
+      "options": [
+        "A) АБВ",
+        "B) абв",
+        "C) ОБО"
+      ]
+    },
+    {
+      "exercise_id": "ex_10_46",
+      "task_number": 10,
+      "title": "Маска поиска",
+      "text": "Сколько 4-буквенных слов из русского алфавита (33 буквы) соответствует маске к?т?",
+      "answer_type": "number",
+      "correct_answer": 1089,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "к_т_: 1 × 33 × 1 × 33 = 1089.",
+      "hints": [
+        "? заменяет ровно 1 символ"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_10_47",
+      "task_number": 10,
+      "title": "Маска со звёздочкой",
+      "text": "Маска: а*а. Какое из слов подходит?\nA) аа  B) аба  C) а  D) абба",
+      "answer_type": "multiple_choice",
+      "correct_answer": [
+        "A",
+        "B",
+        "D"
+      ],
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "а*а: начинается на 'а', заканчивается на 'а'. аа — да, аба — да, а — нет (нужны минимум 2 символа), абба — да.",
+      "hints": [
+        "Evaluate each option independently.",
+        "Verify no additional valid option is missed."
+      ],
+      "code_template": "",
+      "options": [
+        "A) аа",
+        "B) аба",
+        "C) а",
+        "D) абба"
+      ]
+    },
+    {
+      "exercise_id": "ex_10_48",
+      "task_number": 10,
+      "title": "Подсчёт",
+      "text": "Маска: ?о?. Сколько слов из алфавита {а,б,в,г,д} подходят?",
+      "answer_type": "number",
+      "correct_answer": 25,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "?о?: 5 × 1 × 5 = 25.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_10_49",
+      "task_number": 10,
+      "title": "Сложная маска",
+      "text": "Маска: *ка. Какие из слов подходят: ка, рука, каша, сумка, к?",
+      "answer_type": "multiple_choice",
+      "correct_answer": [
+        "A",
+        "B",
+        "D"
+      ],
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "Заканчивается на 'ка': ка, рука, сумка. каша и к — нет.",
+      "hints": [
+        "Evaluate each option independently.",
+        "Verify no additional valid option is missed."
+      ],
+      "code_template": "",
+      "options": [
+        "A) ка",
+        "B) рука",
+        "C) каша",
+        "D) сумка",
+        "E) к"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "task_number": 4,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 4",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_4_1031",
+      "task_number": 4,
+      "title": "Равномерный код",
+      "text": "Для кодирования 50 символов равномерным двоичным кодом минимальная длина кодового слова?",
+      "answer_type": "number",
+      "correct_answer": 6,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "2^5=32<50, 2^6=64>=50. Ответ: 6 бит.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_4_1032",
+      "task_number": 4,
+      "title": "Длина сообщения",
+      "text": "Сообщение 'АБВАБВ' закодировано: А=0, Б=10, В=11. Длина в битах?",
+      "answer_type": "number",
+      "correct_answer": 10,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "0+10+11+0+10+11 = 1+2+2+1+2+2 = 10 бит.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_4_1033",
+      "task_number": 4,
+      "title": "Дерево кодов",
+      "text": "Коды: a=00, b=01, c=100, d=101, e=11. Является ли это префиксным кодом?",
+      "answer_type": "single_choice",
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Ни один код не является началом другого. Да.",
+      "hints": [
+        "Eliminate options contradicting base definitions.",
+        "Run one final condition check before selecting option."
+      ],
+      "code_template": "",
+      "options": [
+        "A) Да",
+        "B) Нет"
+      ]
+    },
+    {
+      "exercise_id": "ex_4_1034",
+      "task_number": 4,
+      "title": "Минимальная длина",
+      "text": "Коды: A=1, B=01. Какой минимальной длины код можно назначить C, сохранив условие Фано?",
+      "answer_type": "number",
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "exercise_type": "closed",
+      "explanation": "Занятые ветви: 1xx, 01x. Свободные: 000, 001. Минимум = 3.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_4_1035",
+      "task_number": 4,
+      "title": "Средняя длина",
+      "text": "Символы с частотами: A(0.5), B(0.25), C(0.25). Коды: A=0, B=10, C=11. Средняя длина?",
+      "answer_type": "number",
+      "correct_answer": 1.5,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "0.5*1 + 0.25*2 + 0.25*2 = 0.5 + 0.5 + 0.5 = 1.5 бит.",
+      "hints": [
+        "Средняя длина = сумма(частота × длина)"
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_4_1036",
+      "task_number": 4,
+      "title": "Декодирование 2",
+      "text": "Коды: a=0, b=10, c=110, d=111. Декодируйте: 1101011100. Количество символов?",
+      "answer_type": "number",
+      "correct_answer": 5,
+      "difficulty": "medium",
+      "exercise_type": "closed",
+      "explanation": "110|10|111|0|0 → c b d a a = 5 символов.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    },
+    {
+      "exercise_id": "ex_4_1037",
+      "task_number": 4,
+      "title": "Неравенство Крафта 2",
+      "text": "Возможен ли префиксный код с длинами 1, 2, 2, 3?",
+      "answer_type": "single_choice",
+      "correct_answer": "A",
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "1/2 + 1/4 + 1/4 + 1/8 = 1.125 > 1. Нет! Ответ: Нет.",
+      "hints": [
+        "Проверьте неравенство Крафта: сумма 2^(-li) <= 1"
+      ],
+      "code_template": "",
+      "options": [
+        "A) Да",
+        "B) Нет"
+      ]
+    },
+    {
+      "exercise_id": "ex_4_1038",
+      "task_number": 4,
+      "title": "Хаффман",
+      "text": "Для алфавита {A:5, B:3, C:2, D:1} постройте оптимальный код. Какова длина кода D?",
+      "answer_type": "number",
+      "correct_answer": 3,
+      "difficulty": "hard",
+      "exercise_type": "closed",
+      "explanation": "Дерево Хаффмана: D и C объединяются (3), потом с B (6), потом с A (11). D получит код длины 3.",
+      "hints": [
+        "Estimate magnitude first, then compute exactly.",
+        "Check unit conversion and rounding before final answer."
+      ],
+      "code_template": ""
+    }
+  ]
+}

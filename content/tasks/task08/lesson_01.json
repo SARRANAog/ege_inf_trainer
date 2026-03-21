@@ -1,0 +1,278 @@
+{
+  "task_number": 8,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 8",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_8_1064",
+      "task_number": 8,
+      "title": "Бинарные строки",
+      "text": "Сколько двоичных строк длины 5 содержат ровно 2 единицы?",
+      "answer_type": "number",
+      "correct_answer": 10,
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "C(5,2) = 10.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from itertools import product\ncount = 0\nfor s in product((0,1), repeat=5):\n    if sum(s) == 2:\n        count += 1\nprint(count)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "10",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "10",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "C(5,2) = 10."
+    },
+    {
+      "exercise_id": "ex_8_1065",
+      "task_number": 8,
+      "title": "Пароль",
+      "text": "Пароль из 4 цифр (0-9), все различные. Сколько вариантов?",
+      "answer_type": "number",
+      "correct_answer": 5040,
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "A(10,4) = 10*9*8*7 = 5040.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from itertools import permutations\nprint(len(list(permutations(range(10), 4))))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "5040",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "5040",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "A(10,4) = 10*9*8*7 = 5040."
+    },
+    {
+      "exercise_id": "ex_8_1066",
+      "task_number": 8,
+      "title": "Анаграммы",
+      "text": "Сколько различных перестановок букв в слове АББА?",
+      "answer_type": "number",
+      "correct_answer": 6,
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "4!/(2!*2!) = 6.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from itertools import permutations\nresult = set(permutations('АББА'))\nprint(len(result))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "6",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "6",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "4!/(2!*2!) = 6."
+    },
+    {
+      "exercise_id": "ex_8_1068",
+      "task_number": 8,
+      "title": "Пути на сетке",
+      "text": "На сетке 3×3 из нижнего левого угла в верхний правый. Ход: вправо или вверх. Сколько путей?",
+      "answer_type": "number",
+      "correct_answer": 6,
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "Нужно 2 шага вправо и 2 вверх = C(4,2) = 6.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from math import comb\n# 2 шага вправо + 2 вверх = C(4,2)\nprint(comb(4, 2))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "6",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "6",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "Нужно 2 шага вправо и 2 вверх = C(4,2) = 6."
+    },
+    {
+      "exercise_id": "ex_8_1069",
+      "task_number": 8,
+      "title": "Цифры без 0",
+      "text": "Сколько 3-значных чисел можно составить из цифр 1-5 с повторениями?",
+      "answer_type": "number",
+      "correct_answer": 125,
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "Correct answer: 125. Rebuild the solution path and verify all constraints.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "print(5**3)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "125",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "125",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "Correct answer: 125. Rebuild the solution path and verify all constraints."
+    },
+    {
+      "exercise_id": "ex_8_1070",
+      "task_number": 8,
+      "title": "Чётные числа",
+      "text": "Сколько 3-значных чётных чисел можно составить из цифр {1,2,3,4}?",
+      "answer_type": "number",
+      "correct_answer": 32,
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "Последняя цифра: 2 или 4 (2 варианта). Первые две: 4*4=16. Итого: 16*2=32.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from itertools import product\ncount = 0\nfor d in product([1,2,3,4], repeat=3):\n    num = d[0]*100 + d[1]*10 + d[2]\n    if num % 2 == 0:\n        count += 1\nprint(count)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "32",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "32",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "Последняя цифра: 2 или 4 (2 варианта). Первые две: 4*4=16. Итого: 16*2=32."
+    },
+    {
+      "exercise_id": "ex_8_36",
+      "task_number": 8,
+      "title": "Слова без повторений",
+      "text": "Сколько трёхбуквенных слов можно составить из букв А, Б, В, Г, если буквы не повторяются?",
+      "answer_type": "number",
+      "correct_answer": 24,
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "Размещения A(4,3) = 4×3×2 = 24.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from itertools import permutations\n\ncount = len(list(permutations('АБВГ', 3)))\nprint(count)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "24",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "24",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "Размещения A(4,3) = 4×3×2 = 24."
+    },
+    {
+      "exercise_id": "ex_8_37",
+      "task_number": 8,
+      "title": "С повторениями",
+      "text": "Сколько 4-значных чисел можно составить из цифр 1, 2, 3?",
+      "answer_type": "number",
+      "correct_answer": 81,
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "3^4 = 81.",
+      "hints": [
+        "Split solution into small steps and print intermediate values during debug.",
+        "Check edge cases: minimum and maximum input bounds."
+      ],
+      "code_template": "from itertools import product\ncount = len(list(product([1,2,3], repeat=4)))\nprint(count)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "81",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "81",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [],
+      "hint_after_first_error": "Split solution into small steps and print intermediate values during debug.",
+      "full_explanation": "3^4 = 81."
+    }
+  ]
+}
