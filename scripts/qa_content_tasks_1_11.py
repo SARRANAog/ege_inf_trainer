@@ -38,6 +38,21 @@ PLACEHOLDER_MARKERS = [
 
 OPTION_LABEL_RE = re.compile(r"^[A-Za-z]\)\s*")
 ANSWER_FROM_EXPLANATION_RE = re.compile(rf"{RUS_ANSWER}\s*[:=]\s*([^\n]+)")
+QUESTION_RUN_RE = re.compile(r"\?{3,}")
+
+MOJIBAKE_MARKERS = [
+    "\u00c2",
+    "\u00c5",
+    "\u00fd",
+    "\u00d0",
+    "\u00d1",
+    "\u0420\u040e",
+    "\u0420\u045f",
+    "\u0413\u0452",
+    "\u0413\u2018",
+    "\u0440\u045f\u201e",
+    "\ufffd",
+]
 
 
 def load_json(path: Path) -> Any:
@@ -55,6 +70,12 @@ def normalize_option_text(option: str) -> str:
 
 def contains_placeholder(text: str) -> bool:
     return any(marker in text for marker in PLACEHOLDER_MARKERS)
+
+
+def contains_mojibake_or_question_run(text: str) -> bool:
+    if QUESTION_RUN_RE.search(text):
+        return True
+    return any(marker in text for marker in MOJIBAKE_MARKERS)
 
 
 def validate_theory(errors: list[str]) -> None:
@@ -199,12 +220,23 @@ def validate_lesson(errors: list[str], task_number: int) -> None:
             fail(errors, f"[practice] task {task_number:02d} {exercise_id} invalid hints list")
         elif any(contains_placeholder(str(item)) for item in hints):
             fail(errors, f"[practice] task {task_number:02d} {exercise_id} hints contain placeholder text")
+        elif any(contains_mojibake_or_question_run(str(item)) for item in hints):
+            fail(errors, f"[practice] task {task_number:02d} {exercise_id} hints contain mojibake or suspicious question marks")
 
         explanation = str(exercise.get("explanation", "")).strip()
         if not explanation:
             fail(errors, f"[practice] task {task_number:02d} {exercise_id} explanation is empty")
         elif contains_placeholder(explanation):
             fail(errors, f"[practice] task {task_number:02d} {exercise_id} explanation contains placeholder text")
+        elif contains_mojibake_or_question_run(explanation):
+            fail(errors, f"[practice] task {task_number:02d} {exercise_id} explanation contains mojibake or suspicious question marks")
+
+        title = str(exercise.get("title", ""))
+        text = str(exercise.get("text", ""))
+        if contains_mojibake_or_question_run(title):
+            fail(errors, f"[practice] task {task_number:02d} {exercise_id} title contains mojibake or suspicious question marks")
+        if contains_mojibake_or_question_run(text):
+            fail(errors, f"[practice] task {task_number:02d} {exercise_id} text contains mojibake or suspicious question marks")
 
         options = exercise.get("options")
         if answer_type in {"single_choice", "multiple_choice"}:
@@ -265,6 +297,8 @@ def validate_lesson(errors: list[str], task_number: int) -> None:
                 fail(errors, f"[practice] task {task_number:02d} {exercise_id} missing full_explanation")
             elif contains_placeholder(full_explanation):
                 fail(errors, f"[practice] task {task_number:02d} {exercise_id} full_explanation contains placeholder text")
+            elif contains_mojibake_or_question_run(full_explanation):
+                fail(errors, f"[practice] task {task_number:02d} {exercise_id} full_explanation contains mojibake or suspicious question marks")
 
             required_nodes = exercise.get("required_nodes")
             if required_nodes is not None and not isinstance(required_nodes, list):
