@@ -75,6 +75,7 @@ export default function TheoryPage() {
     let inCodeBlock = false;
     let codeLines = [];
     let listItems = [];
+    let tableRows = [];
     let key = 0;
 
     const flushList = () => {
@@ -85,9 +86,35 @@ export default function TheoryPage() {
       listItems = [];
     };
 
+    const flushTable = () => {
+      if (tableRows.length === 0) return;
+      elements.push(
+        <div key={`table-${key++}`} className="markdown-table">
+          {tableRows.map((cells, rowIndex) => (
+            <div key={rowIndex} className="markdown-table-row">
+              {cells.map((cell, cellIndex) => <div key={cellIndex} className="markdown-table-cell">{renderInline(cell)}</div>)}
+            </div>
+          ))}
+        </div>
+      );
+      tableRows = [];
+    };
+
+    const parseTableCells = (line) => {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith('|')) return null;
+      const inner = trimmed.replace(/^\|/, '').replace(/\|$/, '');
+      const cells = inner.split('|').map((cell) => cell.trim());
+      if (cells.every((cell) => cell === '')) return null;
+      return cells;
+    };
+
+    const isSeparatorRow = (cells) => cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+
     for (const line of lines) {
       if (line.trim().startsWith('```')) {
         flushList();
+        flushTable();
         if (inCodeBlock) {
           elements.push(<pre key={key++}><code>{codeLines.join('\n')}</code></pre>);
           codeLines = [];
@@ -96,19 +123,25 @@ export default function TheoryPage() {
         continue;
       }
       if (inCodeBlock) { codeLines.push(line); continue; }
-      if (line.startsWith('- ')) { listItems.push(line.slice(2)); continue; }
+      if (line.startsWith('- ')) {
+        flushTable();
+        listItems.push(line.slice(2));
+        continue;
+      }
       flushList();
+      const tableCells = parseTableCells(line);
+      if (tableCells) {
+        if (!isSeparatorRow(tableCells)) tableRows.push(tableCells);
+        continue;
+      }
+      flushTable();
       if (line.startsWith('## ')) elements.push(<h2 key={key++}>{line.slice(3)}</h2>);
       else if (line.startsWith('### ')) elements.push(<h3 key={key++}>{line.slice(4)}</h3>);
-      else if (line.startsWith('| ')) {
-        const cells = line.split('|').filter((c) => c.trim()).map((c) => c.trim());
-        if (!cells.some((c) => c.match(/^-+$/))) {
-          elements.push(<div key={key++} className="markdown-table"><div className="markdown-table-row">{cells.map((c, i) => <div key={i} className="markdown-table-cell">{renderInline(c)}</div>)}</div></div>);
-        }
-      } else if (line.trim() === '') elements.push(<div key={key++} style={{ height: 6 }} />);
+      else if (line.trim() === '') elements.push(<div key={key++} style={{ height: 6 }} />);
       else elements.push(<p key={key++}>{renderInline(line)}</p>);
     }
     flushList();
+    flushTable();
     if (codeLines.length > 0) elements.push(<pre key={key++}><code>{codeLines.join('\n')}</code></pre>);
     return elements;
   };

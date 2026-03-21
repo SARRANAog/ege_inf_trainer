@@ -319,7 +319,7 @@
 .markdown-table { display: grid; gap: 6px; margin: 14px 0; }
 .markdown-table-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
 .markdown-table-cell {
-  padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.028); border: 1px solid var(--border); font-size: 13px; color: var(--text-secondary); line-height: 1.55; overflow-wrap: anywhere;
+  padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.028); border: 1px solid var(--border); font-size: 13px; color: var(--text-secondary); line-height: 1.55; overflow-wrap: break-word;
 }
 
 .form-grid { display: grid; gap: 16px; }
