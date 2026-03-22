@@ -1,7 +1,7 @@
 """Content data aggregator for theory, exercises and roadmap.
 
-Tasks 1-11 are loaded from root ``content/*`` when files exist.
-Tasks 12-27 keep using legacy in-code datasets.
+Tasks 1-27 are loaded from root ``content/*`` when files exist.
+Legacy in-code datasets are used as a fallback source.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ except ImportError:
     from exercises_extra_2 import EXTRA_EXERCISES_2
     from roadmap_content import ROADMAP_DATA as LEGACY_ROADMAP_DATA
 
-TASKS_FROM_ROOT = set(range(1, 12))
+TASKS_FROM_ROOT = set(range(1, 28))
 ROOT_DIR = Path(__file__).resolve().parent.parent
 CONTENT_DIR = ROOT_DIR / "content"
 

@@ -1,0 +1,390 @@
+{
+  "task_number": 19,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 19",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_19_1117",
+      "task_number": 19,
+      "title": "Камни 15",
+      "text": "Куча: 15 камней. Ходы: 1 или 2. Побеждает взявший последний. Выигрывает?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "15 mod 3 = 0. Второй выигрывает. Нет, при ходах 1,2 выигрышная стратегия: 15 mod 3 = 0 → второй.",
+      "hints": [
+        "Если N делится на 3, выигрывает второй",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "15 mod 3 = 0. Второй выигрывает. Нет, при ходах 1,2 выигрышная стратегия: 15 mod 3 = 0 → второй. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с корот..."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "15 mod 3 = 0. Второй выигрывает. Нет, при ходах 1,2 выигрышная стратегия: 15 mod 3 = 0 → второй. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Если N делится на 3, выигрывает второй"
+    },
+    {
+      "exercise_id": "ex_19_2033",
+      "task_number": 19,
+      "title": "Ним 3",
+      "text": "Куча 12. Ходы:1,2,3. Взявший последний выигрывает. Кто?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "12 mod 4 = 0. Второй выигрывает. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hints": [
+        "При ходах 1,2,3 — позиции кратные 4 проигрышные",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "12 mod 4 = 0. Второй выигрывает. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "12 mod 4 = 0. Второй выигрывает. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "При ходах 1,2,3 — позиции кратные 4 проигрышные"
+    },
+    {
+      "exercise_id": "ex_19_1118",
+      "task_number": 19,
+      "title": "Ходы 1,3",
+      "text": "Куча: 10. Ходы: 1 или 3. Побеждает взявший последний. Кто выигрывает?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "Куча: 10. Ходы: 1 или 3. Побеждает взявший последний. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "Куча: 10. Ходы: 1 или 3. Побеждает взявший последний. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чт..."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "Куча: 10. Ходы: 1 или 3. Побеждает взявший последний. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_19_2031",
+      "task_number": 19,
+      "title": "Камни +1,+3",
+      "text": "Куча=7. Ходы:+1,+3. Цель>=12. Кто выигрывает?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "Куча=7. Ходы:+1,+3. Цель>=12. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "Куча=7. Ходы:+1,+3. Цель>=12. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ог..."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for m in [1,3]:\n        if n+m>=12:return True\n        if not w(n+m):return True\n    return False\nprint(1 if w(7) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "1",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "Куча=7. Ходы:+1,+3. Цель>=12. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_19_2032",
+      "task_number": 19,
+      "title": "Камни *2",
+      "text": "Число=3. Ходы:+1,*2. Цель>=16. Кто?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "Число=3. Ходы:+1,*2. Цель>=16. Кто? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "Число=3. Ходы:+1,*2. Цель>=16. Кто? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for nn in [n+1,n*2]:\n        if nn>=16:return True\n        if not w(nn):return True\n    return False\nprint(1 if w(3) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "1",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "Число=3. Ходы:+1,*2. Цель>=16. Кто? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_19_71",
+      "task_number": 19,
+      "title": "Простая игра",
+      "text": "Два игрока, куча: 10 камней. Ход: взять 1 или 2 камня. Побеждает взявший последний. Кто выигрывает?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Pyt..."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый игрок",
+        "B) Второй игрок"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_19_71_v1",
+      "task_number": 19,
+      "title": "Простая игра (variant 1)",
+      "text": "Два игрока, куча: 10 камней. Ход: взять 1 или 2 камня. Побеждает взявший последний. Кто выигрывает?\\n\\nVariant 1: solve it independently and verify by code.",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Pyt..."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый игрок",
+        "B) Второй игрок"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_19_71_v1_v2",
+      "task_number": 19,
+      "title": "Простая игра (variant 1) (variant 2)",
+      "text": "Два игрока, куча: 10 камней. Ход: взять 1 или 2 камня. Побеждает взявший последний. Кто выигрывает?\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Pyt..."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый игрок",
+        "B) Второй игрок"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "10 mod 3 = 1. Первый берёт 1, остаётся 9 (делится на 3). Второй в проигрыше. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    }
+  ]
+}

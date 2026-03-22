@@ -1,0 +1,386 @@
+{
+  "task_number": 20,
+  "lesson_id": "lesson_01",
+  "title": "Practice: task 20",
+  "description": "Training set with gradual difficulty growth: easy -> medium -> hard.",
+  "progression": [
+    "easy",
+    "medium",
+    "hard",
+    "slightly_harder_than_exam"
+  ],
+  "exercises": [
+    {
+      "exercise_id": "ex_20_1119",
+      "task_number": 20,
+      "title": "Две операции",
+      "text": "Число S=7. Ходы: +1, ×2. Цель: ≥15. Кто выигрывает при оптимальной игре?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "Число S=7. Ходы: +1, ×2. Цель: ≥15. Кто выигрывает при оптимальной игре? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошиб...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "Число S=7. Ходы: +1, ×2. Цель: ≥15. Кто выигрывает при оптимальной игре? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python,..."
+      ],
+      "code_template": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef win(n):\n    if n + 1 >= 15 or n * 2 >= 15:\n        return True\n    if not win(n + 1):\n        return True\n    if not win(n * 2):\n        return True\n    return False\n\nprint(1 if win(7) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "1",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "Число S=7. Ходы: +1, ×2. Цель: ≥15. Кто выигрывает при оптимальной игре? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_2034",
+      "task_number": 20,
+      "title": "Две кучи +1",
+      "text": "Кучи: 2,3. Ход: +1 к любой куче. Цель: любая куча >=5. Кто выигрывает?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "exercise_type": "code",
+      "explanation": "Кучи: 2,3. Ход: +1 к любой куче. Цель: любая куча >=5. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "Кучи: 2,3. Ход: +1 к любой куче. Цель: любая куча >=5. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, ч..."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(a,b):\n    if a>=5 or b>=5:return False\n    if not w(a+1,b):return True\n    if not w(a,b+1):return True\n    return False\nprint(1 if w(2,3) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "1",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "Кучи: 2,3. Ход: +1 к любой куче. Цель: любая куча >=5. Кто выигрывает? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_2036",
+      "task_number": 20,
+      "title": "Глубина 2",
+      "text": "S=6. Ходы:+1,+2. Цель>=10. Первый выигрывает на каком ходе (1 или 2)?",
+      "answer_type": "number",
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "S=6. Ходы:+1,+2. Цель>=10. Первый выигрывает на каком ходе (1 или 2)? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "S=6. Ходы:+1,+2. Цель>=10. Первый выигрывает на каком ходе (1 или 2)? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чт..."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for m in [1,2]:\n        if n+m>=10:return True\n        if not w(n+m):return True\n    return False\n# Первый ход: если n+m>=10, выигрыш за 1 ход\nfor m in [1,2]:\n    if 6+m>=10:\n        print(1)\n        exit()\nfor m in [1,2]:\n    nn=6+m\n    if not w(nn):\n        print(1)\n        exit()\nprint(2)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "1",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "S=6. Ходы:+1,+2. Цель>=10. Первый выигрывает на каком ходе (1 или 2)? Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_72",
+      "task_number": 20,
+      "title": "Игра с двумя кучами",
+      "text": "Кучи: 3 и 4. Ход: +1 к любой куче. Побеждает тот, кто первым сделает сумму ≥ 10. Кто выигрывает?",
+      "answer_type": "number",
+      "correct_answer": "A",
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "Сумма 7, нужно 10. Нужно 3 хода. Первый ходит 1-м, 3-м → выигрывает. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "Сумма 7, нужно 10. Нужно 3 хода. Первый ходит 1-м, 3-м → выигрывает. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, что..."
+      ],
+      "code_template": "from functools import lru_cache\\n\\n@lru_cache(None)\\ndef f(x):\\n    if x <= 0:\\n        return 0\\n    return f(x - 1)\\n\\ndef solve():\\n    # TODO: adapt recursion and base case for this task\\n    print(f(10))\\n\\nif __name__ == '__main__':\\n    solve()\\n",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "A",
+          "is_public": true
+        }
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "A",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "Сумма 7, нужно 10. Нужно 3 хода. Первый ходит 1-м, 3-м → выигрывает. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_2035",
+      "task_number": 20,
+      "title": "Ход *2 или +1",
+      "text": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.",
+      "answer_type": "number",
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "exercise_type": "code",
+      "explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать о...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Pyth..."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for nn in [n+1,n*2]:\n        if nn>=20:return True\n        if not w(nn):return True\n    return False\nprint(1 if w(4) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "2",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_2035_v1",
+      "task_number": 20,
+      "title": "Ход *2 или +1 (variant 1)",
+      "text": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.",
+      "answer_type": "number",
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code. Пройдите команды исполнителя по шагам и фиксируйте промежуточное..."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for nn in [n+1,n*2]:\n        if nn>=20:return True\n        if not w(nn):return True\n    return False\nprint(1 if w(4) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "2",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code. Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x. Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_2035_v1_v2",
+      "task_number": 20,
+      "title": "Ход *2 или +1 (variant 1) (variant 2)",
+      "text": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.",
+      "answer_type": "number",
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for nn in [n+1,n*2]:\n        if nn>=20:return True\n        if not w(nn):return True\n    return False\nprint(1 if w(4) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "2",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    },
+    {
+      "exercise_id": "ex_20_2035_v1_v2_v3",
+      "task_number": 20,
+      "title": "Ход *2 или +1 (variant 1) (variant 2) (variant 3)",
+      "text": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.\\n\\nVariant 3: solve it independently and verify by code.",
+      "answer_type": "number",
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "exercise_type": "code",
+      "explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.\\n\\nVariant 3: solve it inde...",
+      "hints": [
+        "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x.",
+        "Сверьте формулу с коротким перебором на Python, чтобы избежать ошибки в ограничениях.",
+        "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.\\n\\nVari..."
+      ],
+      "code_template": "from functools import lru_cache\n@lru_cache(None)\ndef w(n):\n    for nn in [n+1,n*2]:\n        if nn>=20:return True\n        if not w(nn):return True\n    return False\nprint(1 if w(4) else 2)",
+      "options": [
+        "A) Первый",
+        "B) Второй"
+      ],
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2",
+          "is_public": true
+        }
+      ],
+      "tests": [
+        {
+          "input": "",
+          "output": "2",
+          "is_public": true
+        }
+      ],
+      "required_nodes": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "required_constructs": [
+        "function",
+        "recursion",
+        "if"
+      ],
+      "full_explanation": "S=4. Ходы: +1, *2. Цель >=20. При каком S второй выигрывает? Проверить S=4.\\n\\nVariant 1: solve it independently and verify by code.\\n\\nVariant 2: solve it independently and verify by code.\\n\\nVariant 3: solve it independently and verify by code.",
+      "hint_after_first_error": "Пройдите команды исполнителя по шагам и фиксируйте промежуточное значение x."
+    }
+  ]
+}
