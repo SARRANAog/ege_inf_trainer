@@ -1,0 +1,24 @@
+{
+  "name": "ege-inf-trainer-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "main": "desktop/main.js",
+  "scripts": {
+    "start": "npm run desktop:dev",
+    "desktop:dev": "concurrently -k --names BACK,FRONT,ELECTRON --prefix-colors yellow,cyan,magenta \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:electron\"",
+    "dev:backend": "nodemon --config nodemon.backend.json",
+    "dev:frontend": "cross-env BROWSER=none npm --prefix frontend start",
+    "dev:electron": "wait-on tcp:8001 http-get://localhost:3000 && cross-env ELECTRON_START_URL=http://localhost:3000 electron .",
+    "desktop:build": "npm --prefix frontend run build",
+    "desktop:run": "concurrently -k --names BACK,ELECTRON --prefix-colors yellow,magenta \"npm run run:backend\" \"npm run run:electron\"",
+    "run:backend": "node scripts/run-backend.js",
+    "run:electron": "wait-on tcp:8001 && cross-env ELECTRON_START_URL=http://127.0.0.1:8001 electron ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
+    "electron": "^37.2.6",
+    "nodemon": "^3.1.10",
+    "wait-on": "^9.0.2"
+  }
+}

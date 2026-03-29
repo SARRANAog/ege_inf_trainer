@@ -1,0 +1,7 @@
+{
+  "watch": ["backend", "content"],
+  "ignore": ["backend/.venv/**", "backend/data/**", "frontend/**", ".git/**"],
+  "ext": "py,json",
+  "delay": "200",
+  "exec": "node scripts/run-backend.js"
+}
