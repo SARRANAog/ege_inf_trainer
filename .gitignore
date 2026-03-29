@@ -2,6 +2,9 @@
 .env
 .env.*
 !.env.example
+.codex/
+memory/
+FULL_CHANGED_FILES.md
 
 # Node / frontend
 node_modules/
@@ -49,3 +52,4 @@ frontend/build/
 __pycache__/
 *.pyc
 backend/data/*.sqlite3
+backend/package-lock.json
