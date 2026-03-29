@@ -1,43 +1,44 @@
 :root {
   color-scheme: dark;
 
-  --bg-app: #06070b;
-  --bg-app-alt: #090c12;
-  --bg-shell: #0c1017;
-  --bg-surface: #111722;
-  --bg-surface-2: #151d2a;
-  --bg-elevated: #1a2433;
-  --bg-hover: #212f43;
-  --bg-soft: #0d121a;
+  --bg-app: #05070c;
+  --bg-app-alt: #090f1a;
+  --bg-shell: #0b111d;
+  --bg-surface: #0d1422;
+  --bg-surface-2: #111b2d;
+  --bg-elevated: #172439;
+  --bg-hover: #1c2d47;
+  --bg-soft: #0a101a;
 
-  --text-primary: #f6f2e8;
-  --text-secondary: #cdc4b6;
-  --text-tertiary: #aaa08f;
-  --text-muted: #857b6d;
+  --text-primary: #f3e5cc;
+  --text-secondary: #d8c7ab;
+  --text-tertiary: #b9a588;
+  --text-muted: #95846d;
 
-  --border: #263245;
-  --border-strong: #3a4a60;
-  --border-soft: rgba(255, 255, 255, 0.05);
+  --border: rgba(215, 167, 95, 0.25);
+  --border-strong: rgba(227, 190, 131, 0.48);
+  --border-soft: rgba(245, 213, 159, 0.12);
 
-  --accent: #d4b076;
-  --accent-strong: #f1d59f;
-  --accent-muted: #8f7042;
+  --accent: #cd9f5a;
+  --accent-strong: #f1cf96;
+  --accent-muted: #896237;
 
-  --success: #6dc291;
-  --warning: #d8a05b;
-  --danger: #e17b87;
+  --success: #84c49d;
+  --warning: #d5ab6a;
+  --danger: #de8d97;
 
-  --shadow-xs: 0 2px 10px rgba(0, 0, 0, 0.18);
-  --shadow-sm: 0 14px 34px rgba(0, 0, 0, 0.28);
-  --shadow-md: 0 24px 56px rgba(0, 0, 0, 0.36);
-  --shadow-lg: 0 34px 88px rgba(0, 0, 0, 0.46);
+  --shadow-xs: 0 8px 20px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 22px 52px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 34px 78px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 48px 112px rgba(0, 0, 0, 0.6);
 
   --radius-sm: 12px;
   --radius-md: 18px;
   --radius-lg: 24px;
   --radius-xl: 30px;
 
-  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: "Sora", "Manrope", "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Sora", "Manrope", "IBM Plex Sans", "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "Cascadia Code", "Fira Code", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -57,25 +58,38 @@ body {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background:
-    radial-gradient(circle at top left, rgba(212, 176, 118, 0.16), transparent 23%),
-    radial-gradient(circle at 84% 12%, rgba(212, 176, 118, 0.08), transparent 16%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 22%),
-    linear-gradient(180deg, var(--bg-app-alt), var(--bg-app));
+    radial-gradient(circle at 12% 9%, rgba(243, 201, 127, 0.2), transparent 23%),
+    radial-gradient(circle at 86% 14%, rgba(202, 148, 72, 0.12), transparent 20%),
+    radial-gradient(circle at 60% 68%, rgba(42, 66, 108, 0.16), transparent 36%),
+    linear-gradient(170deg, #0b1220 0%, #080d16 42%, #05070c 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow: hidden;
 }
 
-body::before {
+body::before,
+body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
+}
+
+body::before {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 38%),
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.012), transparent 22%);
-  opacity: 0.9;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 26%),
+    radial-gradient(circle at 78% 22%, rgba(255, 248, 229, 0.06), transparent 22%),
+    radial-gradient(circle at 18% 68%, rgba(255, 205, 127, 0.08), transparent 26%);
+}
+
+body::after {
+  opacity: 0.22;
+  background-image:
+    linear-gradient(transparent 97%, rgba(255, 255, 255, 0.08) 100%),
+    linear-gradient(90deg, transparent 97%, rgba(255, 255, 255, 0.04) 100%);
+  background-size: 100% 3px, 3px 100%;
+  mix-blend-mode: soft-light;
 }
 
 a {
@@ -100,8 +114,8 @@ svg {
 }
 
 ::selection {
-  background: rgba(212, 176, 118, 0.3);
-  color: var(--text-primary);
+  background: rgba(235, 194, 122, 0.34);
+  color: #101217;
 }
 
 ::-webkit-scrollbar {
@@ -114,12 +128,12 @@ svg {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(205, 196, 182, 0.18);
+  background: rgba(223, 188, 134, 0.26);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(205, 196, 182, 0.32);
+  background: rgba(235, 202, 152, 0.42);
 }
 
 code,
