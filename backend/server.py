@@ -1,5 +1,7 @@
 import ast
+import mimetypes
 import os
+import random
 import subprocess
 import sys
 import tempfile
@@ -49,8 +51,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 1,
         "kind": "learn",
-        "title": "Старт: задания 1–5",
-        "description": "Проход первого блока: базовая теория, короткая практика, без перескоков.",
+        "title": "РЎС‚Р°СЂС‚: Р·Р°РґР°РЅРёСЏ 1вЂ“5",
+        "description": "РџСЂРѕС…РѕРґ РїРµСЂРІРѕРіРѕ Р±Р»РѕРєР°: Р±Р°Р·РѕРІР°СЏ С‚РµРѕСЂРёСЏ, РєРѕСЂРѕС‚РєР°СЏ РїСЂР°РєС‚РёРєР°, Р±РµР· РїРµСЂРµСЃРєРѕРєРѕРІ.",
         "tasks": [1, 2, 3, 4, 5],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -59,8 +61,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 2,
         "kind": "revisit",
-        "title": "Возврат 1–5: усложнённое закрепление",
-        "description": "Возврат к первым заданиям с большей сложностью и контролем ошибок.",
+        "title": "Р’РѕР·РІСЂР°С‚ 1вЂ“5: СѓСЃР»РѕР¶РЅС‘РЅРЅРѕРµ Р·Р°РєСЂРµРїР»РµРЅРёРµ",
+        "description": "Р’РѕР·РІСЂР°С‚ Рє РїРµСЂРІС‹Рј Р·Р°РґР°РЅРёСЏРј СЃ Р±РѕР»СЊС€РµР№ СЃР»РѕР¶РЅРѕСЃС‚СЊСЋ Рё РєРѕРЅС‚СЂРѕР»РµРј РѕС€РёР±РѕРє.",
         "tasks": [1, 2, 3, 4, 5],
         "min_attempts": 4,
         "min_accuracy": 72,
@@ -69,8 +71,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 3,
         "kind": "learn",
-        "title": "Дальше: задания 6–10",
-        "description": "Второй блок нового материала.",
+        "title": "Р”Р°Р»СЊС€Рµ: Р·Р°РґР°РЅРёСЏ 6вЂ“10",
+        "description": "Р’С‚РѕСЂРѕР№ Р±Р»РѕРє РЅРѕРІРѕРіРѕ РјР°С‚РµСЂРёР°Р»Р°.",
         "tasks": [6, 7, 8, 9, 10],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -80,7 +82,7 @@ GUIDED_STAGES = [
         "stage_number": 4,
         "kind": "review",
         "title": "Weekly Review A",
-        "description": "Обязательный контрольный блок по заданиям 1–10.",
+        "description": "РћР±СЏР·Р°С‚РµР»СЊРЅС‹Р№ РєРѕРЅС‚СЂРѕР»СЊРЅС‹Р№ Р±Р»РѕРє РїРѕ Р·Р°РґР°РЅРёСЏРј 1вЂ“10.",
         "review_index": 1,
         "review_tasks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         "estimated_minutes": 35,
@@ -88,8 +90,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 5,
         "kind": "revisit",
-        "title": "Возврат 1–10: закрепление блока",
-        "description": "Повторение пройденного до перехода в среднюю часть дорожки.",
+        "title": "Р’РѕР·РІСЂР°С‚ 1вЂ“10: Р·Р°РєСЂРµРїР»РµРЅРёРµ Р±Р»РѕРєР°",
+        "description": "РџРѕРІС‚РѕСЂРµРЅРёРµ РїСЂРѕР№РґРµРЅРЅРѕРіРѕ РґРѕ РїРµСЂРµС…РѕРґР° РІ СЃСЂРµРґРЅСЋСЋ С‡Р°СЃС‚СЊ РґРѕСЂРѕР¶РєРё.",
         "tasks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         "min_attempts": 4,
         "min_accuracy": 70,
@@ -98,8 +100,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 6,
         "kind": "learn",
-        "title": "Средний блок: задания 11–15",
-        "description": "Основная середина дорожки, включая кодовые задания.",
+        "title": "РЎСЂРµРґРЅРёР№ Р±Р»РѕРє: Р·Р°РґР°РЅРёСЏ 11вЂ“15",
+        "description": "РћСЃРЅРѕРІРЅР°СЏ СЃРµСЂРµРґРёРЅР° РґРѕСЂРѕР¶РєРё, РІРєР»СЋС‡Р°СЏ РєРѕРґРѕРІС‹Рµ Р·Р°РґР°РЅРёСЏ.",
         "tasks": [11, 12, 13, 14, 15],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -109,7 +111,7 @@ GUIDED_STAGES = [
         "stage_number": 7,
         "kind": "review",
         "title": "Weekly Review B",
-        "description": "Контроль и возврат по заданиям 6–15.",
+        "description": "РљРѕРЅС‚СЂРѕР»СЊ Рё РІРѕР·РІСЂР°С‚ РїРѕ Р·Р°РґР°РЅРёСЏРј 6вЂ“15.",
         "review_index": 2,
         "review_tasks": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
         "estimated_minutes": 40,
@@ -117,8 +119,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 8,
         "kind": "revisit",
-        "title": "Возврат 6–15: сложнее и точнее",
-        "description": "Повторение с упором на слабые темы и трудные упражнения.",
+        "title": "Р’РѕР·РІСЂР°С‚ 6вЂ“15: СЃР»РѕР¶РЅРµРµ Рё С‚РѕС‡РЅРµРµ",
+        "description": "РџРѕРІС‚РѕСЂРµРЅРёРµ СЃ СѓРїРѕСЂРѕРј РЅР° СЃР»Р°Р±С‹Рµ С‚РµРјС‹ Рё С‚СЂСѓРґРЅС‹Рµ СѓРїСЂР°Р¶РЅРµРЅРёСЏ.",
         "tasks": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
         "min_attempts": 4,
         "min_accuracy": 72,
@@ -127,8 +129,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 9,
         "kind": "learn",
-        "title": "Старший блок: задания 16–20",
-        "description": "Продвинутая часть с высокой ценой ошибок.",
+        "title": "РЎС‚Р°СЂС€РёР№ Р±Р»РѕРє: Р·Р°РґР°РЅРёСЏ 16вЂ“20",
+        "description": "РџСЂРѕРґРІРёРЅСѓС‚Р°СЏ С‡Р°СЃС‚СЊ СЃ РІС‹СЃРѕРєРѕР№ С†РµРЅРѕР№ РѕС€РёР±РѕРє.",
         "tasks": [16, 17, 18, 19, 20],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -138,7 +140,7 @@ GUIDED_STAGES = [
         "stage_number": 10,
         "kind": "review",
         "title": "Weekly Review C",
-        "description": "Контроль по заданиям 11–20.",
+        "description": "РљРѕРЅС‚СЂРѕР»СЊ РїРѕ Р·Р°РґР°РЅРёСЏРј 11вЂ“20.",
         "review_index": 3,
         "review_tasks": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
         "estimated_minutes": 40,
@@ -146,8 +148,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 11,
         "kind": "revisit",
-        "title": "Возврат 11–20: работа над ошибками",
-        "description": "Усложнённое повторение перед финальным блоком.",
+        "title": "Р’РѕР·РІСЂР°С‚ 11вЂ“20: СЂР°Р±РѕС‚Р° РЅР°Рґ РѕС€РёР±РєР°РјРё",
+        "description": "РЈСЃР»РѕР¶РЅС‘РЅРЅРѕРµ РїРѕРІС‚РѕСЂРµРЅРёРµ РїРµСЂРµРґ С„РёРЅР°Р»СЊРЅС‹Рј Р±Р»РѕРєРѕРј.",
         "tasks": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
         "min_attempts": 4,
         "min_accuracy": 74,
@@ -156,8 +158,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 12,
         "kind": "learn",
-        "title": "Финиш: задания 21–27",
-        "description": "Последний новый материал перед стабилизацией и пробниками.",
+        "title": "Р¤РёРЅРёС€: Р·Р°РґР°РЅРёСЏ 21вЂ“27",
+        "description": "РџРѕСЃР»РµРґРЅРёР№ РЅРѕРІС‹Р№ РјР°С‚РµСЂРёР°Р» РїРµСЂРµРґ СЃС‚Р°Р±РёР»РёР·Р°С†РёРµР№ Рё РїСЂРѕР±РЅРёРєР°РјРё.",
         "tasks": [21, 22, 23, 24, 25, 26, 27],
         "min_attempts": 2,
         "min_accuracy": 60,
@@ -167,7 +169,7 @@ GUIDED_STAGES = [
         "stage_number": 13,
         "kind": "review",
         "title": "Weekly Review D",
-        "description": "Обязательный контроль по завершающему блоку.",
+        "description": "РћР±СЏР·Р°С‚РµР»СЊРЅС‹Р№ РєРѕРЅС‚СЂРѕР»СЊ РїРѕ Р·Р°РІРµСЂС€Р°СЋС‰РµРјСѓ Р±Р»РѕРєСѓ.",
         "review_index": 4,
         "review_tasks": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
         "estimated_minutes": 45,
@@ -175,8 +177,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 14,
         "kind": "revisit",
-        "title": "Финальное закрепление 16–27",
-        "description": "Последний возврат назад перед полноценными пробниками.",
+        "title": "Р¤РёРЅР°Р»СЊРЅРѕРµ Р·Р°РєСЂРµРїР»РµРЅРёРµ 16вЂ“27",
+        "description": "РџРѕСЃР»РµРґРЅРёР№ РІРѕР·РІСЂР°С‚ РЅР°Р·Р°Рґ РїРµСЂРµРґ РїРѕР»РЅРѕС†РµРЅРЅС‹РјРё РїСЂРѕР±РЅРёРєР°РјРё.",
         "tasks": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
         "min_attempts": 4,
         "min_accuracy": 76,
@@ -185,8 +187,8 @@ GUIDED_STAGES = [
     {
         "stage_number": 15,
         "kind": "mock",
-        "title": "Пробники и стабилизация",
-        "description": "Формат, тайминг и доводка слабых мест.",
+        "title": "РџСЂРѕР±РЅРёРєРё Рё СЃС‚Р°Р±РёР»РёР·Р°С†РёСЏ",
+        "description": "Р¤РѕСЂРјР°С‚, С‚Р°Р№РјРёРЅРі Рё РґРѕРІРѕРґРєР° СЃР»Р°Р±С‹С… РјРµСЃС‚.",
         "min_mock_exams": 1,
         "estimated_minutes": 235,
     },
@@ -194,9 +196,42 @@ GUIDED_STAGES = [
 
 TRAINING_MOCK_TASKS = [2, 5, 6, 8, 12, 14, 16, 17, 19, 23, 25, 27]
 
+GENERAL_THEORY = {
+    "title": "Общая стратегия ЕГЭ",
+    "subtitle": "Как распределять время, порядок номеров и базовые Python-паттерны.",
+    "short_theory": """## Общая теория: быстрый ориентир
+
+- Сначала закрывайте базовые и средние номера, чтобы набрать устойчивые баллы.
+- Для кодовых заданий начинайте с черновика: вход, проверка формата, затем основной алгоритм.
+- После каждой ошибки фиксируйте причину: логика, формат ответа, граничный случай.
+- В пробнике проверяйте ответы после полного прохода, как на реальном экзамене.
+""",
+    "full_theory": """## Общая теория подготовки к ЕГЭ
+
+### 1. Порядок решения
+- Первый проход: берите задания, где вероятность ошибки минимальна.
+- Второй проход: средние задания с расчётом времени.
+- Третий проход: сложные и ресурсные задачи.
+
+### 2. Работа с ошибками
+- Делите ошибки на типы: невнимательность, пробел в теме, неверный алгоритм.
+- Повторяйте похожие задания, но не дословные копии.
+- Проверяйте граничные случаи до отправки ответа.
+
+### 3. Python без перегруза
+- На старте достаточно базиса: `if`, `for`, функции, строки, списки.
+- В кодовых номерах важнее корректный результат, чем «красивый» стиль.
+- После стабилизации добавляйте оптимизации и более короткие конструкции.
+
+### 4. Экзаменационный режим
+- В пробнике отключайте обучающие элементы и решайте в тайминге экзамена.
+- После завершения разбирайте только слабые места по отчёту.
+""",
+}
+
 
 class ProfileCreate(BaseModel):
-    name: str = "Ученик"
+    name: str = "РЈС‡РµРЅРёРє"
     target_score: int = 80
     exam_date: str = "2026-06-01"
     confidence_level: str = "medium"
@@ -220,16 +255,19 @@ class ProfileUpdate(BaseModel):
 class AnswerCheck(BaseModel):
     exercise_id: str
     answer: Any
+    attempt_count: Optional[int] = None
 
 
 class CodeRun(BaseModel):
     code: str
     stdin: str = ""
+    stdin_path: Optional[str] = None
 
 
 class CodeCheck(BaseModel):
     exercise_id: str
     code: str
+    attempt_count: Optional[int] = None
 
 
 class WeeklyReviewAnswer(BaseModel):
@@ -252,6 +290,20 @@ class DraftUpsert(BaseModel):
     task_number: Optional[int] = None
     exercise_id: Optional[str] = None
     payload: Any = None
+
+
+class BaselineUpdate(BaseModel):
+    python_level: str = "beginner"
+    ege_level: str = "start"
+    weekly_goal_hours: float = 6.0
+    note: str = ""
+
+
+class TaskBankCheck(BaseModel):
+    exercise_id: str
+    answer: Any = None
+    code: Optional[str] = None
+    attempt_count: Optional[int] = None
 
 
 def now_utc() -> datetime:
@@ -286,20 +338,26 @@ def normalize_learning_mode(value: Optional[str]) -> str:
     return "free" if value == "free" else "guided"
 
 
-def load_static_content() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+def load_static_content() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     try:
-        from .content_data import THEORY_DATA, EXERCISES_DATA, ROADMAP_DATA
+        from .content_data import THEORY_DATA, EXERCISES_DATA, ROADMAP_DATA, CONTENT_REGISTRY
     except ImportError:
-        from content_data import THEORY_DATA, EXERCISES_DATA, ROADMAP_DATA
-    return THEORY_DATA, EXERCISES_DATA, ROADMAP_DATA
+        from content_data import THEORY_DATA, EXERCISES_DATA, ROADMAP_DATA, CONTENT_REGISTRY
+    return THEORY_DATA, EXERCISES_DATA, ROADMAP_DATA, CONTENT_REGISTRY
 
 
 async def ensure_storage_seeded(force: bool = False) -> dict[str, Any]:
-    theory_data, exercises_data, roadmap_data = load_static_content()
+    theory_data, exercises_data, roadmap_data, _ = load_static_content()
     return storage.seed_static_content(theory_data, exercises_data, roadmap_data, force=force)
 
 
+def get_content_registry() -> dict[str, Any]:
+    _, _, _, registry = load_static_content()
+    return registry
+
+
 def run_python_code(source_code: str, stdin_text: str = "") -> dict[str, Any]:
+    sandbox_files_dir = PROJECT_ROOT / "content"
     with tempfile.TemporaryDirectory() as tmpdir:
         script_path = Path(tmpdir) / "solution.py"
         script_path.write_text(source_code, encoding="utf-8")
@@ -313,6 +371,7 @@ def run_python_code(source_code: str, stdin_text: str = "") -> dict[str, Any]:
                 timeout=5,
                 encoding="utf-8",
                 errors="replace",
+                cwd=str(sandbox_files_dir) if sandbox_files_dir.exists() else None,
             )
             return {
                 "stdout": completed.stdout,
@@ -322,17 +381,47 @@ def run_python_code(source_code: str, stdin_text: str = "") -> dict[str, Any]:
         except subprocess.TimeoutExpired:
             return {
                 "stdout": "",
-                "stderr": "Превышено время выполнения (timeout 5 сек).",
+                "stderr": "РџСЂРµРІС‹С€РµРЅРѕ РІСЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ (timeout 5 СЃРµРє).",
                 "returncode": -1,
             }
+
+
+def resolve_content_file_input(path_value: str) -> Optional[str]:
+    candidate = resolve_content_file_path(path_value)
+    if not candidate:
+        return None
+    try:
+        return candidate.read_text(encoding="utf-8")
+    except Exception:
+        return None
+
+
+def resolve_content_file_path(path_value: str) -> Optional[Path]:
+    raw = str(path_value or "").strip().replace("\\", "/")
+    if not raw:
+        return None
+    content_root = (PROJECT_ROOT / "content").resolve()
+    candidate = (content_root / raw).resolve()
+    if content_root not in candidate.parents and candidate != content_root:
+        return None
+    if not candidate.exists() or not candidate.is_file():
+        return None
+    return candidate
 
 
 def get_profile_core() -> dict[str, Any]:
     profile = storage.get_profile()
     if profile:
+        baseline = profile.get("baseline") if isinstance(profile.get("baseline"), dict) else {}
+        baseline.setdefault("completed", False)
+        baseline.setdefault("python_level", "beginner")
+        baseline.setdefault("ege_level", "start")
+        baseline.setdefault("weekly_goal_hours", float(profile.get("weekly_hours", 10.0) or 10.0))
+        baseline.setdefault("note", "")
+        profile["baseline"] = baseline
         return profile
     profile = {
-        "name": "Ученик",
+        "name": "РЈС‡РµРЅРёРє",
         "target_score": 80,
         "exam_date": "2026-06-01",
         "confidence_level": "medium",
@@ -342,6 +431,13 @@ def get_profile_core() -> dict[str, Any]:
         "learning_mode": "guided",
         "total_exercises_done": 0,
         "total_correct": 0,
+        "baseline": {
+            "completed": False,
+            "python_level": "beginner",
+            "ege_level": "start",
+            "weekly_goal_hours": 6.0,
+            "note": "",
+        },
         "created_at": now_iso(),
         "updated_at": now_iso(),
     }
@@ -351,6 +447,8 @@ def get_profile_core() -> dict[str, Any]:
 
 def get_profile_payload() -> dict[str, Any]:
     profile = get_profile_core().copy()
+    baseline = profile.get("baseline") if isinstance(profile.get("baseline"), dict) else {}
+    profile["baseline_completed"] = bool(baseline.get("completed"))
     profile["exists"] = True
     return profile
 
@@ -365,15 +463,15 @@ def save_profile(profile: dict[str, Any]) -> dict[str, Any]:
 def get_theory_or_404(task_number: int) -> dict[str, Any]:
     item = storage.get_theory(task_number)
     if not item:
-        raise HTTPException(404, "Теория не найдена")
+        raise HTTPException(404, "РўРµРѕСЂРёСЏ РЅРµ РЅР°Р№РґРµРЅР°")
     return item
 
 
 def get_exercise_or_404(exercise_id: str) -> dict[str, Any]:
     exercise = storage.get_exercise(exercise_id)
     if not exercise:
-        raise HTTPException(404, "Упражнение не найдено")
-    return exercise
+        raise HTTPException(404, "РЈРїСЂР°Р¶РЅРµРЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ")
+    return normalize_exercise_contract(exercise)
 
 
 def is_objective_exercise(exercise: dict[str, Any]) -> bool:
@@ -392,7 +490,7 @@ def choose_exercises_for_task(
     theory_item = storage.get_theory(task_number) or {}
     should_be_code = task_number in CODE_TASKS or theory_item.get("is_code_task")
 
-    exercises = storage.list_exercises(task_number=task_number, only_objective=True)
+    exercises = [normalize_exercise_contract(item) for item in storage.list_exercises(task_number=task_number, only_objective=True)]
     if should_be_code:
         code_exercises = [item for item in exercises if item.get("exercise_type") == "code"]
         if code_exercises:
@@ -418,6 +516,24 @@ def choose_exercises_for_task(
     if mode == "mistakes":
         return exercises[: min(limit, 5)]
     return exercises[:limit]
+
+
+def choose_random_exercise_for_task(
+    task_number: int,
+    *,
+    prefer_prototype: bool = False,
+    only_objective: bool = True,
+) -> Optional[dict[str, Any]]:
+    pool = [normalize_exercise_contract(item) for item in storage.list_exercises(task_number=task_number, only_objective=only_objective)]
+    if not pool:
+        return None
+
+    if prefer_prototype:
+        prototype_pool = [item for item in pool if item.get("exercise_mode") == "prototype"]
+        if prototype_pool:
+            pool = prototype_pool
+
+    return random.choice(pool)
 
 
 def record_attempt(task_number: int, exercise_id: str, correct: bool, attempt_type: str, payload: dict[str, Any]) -> None:
@@ -474,8 +590,108 @@ def get_exercise_explanation(exercise: dict[str, Any]) -> str:
     return str(exercise.get("full_explanation") or exercise.get("explanation") or "")
 
 
+def normalize_exercise_contract(exercise: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(exercise)
+    source = str(normalized.get("source", "")).strip().lower()
+    normalized["source"] = source if source in {"fipi", "reshu", "author", "mixed"} else "mixed"
+    normalized["source_visibility"] = str(normalized.get("source_visibility", "subtle")).strip() or "subtle"
+
+    difficulty_stage = str(normalized.get("difficulty_stage", "")).strip().lower()
+    if difficulty_stage not in {"basic", "medium", "exam", "exam_plus"}:
+        difficulty = str(normalized.get("difficulty", "")).strip().lower()
+        if difficulty == "easy":
+            difficulty_stage = "basic"
+        elif difficulty == "hard":
+            difficulty_stage = "exam"
+        else:
+            difficulty_stage = "medium"
+    normalized["difficulty_stage"] = difficulty_stage
+
+    mode = str(normalized.get("exercise_mode", "")).strip().lower()
+    if mode not in {"training", "prototype"}:
+        mode = "prototype" if difficulty_stage in {"exam", "exam_plus"} else "training"
+    normalized["exercise_mode"] = mode
+
+    raw_hints = normalized.get("hints") or []
+    hints = [str(item).strip() for item in raw_hints if str(item).strip()]
+    if not hints and normalized.get("hint_after_first_error"):
+        hints.append(str(normalized["hint_after_first_error"]).strip())
+    if len(hints) == 0:
+        hints = [
+            "РЎРЅР°С‡Р°Р»Р° РІС‹РґРµР»РёС‚Рµ РґР°РЅРЅС‹Рµ РёР· СѓСЃР»РѕРІРёСЏ Рё РѕР¶РёРґР°РµРјС‹Р№ С„РѕСЂРјР°С‚ РѕС‚РІРµС‚Р°.",
+            "РџСЂРѕРІРµСЂСЊС‚Рµ РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅС‹Р№ С€Р°Рі СЂРµС€РµРЅРёСЏ РЅР° РєРѕСЂРѕС‚РєРѕРј РїСЂРёРјРµСЂРµ.",
+            "РЎРІРµСЂСЊС‚Рµ РёС‚РѕРі СЃ РїРѕР»РЅС‹Рј СЂР°Р·Р±РѕСЂРѕРј Рё РёСЃРїСЂР°РІСЊС‚Рµ РјРµСЃС‚Рѕ, РіРґРµ Р»РѕРјР°РµС‚СЃСЏ Р»РѕРіРёРєР°.",
+        ]
+    if len(hints) == 1:
+        hints.append("РџСЂРѕРІРµСЂСЊС‚Рµ РіСЂР°РЅРёС‡РЅС‹Рµ СЃР»СѓС‡Р°Рё Рё С„РѕСЂРјР°С‚ РІС‹РІРѕРґР°.")
+    if len(hints) == 2:
+        hints.append("Р•СЃР»Рё РЅРµ СЃС…РѕРґРёС‚СЃСЏ, РїРѕРІС‚РѕСЂРёС‚Рµ СЂРµС€РµРЅРёРµ РїРѕ С€Р°РіР°Рј РёР· РїРѕР»РЅРѕРіРѕ СЂР°Р·Р±РѕСЂР°.")
+    normalized["hints"] = hints[:3]
+    normalized["hint_after_first_error"] = normalized["hints"][0]
+
+    attempt_policy = normalized.get("attempt_policy") if isinstance(normalized.get("attempt_policy"), dict) else {}
+    normalized["attempt_policy"] = {
+        "max_wrong_before_solution": int(attempt_policy.get("max_wrong_before_solution", 3)),
+        "auto_retry_in_lesson_end": bool(attempt_policy.get("auto_retry_in_lesson_end", True)),
+    }
+
+    if normalized.get("exercise_type") == "code":
+        code_step = str(normalized.get("code_step", "")).strip().lower()
+        if code_step not in {"fragments", "fill_gaps", "full_code"}:
+            if difficulty_stage == "basic":
+                code_step = "fragments"
+            elif difficulty_stage == "medium":
+                code_step = "fill_gaps"
+            else:
+                code_step = "full_code"
+        normalized["code_step"] = code_step
+        normalized["evaluation"] = "tests"
+        normalized["acceptance"] = str(normalized.get("acceptance", "output_first")).strip() or "output_first"
+    else:
+        normalized.setdefault("evaluation", "answer")
+        normalized.setdefault("acceptance", "exact_match")
+    return normalized
+
+
+def build_attempt_feedback(exercise: dict[str, Any], *, correct: bool, attempt_count: Optional[int]) -> dict[str, Any]:
+    normalized = normalize_exercise_contract(exercise)
+    policy = normalized["attempt_policy"]
+    max_wrong = max(1, int(policy.get("max_wrong_before_solution", 3)))
+    current_attempt = max(1, safe_int(attempt_count, 1))
+
+    if correct:
+        return {
+            "attempt_policy": policy,
+            "wrong_attempts": max(0, current_attempt - 1),
+            "hint_level": 0,
+            "hints_shown": [],
+            "hint": None,
+            "reveal_solution": False,
+            "should_retry_in_lesson_end": False,
+        }
+
+    wrong_attempts = current_attempt
+    hint_level = min(wrong_attempts, len(normalized.get("hints", [])))
+    hints_shown = normalized.get("hints", [])[:hint_level]
+    reveal_solution = wrong_attempts >= max_wrong
+    return {
+        "attempt_policy": policy,
+        "wrong_attempts": wrong_attempts,
+        "hint_level": hint_level,
+        "hints_shown": hints_shown,
+        "hint": hints_shown[-1] if hints_shown else None,
+        "reveal_solution": reveal_solution,
+        "should_retry_in_lesson_end": bool(reveal_solution and policy.get("auto_retry_in_lesson_end")),
+    }
+
+
 def normalize_code_tests(exercise: dict[str, Any]) -> list[dict[str, Any]]:
-    raw_tests = exercise.get("tests") or exercise.get("test_cases") or []
+    raw_tests = []
+    if isinstance(exercise.get("tests_open"), list) or isinstance(exercise.get("tests_hidden"), list):
+        raw_tests.extend(exercise.get("tests_open") or [])
+        raw_tests.extend(exercise.get("tests_hidden") or [])
+    if not raw_tests:
+        raw_tests = exercise.get("tests") or exercise.get("test_cases") or []
     normalized: list[dict[str, Any]] = []
     for test in raw_tests:
         if not isinstance(test, dict):
@@ -560,9 +776,10 @@ def evaluate_answer_against_exercise(exercise: dict[str, Any], submitted_answer:
 
 
 def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -> dict[str, Any]:
+    exercise = normalize_exercise_contract(exercise)
     tests = normalize_code_tests(exercise)
     explanation = get_exercise_explanation(exercise)
-    hint = exercise.get("hint_after_first_error")
+    hint = (exercise.get("hints") or [None])[0]
 
     required_nodes_raw = exercise.get("required_nodes") or exercise.get("required_constructs") or []
     required_nodes = [str(node) for node in required_nodes_raw if str(node).strip()]
@@ -614,7 +831,7 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
                     "passed": False,
                     "expected": expected_output,
                     "actual": run_result.get("stderr", "").strip(),
-                    "is_public": True,
+                    "is_public": bool(test.get("is_public", True)),
                 }
             )
             continue
@@ -629,15 +846,18 @@ def evaluate_code_against_exercise(exercise: dict[str, Any], source_code: str) -
                 "passed": passed,
                 "expected": expected_output,
                 "actual": actual_output,
-                "is_public": True,
+                "is_public": bool(test.get("is_public", True)),
             }
         )
+
+    public_results = [item for item in test_results if item.get("is_public", True)]
 
     return {
         "correct": all_passed,
         "message": "Code passed" if all_passed else "Code check failed",
         "details": "\n".join(failures),
-        "test_results": test_results,
+        "test_results": public_results,
+        "all_test_results": test_results,
         "hint": None if all_passed else hint,
         "explanation": explanation,
     }
@@ -688,7 +908,7 @@ def build_progress_metrics() -> dict[str, Any]:
         task_metrics.append(
             {
                 "task_number": task_number,
-                "title": theory.get("title", f"Задание {task_number}"),
+                "title": theory.get("title", f"Р—Р°РґР°РЅРёРµ {task_number}"),
                 "is_code_task": bool(theory.get("is_code_task") or task_number in CODE_TASKS),
                 "total_attempts": total_attempts,
                 "correct_attempts": correct_attempts,
@@ -723,9 +943,9 @@ def build_progress_metrics() -> dict[str, Any]:
         "center": predicted,
         "level": "strong" if predicted >= 82 else "good" if predicted >= 68 else "medium" if predicted >= 45 else "early",
         "description": (
-            "Прогноз основан на покрытии тем, точности и завершённых пробниках."
+            "РџСЂРѕРіРЅРѕР· РѕСЃРЅРѕРІР°РЅ РЅР° РїРѕРєСЂС‹С‚РёРё С‚РµРј, С‚РѕС‡РЅРѕСЃС‚Рё Рё Р·Р°РІРµСЂС€С‘РЅРЅС‹С… РїСЂРѕР±РЅРёРєР°С…."
             if started_tasks
-            else "Нужны первые решённые задания, чтобы строить прогноз."
+            else "РќСѓР¶РЅС‹ РїРµСЂРІС‹Рµ СЂРµС€С‘РЅРЅС‹Рµ Р·Р°РґР°РЅРёСЏ, С‡С‚РѕР±С‹ СЃС‚СЂРѕРёС‚СЊ РїСЂРѕРіРЅРѕР·."
         ),
     }
 
@@ -808,11 +1028,11 @@ def build_today_plan(
         items.append(
             {
                 "type": "weekly_review",
-                "title": "Сначала обязательный Weekly Review",
-                "description": "Дорожка остановлена до прохождения контрольного блока.",
+                "title": "РЎРЅР°С‡Р°Р»Р° РѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№ Weekly Review",
+                "description": "Р”РѕСЂРѕР¶РєР° РѕСЃС‚Р°РЅРѕРІР»РµРЅР° РґРѕ РїСЂРѕС…РѕР¶РґРµРЅРёСЏ РєРѕРЅС‚СЂРѕР»СЊРЅРѕРіРѕ Р±Р»РѕРєР°.",
                 "minutes": current_stage.get("estimated_minutes", 35),
                 "href": "/weekly-review",
-                "action_label": "Открыть Weekly Review",
+                "action_label": "РћС‚РєСЂС‹С‚СЊ Weekly Review",
             }
         )
     elif current_stage.get("kind") in {"learn", "revisit"}:
@@ -822,21 +1042,21 @@ def build_today_plan(
                 items.append(
                     {
                         "type": "theory",
-                        "title": f"Кратко пройти теорию по заданию {task_number}",
-                        "description": "Открыть краткую и полную теорию, затем перейти к практике.",
+                        "title": f"РљСЂР°С‚РєРѕ РїСЂРѕР№С‚Рё С‚РµРѕСЂРёСЋ РїРѕ Р·Р°РґР°РЅРёСЋ {task_number}",
+                        "description": "РћС‚РєСЂС‹С‚СЊ РєСЂР°С‚РєСѓСЋ Рё РїРѕР»РЅСѓСЋ С‚РµРѕСЂРёСЋ, Р·Р°С‚РµРј РїРµСЂРµР№С‚Рё Рє РїСЂР°РєС‚РёРєРµ.",
                         "minutes": 15,
                         "href": f"/theory?task={task_number}",
-                        "action_label": "К теории",
+                        "action_label": "Рљ С‚РµРѕСЂРёРё",
                     }
                 )
                 items.append(
                     {
                         "type": "practice",
-                        "title": f"Решать задание {task_number} в guided mode",
-                        "description": "Наберите первые попытки по текущему этапу.",
+                        "title": f"Р РµС€Р°С‚СЊ Р·Р°РґР°РЅРёРµ {task_number} РІ guided mode",
+                        "description": "РќР°Р±РµСЂРёС‚Рµ РїРµСЂРІС‹Рµ РїРѕРїС‹С‚РєРё РїРѕ С‚РµРєСѓС‰РµРјСѓ СЌС‚Р°РїСѓ.",
                         "minutes": 20,
                         "href": f"/practice?task={task_number}&mode=guided",
-                        "action_label": "К практике",
+                        "action_label": "Рљ РїСЂР°РєС‚РёРєРµ",
                     }
                 )
                 break
@@ -849,22 +1069,22 @@ def build_today_plan(
             items.append(
                 {
                     "type": "practice",
-                    "title": f"Добрать точность по заданию {weakest_inside_stage.get('task_number')}",
-                    "description": "Это задание сильнее всего тормозит переход к следующему этапу.",
+                    "title": f"Р”РѕР±СЂР°С‚СЊ С‚РѕС‡РЅРѕСЃС‚СЊ РїРѕ Р·Р°РґР°РЅРёСЋ {weakest_inside_stage.get('task_number')}",
+                    "description": "Р­С‚Рѕ Р·Р°РґР°РЅРёРµ СЃРёР»СЊРЅРµРµ РІСЃРµРіРѕ С‚РѕСЂРјРѕР·РёС‚ РїРµСЂРµС…РѕРґ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЌС‚Р°РїСѓ.",
                     "minutes": 25,
                     "href": f"/practice?task={weakest_inside_stage.get('task_number')}&mode=guided",
-                    "action_label": "Открыть guided practice",
+                    "action_label": "РћС‚РєСЂС‹С‚СЊ guided practice",
                 }
             )
     else:
         items.append(
             {
                 "type": "mock",
-                "title": "Перейти к пробнику",
-                "description": "Guided path доведён до режима стабилизации.",
+                "title": "РџРµСЂРµР№С‚Рё Рє РїСЂРѕР±РЅРёРєСѓ",
+                "description": "Guided path РґРѕРІРµРґС‘РЅ РґРѕ СЂРµР¶РёРјР° СЃС‚Р°Р±РёР»РёР·Р°С†РёРё.",
                 "minutes": 120,
                 "href": "/mock-exam",
-                "action_label": "Открыть пробник",
+                "action_label": "РћС‚РєСЂС‹С‚СЊ РїСЂРѕР±РЅРёРє",
             }
         )
 
@@ -873,11 +1093,11 @@ def build_today_plan(
         items.append(
             {
                 "type": "weak",
-                "title": f"Вернуться к слабой теме №{task_number}",
+                "title": f"Р’РµСЂРЅСѓС‚СЊСЃСЏ Рє СЃР»Р°Р±РѕР№ С‚РµРјРµ в„–{task_number}",
                 "description": weak_details[0]["reason"],
                 "minutes": 20,
                 "href": f"/practice?task={task_number}&mode=weak",
-                "action_label": "Слабые темы",
+                "action_label": "РЎР»Р°Р±С‹Рµ С‚РµРјС‹",
             }
         )
 
@@ -886,18 +1106,18 @@ def build_today_plan(
         items.append(
             {
                 "type": "mistakes",
-                "title": f"Разобрать недавние ошибки по №{task_number}",
-                "description": "Режим ошибок показывает темы, где были последние промахи.",
+                "title": f"Р Р°Р·РѕР±СЂР°С‚СЊ РЅРµРґР°РІРЅРёРµ РѕС€РёР±РєРё РїРѕ в„–{task_number}",
+                "description": "Р РµР¶РёРј РѕС€РёР±РѕРє РїРѕРєР°Р·С‹РІР°РµС‚ С‚РµРјС‹, РіРґРµ Р±С‹Р»Рё РїРѕСЃР»РµРґРЅРёРµ РїСЂРѕРјР°С…Рё.",
                 "minutes": 15,
                 "href": f"/practice?task={task_number}&mode=mistakes",
-                "action_label": "К ошибкам",
+                "action_label": "Рљ РѕС€РёР±РєР°Рј",
             }
         )
 
     daily_hours = float(profile.get("daily_hours", 2) or 2)
     total_minutes = int(sum(item["minutes"] for item in items[:3]))
     return {
-        "summary": "Понятный план на сегодня без лишней геймификации.",
+        "summary": "РџРѕРЅСЏС‚РЅС‹Р№ РїР»Р°РЅ РЅР° СЃРµРіРѕРґРЅСЏ Р±РµР· Р»РёС€РЅРµР№ РіРµР№РјРёС„РёРєР°С†РёРё.",
         "daily_budget_minutes": int(daily_hours * 60),
         "planned_minutes": total_minutes,
         "items": items[:3],
@@ -928,9 +1148,9 @@ def build_roadmap_payload() -> dict[str, Any]:
                 "accuracy": item.get("accuracy", 0),
                 "attempts": item.get("total_attempts", 0),
                 "reason": (
-                    "Низкая точность после серии попыток."
+                    "РќРёР·РєР°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ РїРѕСЃР»Рµ СЃРµСЂРёРё РїРѕРїС‹С‚РѕРє."
                     if item.get("accuracy", 0) < 60
-                    else "Задание решается нестабильно и требует закрепления."
+                    else "Р—Р°РґР°РЅРёРµ СЂРµС€Р°РµС‚СЃСЏ РЅРµСЃС‚Р°Р±РёР»СЊРЅРѕ Рё С‚СЂРµР±СѓРµС‚ Р·Р°РєСЂРµРїР»РµРЅРёСЏ."
                 ),
             }
         )
@@ -970,7 +1190,7 @@ def build_roadmap_payload() -> dict[str, Any]:
 
     return {
         "profile_learning_mode": normalize_learning_mode(profile.get("learning_mode")),
-        "dashboard_title": "Дашборд подготовки",
+        "dashboard_title": "Р”Р°С€Р±РѕСЂРґ РїРѕРґРіРѕС‚РѕРІРєРё",
         "current_stage": current_stage["stage_number"],
         "current_stage_title": current_stage["title"],
         "current_stage_kind": current_stage["kind"],
@@ -984,10 +1204,10 @@ def build_roadmap_payload() -> dict[str, Any]:
         "progress_data": progress_map,
         "today_plan": today_plan,
         "quick_actions": [
-            {"label": "Свободная практика", "href": "/practice?mode=free"},
+            {"label": "РЎРІРѕР±РѕРґРЅР°СЏ РїСЂР°РєС‚РёРєР°", "href": "/practice?mode=free"},
             {"label": "Guided path", "href": "/practice?mode=guided"},
             {"label": "Weekly Review", "href": "/weekly-review"},
-            {"label": "Пробник", "href": "/mock-exam"},
+            {"label": "РџСЂРѕР±РЅРёРє", "href": "/mock-exam"},
         ],
         "summary": {
             "coverage": progress_metrics["coverage"],
@@ -1025,7 +1245,7 @@ def build_weekly_review_blueprint(active_only: bool = False) -> dict[str, Any]:
 
     return {
         "status": "ready",
-        "summary": "Weekly Review собирается из текущего этапа, слабых тем и недавних ошибок.",
+        "summary": "Weekly Review СЃРѕР±РёСЂР°РµС‚СЃСЏ РёР· С‚РµРєСѓС‰РµРіРѕ СЌС‚Р°РїР°, СЃР»Р°Р±С‹С… С‚РµРј Рё РЅРµРґР°РІРЅРёС… РѕС€РёР±РѕРє.",
         "review_tasks": list(dict.fromkeys(item["task_number"] for item in selected_exercises)),
         "weak_tasks": weak_tasks,
         "estimated_time": max(20, len(selected_exercises) * 4),
@@ -1040,13 +1260,14 @@ def build_weekly_review_blueprint(active_only: bool = False) -> dict[str, Any]:
 
 
 def build_mock_exam_task(task_number: int, mode: str) -> dict[str, Any]:
-    prefer_harder = mode == "exam"
-    exercises = choose_exercises_for_task(task_number, mode="guided", prefer_harder=prefer_harder, limit=6)
-    exercise = exercises[0] if exercises else None
+    selection_mode = "prototype" if mode == "exam" else "training"
+    exercise = choose_task_bank_exercise(task_number, mode=selection_mode)
+    if not exercise:
+        exercise = choose_random_exercise_for_task(task_number, prefer_prototype=(mode == "exam"))
     theory = storage.get_theory(task_number) or {}
     return {
         "task_number": task_number,
-        "title": theory.get("title", f"Задание {task_number}"),
+        "title": theory.get("title", f"Р—Р°РґР°РЅРёРµ {task_number}"),
         "status": "pending",
         "flagged": False,
         "answer": None,
@@ -1090,17 +1311,17 @@ def mock_exam_status_payload() -> dict[str, Any]:
         "modes": [
             {
                 "mode": "exam",
-                "label": "Экзаменационный",
+                "label": "Р­РєР·Р°РјРµРЅР°С†РёРѕРЅРЅС‹Р№",
                 "duration_minutes": 235,
                 "tasks_count": 27,
-                "description": "Максимально похоже на реальный экзамен.",
+                "description": "РњР°РєСЃРёРјР°Р»СЊРЅРѕ РїРѕС…РѕР¶Рµ РЅР° СЂРµР°Р»СЊРЅС‹Р№ СЌРєР·Р°РјРµРЅ.",
             },
             {
                 "mode": "training",
-                "label": "Тренировочный",
+                "label": "РўСЂРµРЅРёСЂРѕРІРѕС‡РЅС‹Р№",
                 "duration_minutes": 120,
                 "tasks_count": len(TRAINING_MOCK_TASKS),
-                "description": "Укороченный пробник с акцентом на тренируемые типы задач.",
+                "description": "РЈРєРѕСЂРѕС‡РµРЅРЅС‹Р№ РїСЂРѕР±РЅРёРє СЃ Р°РєС†РµРЅС‚РѕРј РЅР° С‚СЂРµРЅРёСЂСѓРµРјС‹Рµ С‚РёРїС‹ Р·Р°РґР°С‡.",
             },
         ],
     }
@@ -1111,9 +1332,75 @@ def mock_exam_status_payload() -> dict[str, Any]:
     return payload
 
 
+def build_task_bank_summary() -> dict[str, Any]:
+    theory_items = storage.list_theory()
+    attempts = storage.list_recent_task_bank_attempts(limit=2500)
+
+    task_stats: dict[int, dict[str, Any]] = {}
+    for theory in theory_items:
+        task_number = int(theory.get("task_number", 0))
+        task_stats[task_number] = {
+            "task_number": task_number,
+            "title": theory.get("title", f"Задание {task_number}"),
+            "source": theory.get("source", "mixed"),
+            "attempts": 0,
+            "correct": 0,
+            "accuracy": 0.0,
+            "is_code_task": bool(theory.get("is_code_task") or task_number in CODE_TASKS),
+        }
+
+    for attempt in attempts:
+        task_number = safe_int(attempt.get("task_number"), 0)
+        row = task_stats.get(task_number)
+        if not row:
+            continue
+        row["attempts"] += 1
+        row["correct"] += 1 if attempt.get("correct") else 0
+
+    for row in task_stats.values():
+        row["accuracy"] = round((row["correct"] / row["attempts"]) * 100, 1) if row["attempts"] else 0.0
+
+    items = sorted(task_stats.values(), key=lambda item: item["task_number"])
+    total_attempts = sum(item["attempts"] for item in items)
+    total_correct = sum(item["correct"] for item in items)
+    overall_accuracy = round((total_correct / total_attempts) * 100, 1) if total_attempts else 0.0
+    return {
+        "tasks": items,
+        "total_attempts": total_attempts,
+        "total_correct": total_correct,
+        "overall_accuracy": overall_accuracy,
+    }
+
+
+def choose_task_bank_exercise(task_number: int, mode: str = "any") -> Optional[dict[str, Any]]:
+    normalized_mode = str(mode or "any").strip().lower()
+    pool = [
+        normalize_exercise_contract(item)
+        for item in storage.list_exercises(task_number=task_number, only_objective=True)
+    ]
+    if not pool:
+        return None
+
+    if normalized_mode in {"training", "prototype"}:
+        scoped_pool = [item for item in pool if item.get("exercise_mode") == normalized_mode]
+        if scoped_pool:
+            pool = scoped_pool
+    elif normalized_mode == "exam":
+        prototype_pool = [item for item in pool if item.get("exercise_mode") == "prototype"]
+        if prototype_pool:
+            pool = prototype_pool
+
+    return random.choice(pool)
+
+
 @app.get("/api/theory")
 async def list_theory():
     return storage.list_theory()
+
+
+@app.get("/api/theory/general")
+async def get_general_theory():
+    return GENERAL_THEORY
 
 
 @app.get("/api/theory/{task_number}")
@@ -1145,13 +1432,67 @@ async def list_exercises_for_task(
 async def get_exercise_alias(exercise_id: str):
     return get_exercise_or_404(exercise_id)
 
+
+@app.get("/api/task-bank/summary")
+async def get_task_bank_summary():
+    return build_task_bank_summary()
+
+
+@app.get("/api/task-bank/{task_number}/next")
+async def get_task_bank_exercise(task_number: int, mode: str = "any"):
+    exercise = choose_task_bank_exercise(task_number, mode=mode)
+    if not exercise:
+        raise HTTPException(404, "Для этого номера пока нет доступных заданий в банке.")
+    return exercise
+
+
+@app.post("/api/task-bank/check")
+async def check_task_bank(payload: TaskBankCheck):
+    exercise = get_exercise_or_404(payload.exercise_id)
+    is_code = exercise.get("exercise_type") == "code"
+
+    if is_code:
+        if payload.code is None:
+            raise HTTPException(400, "Для кодового задания передайте поле code.")
+        result = evaluate_code_against_exercise(exercise, payload.code)
+        correct = bool(result.get("correct"))
+        extra_payload = {"submitted_code": payload.code}
+    else:
+        correct, expected_answer = evaluate_answer_against_exercise(exercise, payload.answer)
+        result = {
+            "correct": correct,
+            "expected": expected_answer,
+            "explanation": get_exercise_explanation(exercise),
+        }
+        extra_payload = {"submitted_answer": payload.answer, "correct_answer": expected_answer}
+
+    feedback = build_attempt_feedback(exercise, correct=correct, attempt_count=payload.attempt_count)
+    storage.add_task_bank_attempt(
+        {
+            "task_number": exercise["task_number"],
+            "exercise_id": exercise["exercise_id"],
+            "correct": correct,
+            "timestamp": now_iso(),
+            "source": exercise.get("source"),
+            "mode": exercise.get("exercise_mode"),
+            **extra_payload,
+        }
+    )
+
+    result["source"] = exercise.get("source")
+    result["source_visibility"] = exercise.get("source_visibility", "subtle")
+    result.update(feedback)
+    return result
+
+
 @app.post("/api/check-answer")
 async def check_answer(payload: AnswerCheck):
     exercise = get_exercise_or_404(payload.exercise_id)
     if exercise.get("exercise_type") == "code":
-        raise HTTPException(400, "Для кодовых задач используйте /api/check-code")
+        raise HTTPException(400, "Р”Р»СЏ РєРѕРґРѕРІС‹С… Р·Р°РґР°С‡ РёСЃРїРѕР»СЊР·СѓР№С‚Рµ /api/check-code")
 
     correct, expected_answer = evaluate_answer_against_exercise(exercise, payload.answer)
+    attempt_feedback = build_attempt_feedback(exercise, correct=correct, attempt_count=payload.attempt_count)
     record_attempt(
         exercise["task_number"],
         exercise["exercise_id"],
@@ -1166,6 +1507,9 @@ async def check_answer(payload: AnswerCheck):
         "correct": correct,
         "expected": expected_answer,
         "explanation": get_exercise_explanation(exercise),
+        "source": exercise.get("source"),
+        "source_visibility": exercise.get("source_visibility", "subtle"),
+        **attempt_feedback,
     }
 
 
@@ -1176,7 +1520,17 @@ async def check_answer_alias(payload: AnswerCheck):
 
 @app.post("/api/run-code")
 async def run_code(payload: CodeRun):
-    return run_python_code(payload.code, payload.stdin)
+    stdin_text = payload.stdin or ""
+    if payload.stdin_path:
+        file_text = resolve_content_file_input(payload.stdin_path)
+        if file_text is None:
+            return {
+                "stdout": "",
+                "stderr": "Файл для входных данных не найден или недоступен.",
+                "returncode": -1,
+            }
+        stdin_text = file_text
+    return run_python_code(payload.code, stdin_text)
 
 
 @app.post("/api/code/run")
@@ -1188,6 +1542,7 @@ async def run_code_alias(payload: CodeRun):
 async def check_code(payload: CodeCheck):
     exercise = get_exercise_or_404(payload.exercise_id)
     result = evaluate_code_against_exercise(exercise, payload.code)
+    attempt_feedback = build_attempt_feedback(exercise, correct=bool(result.get("correct")), attempt_count=payload.attempt_count)
     record_attempt(
         exercise["task_number"],
         exercise["exercise_id"],
@@ -1197,6 +1552,9 @@ async def check_code(payload: CodeCheck):
             "submitted_code": payload.code,
         },
     )
+    result["source"] = exercise.get("source")
+    result["source_visibility"] = exercise.get("source_visibility", "subtle")
+    result.update(attempt_feedback)
     return result
 
 
@@ -1208,6 +1566,36 @@ async def check_code_alias(payload: CodeCheck):
 @app.get("/api/profile")
 async def get_profile():
     return get_profile_payload()
+
+
+@app.get("/api/onboarding/baseline")
+async def get_baseline():
+    profile = get_profile_core()
+    baseline = profile.get("baseline") if isinstance(profile.get("baseline"), dict) else {}
+    return {
+        "completed": bool(baseline.get("completed")),
+        "python_level": baseline.get("python_level", "beginner"),
+        "ege_level": baseline.get("ege_level", "start"),
+        "weekly_goal_hours": float(baseline.get("weekly_goal_hours", profile.get("weekly_hours", 10.0) or 10.0)),
+        "note": baseline.get("note", ""),
+    }
+
+
+@app.put("/api/onboarding/baseline")
+async def save_baseline(payload: BaselineUpdate):
+    profile = get_profile_core()
+    profile["baseline"] = {
+        "completed": True,
+        "python_level": str(payload.python_level or "beginner"),
+        "ege_level": str(payload.ege_level or "start"),
+        "weekly_goal_hours": float(payload.weekly_goal_hours or 6.0),
+        "note": str(payload.note or ""),
+        "updated_at": now_iso(),
+    }
+    if payload.weekly_goal_hours and payload.weekly_goal_hours > 0:
+        profile["weekly_hours"] = float(payload.weekly_goal_hours)
+    save_profile(profile)
+    return {"status": "ok", "baseline": profile["baseline"]}
 
 
 @app.post("/api/profile")
@@ -1261,13 +1649,18 @@ async def get_progress_for_task(task_number: int):
     metrics = build_progress_metrics()
     task = metrics["task_map"].get(task_number)
     if not task:
-        raise HTTPException(404, "Прогресс по заданию не найден")
+        raise HTTPException(404, "РџСЂРѕРіСЂРµСЃСЃ РїРѕ Р·Р°РґР°РЅРёСЋ РЅРµ РЅР°Р№РґРµРЅ")
     return task
 
 
 @app.get("/api/attempts/{task_number}")
 async def get_attempts(task_number: int, limit: int = 20):
     return storage.list_attempts(task_number, limit=limit)
+
+
+@app.get("/api/attempts/exercise/{exercise_id}")
+async def get_attempts_by_exercise(exercise_id: str, limit: int = 20):
+    return storage.list_attempts_by_exercise(exercise_id, limit=limit)
 
 
 @app.get("/api/history")
@@ -1296,7 +1689,7 @@ async def start_weekly_review():
 
     blueprint = build_weekly_review_blueprint()
     if not blueprint.get("exercises"):
-        raise HTTPException(400, "Не удалось собрать Weekly Review: недостаточно объективных заданий.")
+        raise HTTPException(400, "РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР±СЂР°С‚СЊ Weekly Review: РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РѕР±СЉРµРєС‚РёРІРЅС‹С… Р·Р°РґР°РЅРёР№.")
 
     review = {
         **blueprint,
@@ -1318,14 +1711,14 @@ async def start_weekly_review():
 async def answer_weekly_review(payload: WeeklyReviewAnswer):
     review = storage.get_active_weekly_review()
     if not review:
-        raise HTTPException(404, "Активный Weekly Review не найден")
+        raise HTTPException(404, "РђРєС‚РёРІРЅС‹Р№ Weekly Review РЅРµ РЅР°Р№РґРµРЅ")
 
     exercise = next((item for item in review.get("exercises", []) if item.get("exercise_id") == payload.exercise_id), None)
     if not exercise:
-        raise HTTPException(404, "Задание не найдено в активном Weekly Review")
+        raise HTTPException(404, "Р—Р°РґР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ РІ Р°РєС‚РёРІРЅРѕРј Weekly Review")
 
     if exercise.get("exercise_type") == "code":
-        raise HTTPException(400, "Weekly Review принимает только объективные ответы.")
+        raise HTTPException(400, "Weekly Review РїСЂРёРЅРёРјР°РµС‚ С‚РѕР»СЊРєРѕ РѕР±СЉРµРєС‚РёРІРЅС‹Рµ РѕС‚РІРµС‚С‹.")
 
     correct, expected_answer = evaluate_answer_against_exercise(exercise, payload.answer)
     review.setdefault("answers", {})[payload.exercise_id] = payload.answer
@@ -1358,14 +1751,14 @@ async def answer_weekly_review(payload: WeeklyReviewAnswer):
 async def complete_weekly_review():
     review = storage.get_active_weekly_review()
     if not review:
-        raise HTTPException(404, "Активный Weekly Review не найден")
+        raise HTTPException(404, "РђРєС‚РёРІРЅС‹Р№ Weekly Review РЅРµ РЅР°Р№РґРµРЅ")
 
     total = len(review.get("exercises", []))
     answers_count = safe_int(review.get("answers_count"), 0)
     if total == 0:
-        raise HTTPException(400, "Weekly Review пуст.")
+        raise HTTPException(400, "Weekly Review РїСѓСЃС‚.")
     if answers_count < max(3, total - 1):
-        raise HTTPException(400, "Нужно ответить почти на все задания review, прежде чем завершать.")
+        raise HTTPException(400, "РќСѓР¶РЅРѕ РѕС‚РІРµС‚РёС‚СЊ РїРѕС‡С‚Рё РЅР° РІСЃРµ Р·Р°РґР°РЅРёСЏ review, РїСЂРµР¶РґРµ С‡РµРј Р·Р°РІРµСЂС€Р°С‚СЊ.")
 
     review["status"] = "completed"
     review["has_active"] = False
@@ -1413,9 +1806,9 @@ async def start_mock_exam(payload: MockExamStart):
 async def save_mock_exam_answer(exam_id: str, payload: MockExamAnswer):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "Пробник не найден")
+        raise HTTPException(404, "РџСЂРѕР±РЅРёРє РЅРµ РЅР°Р№РґРµРЅ")
     if exam.get("status") == "completed":
-        raise HTTPException(400, "Пробник уже завершён")
+        raise HTTPException(400, "РџСЂРѕР±РЅРёРє СѓР¶Рµ Р·Р°РІРµСЂС€С‘РЅ")
 
     updated = False
     for task in exam.get("tasks", []):
@@ -1426,7 +1819,7 @@ async def save_mock_exam_answer(exam_id: str, payload: MockExamAnswer):
             updated = True
             break
     if not updated:
-        raise HTTPException(404, "Задание не найдено в пробнике")
+        raise HTTPException(404, "Р—Р°РґР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ РІ РїСЂРѕР±РЅРёРєРµ")
 
     storage.save_mock_exam(exam)
     return {"status": "ok"}
@@ -1436,39 +1829,39 @@ async def save_mock_exam_answer(exam_id: str, payload: MockExamAnswer):
 async def flag_mock_exam_task(exam_id: str, payload: MockExamAnswer):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "Пробник не найден")
+        raise HTTPException(404, "РџСЂРѕР±РЅРёРє РЅРµ РЅР°Р№РґРµРЅ")
 
     for task in exam.get("tasks", []):
         if task["task_number"] == payload.task_number:
             task["flagged"] = not task.get("flagged", False)
             storage.save_mock_exam(exam)
             return {"status": "ok", "flagged": task["flagged"]}
-    raise HTTPException(404, "Задание не найдено")
+    raise HTTPException(404, "Р—Р°РґР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ")
 
 
 @app.put("/api/mock-exam/{exam_id}/flag/{task_number}")
 async def flag_mock_exam_task_compat(exam_id: str, task_number: int):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "Пробник не найден")
+        raise HTTPException(404, "РџСЂРѕР±РЅРёРє РЅРµ РЅР°Р№РґРµРЅ")
 
     for task in exam.get("tasks", []):
         if task["task_number"] == task_number:
             task["flagged"] = not task.get("flagged", False)
             storage.save_mock_exam(exam)
             return {"status": "ok", "flagged": task["flagged"]}
-    raise HTTPException(404, "Задание не найдено")
+    raise HTTPException(404, "Р—Р°РґР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ")
 
 
 @app.post("/api/mock-exam/{exam_id}/pause")
 async def pause_mock_exam(exam_id: str):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "Пробник не найден")
+        raise HTTPException(404, "РџСЂРѕР±РЅРёРє РЅРµ РЅР°Р№РґРµРЅ")
     if exam.get("status") == "paused":
         return {"status": "ok"}
     if exam.get("status") == "completed":
-        raise HTTPException(400, "Пробник уже завершён")
+        raise HTTPException(400, "РџСЂРѕР±РЅРёРє СѓР¶Рµ Р·Р°РІРµСЂС€С‘РЅ")
 
     exam["elapsed_seconds"] = mock_elapsed_seconds(exam)
     exam["paused_at"] = now_iso()
@@ -1481,7 +1874,7 @@ async def pause_mock_exam(exam_id: str):
 async def resume_mock_exam(exam_id: str):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "Пробник не найден")
+        raise HTTPException(404, "РџСЂРѕР±РЅРёРє РЅРµ РЅР°Р№РґРµРЅ")
     if exam.get("status") != "paused":
         return {"status": "ok"}
 
@@ -1498,22 +1891,33 @@ async def resume_mock_exam(exam_id: str):
 async def submit_mock_exam(exam_id: str):
     exam = storage.get_mock_exam(exam_id)
     if not exam:
-        raise HTTPException(404, "Пробник не найден")
+        raise HTTPException(404, "РџСЂРѕР±РЅРёРє РЅРµ РЅР°Р№РґРµРЅ")
     if exam.get("status") == "completed":
         return exam
 
     results = []
+    weak_tasks: list[dict[str, Any]] = []
     correct_count = 0
 
     for task in exam.get("tasks", []):
         exercise = task.get("exercise")
         task_number = task.get("task_number")
         if not exercise:
+            weak_tasks.append(
+                {
+                    "task_number": task_number,
+                    "reason": "exercise_missing",
+                    "theory_link": f"/theory?task={task_number}",
+                    "practice_link": f"/practice?task={task_number}&mode=weak",
+                }
+            )
             results.append(
                 {
                     "task_number": task_number,
                     "correct": False,
-                    "explanation": "Для этого задания не найдено упражнение в локальной базе.",
+                    "explanation": "Р”Р»СЏ СЌС‚РѕРіРѕ Р·Р°РґР°РЅРёСЏ РЅРµ РЅР°Р№РґРµРЅРѕ СѓРїСЂР°Р¶РЅРµРЅРёРµ РІ Р»РѕРєР°Р»СЊРЅРѕР№ Р±Р°Р·Рµ.",
+                    "theory_link": f"/theory?task={task_number}",
+                    "practice_link": f"/practice?task={task_number}&mode=weak",
                 }
             )
             continue
@@ -1552,12 +1956,23 @@ async def submit_mock_exam(exam_id: str):
             }
 
         correct_count += 1 if correct else 0
+        if not correct:
+            weak_tasks.append(
+                {
+                    "task_number": task_number,
+                    "reason": "incorrect_answer",
+                    "theory_link": f"/theory?task={task_number}",
+                    "practice_link": f"/practice?task={task_number}&mode=weak",
+                }
+            )
         results.append(
             {
                 "task_number": task_number,
                 "correct": correct,
                 "explanation": evaluation.get("explanation", ""),
                 "details": evaluation.get("details", ""),
+                "theory_link": f"/theory?task={task_number}",
+                "practice_link": f"/practice?task={task_number}&mode={'weak' if not correct else 'free'}",
             }
         )
 
@@ -1581,6 +1996,7 @@ async def submit_mock_exam(exam_id: str):
         "total": total_count,
         "elapsed_seconds": exam["elapsed_seconds"],
         "results": results,
+        "weak_tasks": weak_tasks,
     }
 
 
@@ -1632,6 +2048,7 @@ async def reseed():
 @app.get("/api/health")
 async def health():
     build_index_exists = (FRONTEND_BUILD_DIR / "index.html").exists()
+    registry = get_content_registry()
     return {
         "status": "ok",
         "timestamp": now_iso(),
@@ -1639,7 +2056,40 @@ async def health():
         "db_path": str(storage.db_path),
         "serving_frontend_build": SERVE_FRONTEND_BUILD,
         "frontend_build_exists": build_index_exists,
+        "content_registry_ok": registry.get("ok", True),
+        "content_registry_missing": registry.get("missing", 0),
     }
+
+
+@app.get("/api/content/registry")
+async def content_registry():
+    return get_content_registry()
+
+
+@app.get("/api/content/file")
+async def get_content_file(path: str = Query(...), download: bool = Query(default=False)):
+    file_path = resolve_content_file_path(path)
+    if not file_path:
+        raise HTTPException(404, "Файл не найден.")
+
+    media_type, _ = mimetypes.guess_type(str(file_path))
+    return FileResponse(
+        file_path,
+        media_type=media_type or "application/octet-stream",
+        filename=file_path.name if download else None,
+    )
+
+
+@app.get("/api/content/text")
+async def get_content_text(path: str = Query(...)):
+    file_path = resolve_content_file_path(path)
+    if not file_path:
+        raise HTTPException(404, "Файл не найден.")
+    try:
+        text = file_path.read_text(encoding="utf-8")
+    except Exception as exc:
+        raise HTTPException(400, f"Файл нельзя прочитать как UTF-8: {exc}") from exc
+    return {"path": path, "name": file_path.name, "text": text}
 
 
 @app.get("/", include_in_schema=False)

@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import sqlite3
+import sys
 import threading
 from pathlib import Path
 from typing import Any, Optional
@@ -13,14 +14,29 @@ def _json_dumps(value: Any) -> str:
 
 class LocalSQLiteStorage:
     def __init__(self, base_dir: Path):
-        raw_data_dir = os.environ.get("APP_DATA_DIR", "./data")
-        data_dir = Path(raw_data_dir)
-        if not data_dir.is_absolute():
-            data_dir = (base_dir / data_dir).resolve()
+        data_dir = self._resolve_data_dir(base_dir)
         db_name = os.environ.get("APP_DB_NAME", "ege_trainer.sqlite3")
         self.data_dir = data_dir
         self.db_path = data_dir / db_name
         self._lock = threading.RLock()
+
+    def _resolve_data_dir(self, base_dir: Path) -> Path:
+        raw_data_dir = os.environ.get("APP_DATA_DIR")
+        if raw_data_dir:
+            data_dir = Path(raw_data_dir)
+            if not data_dir.is_absolute():
+                data_dir = (base_dir / data_dir).resolve()
+            return data_dir
+
+        app_name = "EGEInformaticsTrainer"
+        if os.name == "nt":
+            local_app_data = os.environ.get("LOCALAPPDATA")
+            if local_app_data:
+                return Path(local_app_data) / app_name
+            return (Path.home() / "AppData" / "Local" / app_name).resolve()
+        if sys.platform == "darwin":
+            return (Path.home() / "Library" / "Application Support" / app_name).resolve()
+        return (Path.home() / ".local" / "share" / "ege_inf_trainer").resolve()
 
     def initialize(self) -> None:
         self.data_dir.mkdir(parents=True, exist_ok=True)
@@ -83,6 +99,18 @@ class LocalSQLiteStorage:
                 CREATE INDEX IF NOT EXISTS idx_attempts_task_time ON attempts(task_number, timestamp DESC);
                 CREATE INDEX IF NOT EXISTS idx_attempts_correct ON attempts(correct);
                 CREATE INDEX IF NOT EXISTS idx_attempts_timestamp ON attempts(timestamp DESC);
+
+                CREATE TABLE IF NOT EXISTS task_bank_attempts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_number INTEGER NOT NULL,
+                    exercise_id TEXT,
+                    correct INTEGER NOT NULL DEFAULT 0,
+                    timestamp TEXT NOT NULL,
+                    data_json TEXT NOT NULL
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_task_bank_attempts_task_time ON task_bank_attempts(task_number, timestamp DESC);
+                CREATE INDEX IF NOT EXISTS idx_task_bank_attempts_exercise_time ON task_bank_attempts(exercise_id, timestamp DESC);
 
                 CREATE TABLE IF NOT EXISTS weekly_reviews (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -389,6 +417,10 @@ class LocalSQLiteStorage:
         query = f"SELECT data_json FROM attempts WHERE task_number = ? ORDER BY timestamp DESC LIMIT {int(limit)}"
         return self._fetch_many_docs(query, (task_number,))
 
+    def list_attempts_by_exercise(self, exercise_id: str, limit: int = 20) -> list[dict[str, Any]]:
+        query = f"SELECT data_json FROM attempts WHERE exercise_id = ? ORDER BY timestamp DESC LIMIT {int(limit)}"
+        return self._fetch_many_docs(query, (exercise_id,))
+
     def list_recent_attempts(self, limit: int = 120) -> list[dict[str, Any]]:
         query = f"SELECT data_json FROM attempts ORDER BY timestamp DESC LIMIT {int(limit)}"
         return self._fetch_many_docs(query)
@@ -402,6 +434,26 @@ class LocalSQLiteStorage:
         with self._lock, self._connect() as conn:
             row = conn.execute(query, params).fetchone()
         return int(row["c"]) if row else 0
+
+    def add_task_bank_attempt(self, attempt: dict[str, Any]) -> None:
+        self._execute(
+            "INSERT INTO task_bank_attempts (task_number, exercise_id, correct, timestamp, data_json) VALUES (?, ?, ?, ?, ?)",
+            (
+                attempt.get("task_number", 0),
+                attempt.get("exercise_id"),
+                1 if attempt.get("correct") else 0,
+                attempt.get("timestamp", ""),
+                _json_dumps(attempt),
+            ),
+        )
+
+    def list_task_bank_attempts(self, task_number: int, limit: int = 120) -> list[dict[str, Any]]:
+        query = f"SELECT data_json FROM task_bank_attempts WHERE task_number = ? ORDER BY timestamp DESC LIMIT {int(limit)}"
+        return self._fetch_many_docs(query, (task_number,))
+
+    def list_recent_task_bank_attempts(self, limit: int = 600) -> list[dict[str, Any]]:
+        query = f"SELECT data_json FROM task_bank_attempts ORDER BY timestamp DESC LIMIT {int(limit)}"
+        return self._fetch_many_docs(query)
 
     def list_roadmap(self) -> list[dict[str, Any]]:
         return self._fetch_many_docs("SELECT data_json FROM roadmap ORDER BY stage_number ASC")

@@ -5,6 +5,7 @@ import './App.css';
 import DashboardPage from './pages/Roadmap';
 import TheoryPage from './pages/Theory';
 import PracticePage from './pages/Practice';
+import TaskBankPage from './pages/TaskBank';
 import WeeklyReviewPage from './pages/WeeklyReview';
 import MockExamPage from './pages/MockExam';
 import ProgressPage from './pages/Progress';
@@ -14,32 +15,36 @@ import API from './config/api';
 
 const pageTitles = {
   '/': {
-    title: 'Dashboard',
-    subtitle: 'Главный продуктовый экран: текущий этап, слабые места и следующий осмысленный шаг.',
+    title: 'Roadmap',
+    subtitle: 'Текущий этап, слабые темы и следующий осмысленный шаг.',
   },
   '/theory': {
     title: 'Theory',
-    subtitle: 'Краткая и полная теория по каждому заданию в спокойном учебном формате.',
+    subtitle: 'Краткая и полная теория по каждому номеру + общая стратегия ЕГЭ.',
   },
   '/practice': {
     title: 'Practice',
-    subtitle: 'Свободный режим, guided path, слабые темы и работа над ошибками без визуального шума.',
+    subtitle: 'Последовательная практика: подсказки после ошибок и добивка слабых мест.',
+  },
+  '/task-bank': {
+    title: 'Task Bank',
+    subtitle: 'Отдельный банк случайных заданий с независимой статистикой.',
   },
   '/weekly-review': {
     title: 'Weekly Review',
-    subtitle: 'Контрольный блок между этапами дорожки: только проверка, без декоративной геймификации.',
+    subtitle: 'Контрольный блок между этапами дорожки.',
   },
   '/mock-exam': {
     title: 'Mock Exam',
-    subtitle: 'Экзаменационный и тренировочный режимы с таймером, паузой и локальным сохранением.',
+    subtitle: 'Пробник в формате экзамена: свободная навигация, проверка после завершения.',
   },
   '/progress': {
     title: 'Progress',
-    subtitle: 'Покрытие, точность, прогноз баллов, история попыток и зоны риска.',
+    subtitle: 'Покрытие тем, точность, история и прогноз.',
   },
   '/profile': {
     title: 'Profile',
-    subtitle: 'Локальные настройки ученика, ритм подготовки и параметры интерфейса.',
+    subtitle: 'Локальные настройки и цель подготовки.',
   },
 };
 
@@ -60,9 +65,10 @@ function Sidebar({ profile }) {
     {
       label: 'Учёба',
       items: [
-        { path: '/', label: 'Дашборд', icon: 'M4 10.5L12 4l8 6.5V20a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9.5z' },
+        { path: '/', label: 'Дорожка', icon: 'M4 10.5L12 4l8 6.5V20a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9.5z' },
         { path: '/theory', label: 'Теория', icon: 'M5 5h6a4 4 0 014 4v10H9a4 4 0 00-4 4V5zm14 0h-6a4 4 0 00-4 4v10h6a4 4 0 014 4V5z' },
         { path: '/practice', label: 'Практика', icon: 'M7 7h10M7 12h10M7 17h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z' },
+        { path: '/task-bank', label: 'Банк задач', icon: 'M4 6h16M4 12h16M4 18h16' },
       ],
     },
     {
@@ -88,7 +94,7 @@ function Sidebar({ profile }) {
           <div className="sidebar-logo-icon">ЕГЭ</div>
           <div>
             <div className="sidebar-logo-text">Informatics Trainer</div>
-            <div className="sidebar-logo-sub">obsidian desktop UI · offline-first · без лишней геймификации</div>
+            <div className="sidebar-logo-sub">offline-first desktop · локальная база · без лишнего шума</div>
           </div>
         </div>
 
@@ -98,7 +104,11 @@ function Sidebar({ profile }) {
           <div className="sidebar-profile-meta">
             <span className="badge badge-accent">{profile?.learning_mode === 'free' ? 'Свободный режим' : 'Guided path'}</span>
             <span className="badge badge-muted">Цель: {profile?.target_score || 80}</span>
-            {typeof examDays === 'number' ? <span className={`badge ${examDays <= 30 ? 'badge-warning' : 'badge-muted'}`}>{examDays >= 0 ? `До экзамена ${examDays} дн.` : 'Дата экзамена прошла'}</span> : null}
+            {typeof examDays === 'number' ? (
+              <span className={`badge ${examDays <= 30 ? 'badge-warning' : 'badge-muted'}`}>
+                {examDays >= 0 ? `Экзамен через ${examDays} дн.` : 'Дата экзамена прошла'}
+              </span>
+            ) : null}
           </div>
         </div>
       </div>
@@ -155,6 +165,97 @@ function Topbar({ profile }) {
   );
 }
 
+function BaselineModal({ open, onSaved }) {
+  const [pythonLevel, setPythonLevel] = useState('beginner');
+  const [egeLevel, setEgeLevel] = useState('start');
+  const [weeklyGoalHours, setWeeklyGoalHours] = useState(6);
+  const [note, setNote] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  if (!open) return null;
+
+  const handleSubmit = async () => {
+    setSaving(true);
+    try {
+      const response = await fetch(`${API}/api/onboarding/baseline`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          python_level: pythonLevel,
+          ege_level: egeLevel,
+          weekly_goal_hours: Number(weeklyGoalHours || 0),
+          note,
+        }),
+      });
+      const data = await response.json();
+      onSaved?.(data?.baseline || null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="modal-backdrop">
+      <div className="modal-card">
+        <div className="section-title">Небольшой стартовый опрос</div>
+        <div className="section-description" style={{ marginTop: 8 }}>
+          Это нужно, чтобы подстроить дорожку и темп без перегруза.
+        </div>
+
+        <div className="info-grid" style={{ marginTop: 16 }}>
+          <div className="info-card" style={{ gridColumn: '1 / -1' }}>
+            <div className="info-label">Уровень Python</div>
+            <div className="segment-control" style={{ marginTop: 10 }}>
+              <button className={`segment-btn ${pythonLevel === 'beginner' ? 'active' : ''}`} onClick={() => setPythonLevel('beginner')}>Начинающий</button>
+              <button className={`segment-btn ${pythonLevel === 'basic' ? 'active' : ''}`} onClick={() => setPythonLevel('basic')}>Базовый</button>
+              <button className={`segment-btn ${pythonLevel === 'confident' ? 'active' : ''}`} onClick={() => setPythonLevel('confident')}>Уверенный</button>
+            </div>
+          </div>
+
+          <div className="info-card" style={{ gridColumn: '1 / -1' }}>
+            <div className="info-label">Текущий уровень ЕГЭ</div>
+            <div className="segment-control" style={{ marginTop: 10 }}>
+              <button className={`segment-btn ${egeLevel === 'start' ? 'active' : ''}`} onClick={() => setEgeLevel('start')}>С нуля</button>
+              <button className={`segment-btn ${egeLevel === 'middle' ? 'active' : ''}`} onClick={() => setEgeLevel('middle')}>Средний</button>
+              <button className={`segment-btn ${egeLevel === 'advanced' ? 'active' : ''}`} onClick={() => setEgeLevel('advanced')}>Продвинутый</button>
+            </div>
+          </div>
+
+          <div className="info-card">
+            <div className="info-label">Часов в неделю</div>
+            <input
+              className="input"
+              type="number"
+              min="1"
+              max="40"
+              value={weeklyGoalHours}
+              onChange={(event) => setWeeklyGoalHours(event.target.value)}
+              style={{ marginTop: 8 }}
+            />
+          </div>
+
+          <div className="info-card">
+            <div className="info-label">Комментарий (опционально)</div>
+            <input
+              className="input"
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+              placeholder="Например: нужен мягкий старт"
+              style={{ marginTop: 8 }}
+            />
+          </div>
+        </div>
+
+        <div className="row-actions" style={{ marginTop: 18 }}>
+          <button className="btn btn-primary btn-md" onClick={handleSubmit} disabled={saving}>{saving ? 'Сохраняем...' : 'Сохранить и продолжить'}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AppLayout({ profile, reloadProfile }) {
   return (
     <div className="app-layout">
@@ -166,6 +267,7 @@ function AppLayout({ profile, reloadProfile }) {
             <Route path="/" element={<DashboardPage profile={profile} reloadProfile={reloadProfile} />} />
             <Route path="/theory" element={<TheoryPage profile={profile} />} />
             <Route path="/practice" element={<PracticePage profile={profile} />} />
+            <Route path="/task-bank" element={<TaskBankPage profile={profile} />} />
             <Route path="/weekly-review" element={<WeeklyReviewPage profile={profile} />} />
             <Route path="/mock-exam" element={<MockExamPage profile={profile} />} />
             <Route path="/progress" element={<ProgressPage profile={profile} />} />
@@ -179,23 +281,32 @@ function AppLayout({ profile, reloadProfile }) {
 
 export default function App() {
   const [profile, setProfile] = useState(null);
+  const [baseline, setBaseline] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const loadProfile = useCallback(async () => {
+  const loadBootstrap = useCallback(async () => {
+    setLoading(true);
     try {
-      const response = await fetch(`${API}/api/profile`);
-      const data = await response.json();
-      setProfile(data);
+      const [profileResponse, baselineResponse] = await Promise.all([
+        fetch(`${API}/api/profile`),
+        fetch(`${API}/api/onboarding/baseline`),
+      ]);
+      const [profileData, baselineData] = await Promise.all([
+        profileResponse.json(),
+        baselineResponse.json(),
+      ]);
+      setProfile(profileData);
+      setBaseline(baselineData);
     } catch (error) {
-      console.error('Profile load error:', error);
+      console.error('Bootstrap load error:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    loadProfile();
-  }, [loadProfile]);
+    loadBootstrap();
+  }, [loadBootstrap]);
 
   if (loading) {
     return (
@@ -203,15 +314,24 @@ export default function App() {
         <div className="app-loading-card loading-shimmer">
           <div className="sidebar-logo-icon app-loading-logo">ЕГЭ</div>
           <div className="app-loading-title">Загрузка локального тренажёра</div>
-          <div className="app-loading-subtitle">Поднимаем профиль, аналитику и дорожку обучения из локальной базы.</div>
+          <div className="app-loading-subtitle">Поднимаем профиль, статистику и дорожку обучения из локальной базы.</div>
         </div>
       </div>
     );
   }
 
+  const baselineOpen = !baseline?.completed;
+
   return (
     <Router>
-      <AppLayout profile={profile} reloadProfile={loadProfile} />
+      <AppLayout profile={profile} reloadProfile={loadBootstrap} />
+      <BaselineModal
+        open={baselineOpen}
+        onSaved={(savedBaseline) => {
+          setBaseline((prev) => ({ ...(prev || {}), ...(savedBaseline || {}), completed: true }));
+          loadBootstrap();
+        }}
+      />
     </Router>
   );
 }

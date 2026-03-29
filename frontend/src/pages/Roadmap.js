@@ -47,7 +47,7 @@ export default function RoadmapPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const stages = roadmap?.stages || [];
+  const stages = useMemo(() => roadmap?.stages || [], [roadmap?.stages]);
   const summary = roadmap?.summary || {};
   const todayPlan = roadmap?.today_plan || { items: [] };
   const weakTaskDetails = roadmap?.weak_task_details || [];

@@ -1517,3 +1517,87 @@ a:focus-visible {
     font-size: clamp(26px, 7vw, 34px);
   }
 }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(4, 8, 14, 0.74);
+  backdrop-filter: blur(4px);
+}
+
+.modal-card {
+  width: min(760px, 100%);
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+  border-radius: 22px;
+  border: 1px solid var(--border-strong);
+  background:
+    radial-gradient(circle at 70% -8%, rgba(246, 209, 141, 0.12), transparent 35%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 100%),
+    rgba(9, 14, 24, 0.96);
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.48);
+  padding: 22px;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.media-item {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 100%),
+    rgba(255, 255, 255, 0.01);
+  padding: 10px;
+}
+
+.media-thumb {
+  width: 100%;
+  height: 122px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  cursor: zoom-in;
+}
+
+.media-placeholder {
+  width: 100%;
+  min-height: 122px;
+  border-radius: 10px;
+  border: 1px dashed var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 10px;
+}
+
+.media-modal {
+  width: min(980px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 100%),
+    rgba(6, 10, 17, 0.98);
+  padding: 14px;
+}
+
+.media-modal-image {
+  width: 100%;
+  max-height: calc(100vh - 160px);
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
